@@ -1,7 +1,7 @@
 /**
  * @file
  * @brief NPDE homework ProjectionOntoGradients code
- * @author ?, Philippe Peter
+ * @author Erick Schulz, Philippe Peter
  * @date December 2019
  * @copyright Developed at ETH Zurich
  */
