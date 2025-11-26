@@ -1,0 +1,96 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install clang-format
+      run: sudo apt-get update && sudo apt-get install -y clang-format
+    - name: Check formatting
+      run: |
+        echo "Checking if the code is well formatted"
+        clang-format --version
+        echo "Checking developers folder"
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always developers/
+        echo "Checking include folder"
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always include/
+        echo "Checking lecturecodes folder"
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always lecturecodes/
+
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            compiler: g++
+            cxxflags: "-Werror=cpp"
+          - os: macos-latest
+            compiler: clang++
+            cxxflags: "-Werror=#warnings"
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Cache Hunter
+      uses: actions/cache@v3
+      with:
+        path: ${{ github.workspace }}/hunter
+        key: hunter-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          hunter-${{ runner.os }}-
+
+    - name: Get Dependencies
+      run: |
+        mkdir -p build
+        cd build
+        export CXX=${{ matrix.compiler }}
+        cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=Release -DHUNTER_CONFIGURATION_TYPES=Release -Wdev -DCMAKE_CXX_FLAGS_DEBUG="${{ matrix.cxxflags }}" ..
+
+    - name: Build
+      run: |
+        cd build
+        make -j $(nproc)
+
+    - name: Test
+      run: |
+        cd build
+        echo "Testing developer folder master solutions"
+        ../scripts/ci/test_developers.sh
+        echo "Testing lecture codes"
+        ../scripts/ci/run_lecturecodes.sh
+
+  tidy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install clang-tidy
+      run: sudo apt-get update && sudo apt-get install -y clang-tidy
+
+    - name: Cache Hunter
+      uses: actions/cache@v3
+      with:
+        path: ${{ github.workspace }}/hunter
+        key: hunter-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          hunter-${{ runner.os }}-
+          
+    - name: Run tidy
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=Release -DHUNTER_CONFIGURATION_TYPES=Release -Wdev -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DMYSOLUTION=OFF ..
+        echo "Running clang-tidy on developers folder"
+        clang-tidy --version
+        ../scripts/ci/run-clang-tidy.py -p . -config-file ../.clang-tidy "../developers/.*\\.cc"
+        echo "Checking if std::system is used in developers folder"
+        ../scripts/ci/forbid_stdsystem.sh ../developers/
+        echo "Running clang-tidy on lecturecodes folder"
+        ../scripts/ci/run-clang-tidy.py -p . -config-file ../.clang-tidy "../lecturecodes/.*\\.cc"
