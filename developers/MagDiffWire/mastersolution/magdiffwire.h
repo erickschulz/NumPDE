@@ -42,16 +42,16 @@ namespace MagDiffWire {
  */
 class MeshFunctionPWConst {
  public:
-  MeshFunctionPWConst(const lf::mesh::utils::CodimMeshDataSet<bool> &flags,
+  MeshFunctionPWConst(const lf::mesh::utils::CodimMeshDataSet<bool>& flags,
                       double val_true, double val_false)
       : flags_(flags), val_true_(val_true), val_false_(val_false) {}
   // Evaluation operator: returns one value for cells flagged 'true', the other
   // value for cells flagged 'false'
-  std::vector<double> operator()(const lf::mesh::Entity &cell,
-                                 const Eigen::MatrixXd &local) const;
+  std::vector<double> operator()(const lf::mesh::Entity& cell,
+                                 const Eigen::MatrixXd& local) const;
 
  private:
-  const lf::mesh::utils::CodimMeshDataSet<bool> &flags_;
+  const lf::mesh::utils::CodimMeshDataSet<bool>& flags_;
   double val_true_;
   double val_false_;
 };
@@ -67,13 +67,13 @@ buildExtMOLMatrices(std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
 /* @brief SDIRK-2 timestepping for magnetic diffusion equation */
 /* SAM_LISTING_BEGIN_3 */
 template <typename SCALARFUNCTOR, typename RECORDER = std::function<
-                                      void(double, const Eigen::VectorXd &)>>
+                                      void(double, const Eigen::VectorXd&)>>
 void sdirkMagDiffWire(
     std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
     lf::mesh::utils::CodimMeshDataSet<bool> Oc_flags, double sigma_c,
     double mu_c, SCALARFUNCTOR I_source, unsigned int M, double T_final,
-    Eigen::VectorXd &mu_vec,
-    RECORDER rec = [](double, const Eigen::VectorXd &) -> void {}) {
+    Eigen::VectorXd& mu_vec,
+    RECORDER rec = [](double, const Eigen::VectorXd&) -> void {}) {
   std::cout << "sdirMagDiffWire_org\n";
   // Obtain extended Galerkin matrices as lf::asseemble::COOMatrix
   auto [Mt, At] = buildExtMOLMatrices(fes_p, Oc_flags, sigma_c, mu_c);
@@ -85,17 +85,17 @@ void sdirkMagDiffWire(
   // We have built a sparse matrix containing the diagonal block(s) of the
   // SDIRK2 linear system, because this has to be supplied to Eigen's built-in
   // sparse elimination solver.
-  auto &At_triplet_vec{At.triplets()};
-  auto &Mt_triplet_vec{Mt.triplets()};
+  auto& At_triplet_vec{At.triplets()};
+  auto& Mt_triplet_vec{Mt.triplets()};
   // Form weighted sum of sparse matrices in triplet format by merging triplet
   // vectors
   const double zeta = 1.0 - 0.5 * std::sqrt(2.0);  // SDIRK parameter
   const double tau = T_final / M;
   std::vector<Eigen::Triplet<double>> Dt_triplet_vec{};
-  for (const auto &triplet : Mt_triplet_vec) {
+  for (const auto& triplet : Mt_triplet_vec) {
     Dt_triplet_vec.push_back(triplet);
   }
-  for (const auto &triplet : At_triplet_vec) {
+  for (const auto& triplet : At_triplet_vec) {
     Dt_triplet_vec.emplace_back(triplet.row(), triplet.col(),
                                 zeta * tau * triplet.value());
   }
@@ -147,13 +147,13 @@ void sdirkMagDiffWire(
 
 /* SAM_LISTING_BEGIN_4 */
 template <typename SCALARFUNCTOR, typename RECORDER = std::function<
-                                      void(double, const Eigen::VectorXd &)>>
+                                      void(double, const Eigen::VectorXd&)>>
 void sdirkMagDiffWire_alt(
     std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
     lf::mesh::utils::CodimMeshDataSet<bool> Oc_flags, double sigma_c,
     double mu_c, SCALARFUNCTOR I_source, unsigned int M, double T_final,
-    Eigen::VectorXd &mu_vec,
-    RECORDER rec = [](double, const Eigen::VectorXd &) -> void {}) {
+    Eigen::VectorXd& mu_vec,
+    RECORDER rec = [](double, const Eigen::VectorXd&) -> void {}) {
   std::cout << "sdirMagDiffWire_alt\n";
   // Obtain extended Galerkin matrices as lf::asseemble::COOMatrix
   auto [Mt, At] = buildExtMOLMatrices(fes_p, Oc_flags, sigma_c, mu_c);
@@ -165,17 +165,17 @@ void sdirkMagDiffWire_alt(
   // We have built a sparse matrix containing the diagonal block(s) of the
   // SDIRK2 linear system, because this has to be supplied to Eigen's built-in
   // sparse elimination solver.
-  auto &At_triplet_vec{At.triplets()};
-  auto &Mt_triplet_vec{Mt.triplets()};
+  auto& At_triplet_vec{At.triplets()};
+  auto& Mt_triplet_vec{Mt.triplets()};
   // Form weighted sum of sparse matrices in triplet format by merging triplet
   // vectors
   const double zeta = 1.0 - 0.5 * std::sqrt(2.0);  // SDIRK parameter
   const double tau = T_final / M;
   std::vector<Eigen::Triplet<double>> Dt_triplet_vec{};
-  for (const auto &triplet : Mt_triplet_vec) {
+  for (const auto& triplet : Mt_triplet_vec) {
     Dt_triplet_vec.push_back(triplet);
   }
-  for (const auto &triplet : At_triplet_vec) {
+  for (const auto& triplet : At_triplet_vec) {
     Dt_triplet_vec.emplace_back(triplet.row(), triplet.col(),
                                 zeta * tau * triplet.value());
   }
@@ -218,13 +218,13 @@ void sdirkMagDiffWire_alt(
 
 /* SAM_LISTING_BEGIN_5 */
 template <typename SCALARFUNCTOR, typename RECORDER = std::function<
-                                      void(double, const Eigen::VectorXd &)>>
+                                      void(double, const Eigen::VectorXd&)>>
 void sdirkMagDiffWire_mat(
     std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
     lf::mesh::utils::CodimMeshDataSet<bool> Oc_flags, double sigma_c,
     double mu_c, SCALARFUNCTOR I_source, unsigned int M, double T_final,
-    Eigen::VectorXd &mu_vec,
-    RECORDER rec = [](double, const Eigen::VectorXd &) -> void {}) {
+    Eigen::VectorXd& mu_vec,
+    RECORDER rec = [](double, const Eigen::VectorXd&) -> void {}) {
   std::cout << "sdirkMagDiffWire_mat\n";
   // Obtain extended Galerkin matrices as lf::asseemble::COOMatrix
   auto [Mt, At] = buildExtMOLMatrices(fes_p, Oc_flags, sigma_c, mu_c);
@@ -267,13 +267,13 @@ void sdirkMagDiffWire_mat(
 
 /* SAM_LISTING_BEGIN_6 */
 template <typename SCALARFUNCTOR, typename RECORDER = std::function<
-                                      void(double, const Eigen::VectorXd &)>>
+                                      void(double, const Eigen::VectorXd&)>>
 void sdirkMagDiffWire_new(
     std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
     lf::mesh::utils::CodimMeshDataSet<bool> Oc_flags, double sigma_c,
     double mu_c, SCALARFUNCTOR I_source, unsigned int M, double T_final,
-    Eigen::VectorXd &mu_vec,
-    RECORDER rec = [](double, const Eigen::VectorXd &) -> void {}) {
+    Eigen::VectorXd& mu_vec,
+    RECORDER rec = [](double, const Eigen::VectorXd&) -> void {}) {
   std::cout << "sdirkMagDiffWire_new\n";
   // Obtain extended Galerkin matrices as lf::asseemble::COOMatrix
   auto [Mt, At] = buildExtMOLMatrices(fes_p, Oc_flags, sigma_c, mu_c);

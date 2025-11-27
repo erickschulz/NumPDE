@@ -32,11 +32,11 @@ generateMOLMatrices(unsigned int M, double rho, double sigma, double mu,
 
 /** @brief Implicit Euler timestepping for Guyer-Krumhansl heat equation */
 /* SAM_LISTING_BEGIN_1 */
-template <typename RECORDER = std::function<void(const Eigen::VectorXd &)>>
+template <typename RECORDER = std::function<void(const Eigen::VectorXd&)>>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> timestepping_GKHeat(
-    double T, unsigned int L, unsigned int M, const Eigen::VectorXd &mu0,
-    const Eigen::VectorXd &zeta0, double rho, double sigma, double mu,
-    double kappa, RECORDER &&rec = [](const Eigen::VectorXd & /*nu*/) {}) {
+    double T, unsigned int L, unsigned int M, const Eigen::VectorXd& mu0,
+    const Eigen::VectorXd& zeta0, double rho, double sigma, double mu,
+    double kappa, RECORDER&& rec = [](const Eigen::VectorXd& /*nu*/) {}) {
   const double tau = T / L;          // size of timestep
   const unsigned int N = 2 * M - 1;  // Total number of FE d.o.f.s
 
@@ -56,7 +56,7 @@ std::pair<Eigen::VectorXd, Eigen::VectorXd> timestepping_GKHeat(
   Mh.setFromTriplets(Mh_COO.begin(), Mh_COO.end());
   // Build matrix $\wh{\VX} := \wh{\VM}-\tau \wh{\VA}$
   std::vector<Eigen::Triplet<double>> Xh_COO = Mh_COO;
-  for (Eigen::Triplet<double> &t : Ah_COO) {
+  for (Eigen::Triplet<double>& t : Ah_COO) {
     Xh_COO.emplace_back(t.row(), t.col(), -tau * t.value());
   }
   // Build sparse matrix in CRS format
@@ -84,8 +84,8 @@ std::pair<Eigen::VectorXd, Eigen::VectorXd> timestepping_GKHeat(
 
 /** @brief tracking evolution of discrete energy during timestepping */
 std::vector<double> track_GKHeatEnergy(double T, unsigned int L, unsigned int M,
-                                       const Eigen::VectorXd &mu0,
-                                       const Eigen::VectorXd &zeta0, double rho,
+                                       const Eigen::VectorXd& mu0,
+                                       const Eigen::VectorXd& zeta0, double rho,
                                        double sigma, double mu, double kappa);
 
 }  // namespace GuyerKrumhansl

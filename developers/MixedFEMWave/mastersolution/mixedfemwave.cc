@@ -40,16 +40,16 @@ lf::quad::QuadRule make_TriaQR_TrapezoidalRule() {
 // of a mesh
 lf::mesh::utils::CodimMeshDataSet<double> areasOfAdjacentCells(
     std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // The areas are stored in a node-indexed (codim == 2) array
   lf::mesh::utils::CodimMeshDataSet<double> areas(mesh_p, 2, 0.0);
   // Loop over all cells (codim == 0 entities)
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     const double area = lf::geometry::Volume(*(cell->Geometry()));
     // Loop over nodes of  a cell (relative codim == 2 sub-entities)
-    const std::span<const lf::mesh::Entity *const> cell_nodes{
+    const std::span<const lf::mesh::Entity* const> cell_nodes{
         cell->SubEntities(2)};
-    for (const lf::mesh::Entity *node : cell_nodes) {
+    for (const lf::mesh::Entity* node : cell_nodes) {
       LF_ASSERT_MSG(node->RefEl() == lf::base::RefEl::kPoint(),
                     "Illegal topological type for node");
       areas(*node) += area;
@@ -61,7 +61,7 @@ lf::mesh::utils::CodimMeshDataSet<double> areasOfAdjacentCells(
 #endif
 
 /* SAM_LISTING_BEGIN_2 */
-Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q) {
+Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler& dofh_Q) {
   // TOOLS AND DATA
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs_Q(dofh_Q.NumDofs());
@@ -74,7 +74,7 @@ Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q) {
   // First option: assembly via triplet format
   lf::assemble::COOMatrix<double> M_Q_COO(N_dofs_Q, N_dofs_Q);
   // Loop over all cells
-  for (const lf::mesh::Entity *entity : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* entity : mesh_p->Entities(0)) {
     const double area = lf::geometry::Volume(*(entity->Geometry()));
     auto global_idx = dofh_Q.GlobalDofIndices(*entity);
     M_Q_COO.AddToEntry(global_idx[0], global_idx[0], area);
@@ -95,8 +95,8 @@ Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q) {
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_9 */
-Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler &dofh_V,
-                                     const lf::assemble::DofHandler &dofh_Q) {
+Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler& dofh_V,
+                                     const lf::assemble::DofHandler& dofh_Q) {
   // TOOLS AND DATA
   auto mesh_p = dofh_V.Mesh();
   // Dimension of finite element space
@@ -136,7 +136,7 @@ Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler &dofh_V,
 
 /* SAM_LISTING_BEGIN_B */
 Eigen::Matrix<double, 2, 3> BElemMatProvider::Eval(
-    const lf::mesh::Entity &tria) {
+    const lf::mesh::Entity& tria) {
   // Obtain vertex coordinates of the triangle in a 2x3 matrix
   const auto vertices = lf::geometry::Corners(*(tria.Geometry()));
   LF_ASSERT_MSG((vertices.cols() == 3) && (vertices.rows() == 2),

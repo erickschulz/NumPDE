@@ -4,8 +4,8 @@ namespace OrdNotAll {
 
 /* SAM_LISTING_BEGIN_1 */
 template <class Function>
-void testCvgRKSSM(const Function &f, double T, double y0,
-                  const Eigen::MatrixXd &A, const Eigen::VectorXd &b) {
+void testCvgRKSSM(const Function& f, double T, double y0,
+                  const Eigen::MatrixXd& A, const Eigen::VectorXd& b) {
   // Helper object carrying out the actual explicit RK-SSM
   RKIntegrator<double> rk(A, b);
   // Vector for collecting errors

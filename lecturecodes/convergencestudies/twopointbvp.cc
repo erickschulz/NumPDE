@@ -21,7 +21,7 @@
 namespace po = boost::program_options;
 
 // Code conduting empiric convergence studies for 1D FEM for 2-point BVPs
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   std::cout << "Run with --help for usage information" << std::endl;
   po::options_description desc("Allowed options");
   // clang-format off

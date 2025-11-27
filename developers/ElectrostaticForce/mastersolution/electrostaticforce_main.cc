@@ -195,7 +195,7 @@ int main() {
   /* Output results to vtk file */
   // We store data by keeping only the coefficients of nodal basis functions
   // In that sense, we are plotting the values of the solution at the vertices
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
   lf::io::VtkWriter vtk_writer(mesh_p,
                                "ElectrostaticForcePoissonBVP_solution.vtk");

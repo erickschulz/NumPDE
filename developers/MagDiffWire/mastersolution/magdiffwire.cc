@@ -23,7 +23,7 @@
 namespace MagDiffWire {
 
 std::vector<double> MeshFunctionPWConst::operator()(
-    const lf::mesh::Entity &cell, const Eigen::MatrixXd &local) const {
+    const lf::mesh::Entity& cell, const Eigen::MatrixXd& local) const {
   const size_t n_pts = local.cols();
   if (flags_(cell)) {
     return std::vector<double>(n_pts, val_true_);
@@ -37,7 +37,7 @@ buildExtMOLMatrices(std::shared_ptr<const lf::fe::ScalarFESpace<double>> fes_p,
                     lf::mesh::utils::CodimMeshDataSet<bool> Oc_flags,
                     double sigma_c, double mu_c) {
   // Obtain handle to dof handler and mesh
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const std::shared_ptr<const lf::mesh::Mesh> mesh_p = dofh.Mesh();
   // Dimension of finite element space
   const lf::base::size_type N(dofh.NumDofs());
@@ -142,7 +142,7 @@ void testCvgMagDiffWire(unsigned int refsteps) {
   const std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_ptr,
                                                               refsteps);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput summary information about hierarchy of nested meshes
   std::cout << "\t Sequence of nested meshes created\n";
   multi_mesh.PrintInfo(std::cout);
@@ -190,7 +190,7 @@ void testCvgMagDiffWire(unsigned int refsteps) {
             << std::left << std::setw(10) << "N" << std::right << std::setw(16)
             << "L2 err" << std::setw(16) << "H1s err" << '\n';
   std::cout << "---------------------------------------------" << '\n';
-  for (const auto &err : errs) {
+  for (const auto& err : errs) {
     auto [N, L2err, H1err] = err;
     out_file << std::left << std::setw(10) << N << std::left << std::setw(16)
              << L2err << std::setw(16) << H1err << '\n';

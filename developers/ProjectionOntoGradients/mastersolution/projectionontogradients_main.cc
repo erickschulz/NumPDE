@@ -24,7 +24,7 @@ int main() {
   auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // Compute solution
   const Eigen::VectorXd sol_vec =

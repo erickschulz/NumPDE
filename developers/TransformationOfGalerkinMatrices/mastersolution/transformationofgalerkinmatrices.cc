@@ -14,13 +14,13 @@ namespace TransformationOfGalerkinMatrices {
 
 /* SAM_LISTING_BEGIN_1 */
 std::vector<Eigen::Triplet<double>> transformCOOmatrix(
-    const std::vector<Eigen::Triplet<double>> &A) {
+    const std::vector<Eigen::Triplet<double>>& A) {
   std::vector<Eigen::Triplet<double>> A_t{};  // return value
 
   // First step: find the size of the matrix by searching the maximal
   // indices. Depends on the assumption that no zero rows/columns occur.
   int rows_max_idx = 0, cols_max_idx = 0;
-  for (const Eigen::Triplet<double> &triplet : A) {
+  for (const Eigen::Triplet<double>& triplet : A) {
     rows_max_idx =
         (triplet.row() > rows_max_idx) ? triplet.row() : rows_max_idx;
     cols_max_idx =

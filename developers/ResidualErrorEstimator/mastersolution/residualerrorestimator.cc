@@ -24,16 +24,16 @@ dataDiscreteBVP::dataDiscreteBVP(std::shared_ptr<const lf::mesh::Mesh> mesh_p,
 }
 /* SAM_LISTING_END_2 */
 
-Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
+Eigen::VectorXd solveBVP(const dataDiscreteBVP& disc_bvp) {
   // For conveneicne we set up references to essential objects for FE
   // discretization in the lowest-order Lagrangian finite element space
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &linfespc{
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& linfespc{
       *disc_bvp.pwlinfespace_p_};
   // The underlying finite-element mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{linfespc.Mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{linfespc.LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{linfespc.LocGlobMap()};
   // Dimension of finite element space, number of unknowns
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
@@ -67,7 +67,7 @@ Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
   lf::assemble::FixFlaggedSolutionCompAlt<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t dof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(dof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(dof_idx)};
         return (bd_flags(node) ? std::make_pair(true, 0.0)
                                : std::make_pair(false, 0.0));
       },
@@ -88,7 +88,7 @@ Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
 
 /* SAM_LISTING_BEGIN_3 */
 lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd & /*u_vec*/) {
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& /*u_vec*/) {
   // Get pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       disc_bvp.pwlinfespace_p_->Mesh();
@@ -103,11 +103,11 @@ lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
   const Eigen::VectorXd qw{qr.Weights()};  // quadrature weigth vector
 
   // Run over all cells of the mesh
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Implemented for triangles only");
     // Obtain information about the shape of the cell
-    const lf::geometry::Geometry &geo{*(cell->Geometry())};
+    const lf::geometry::Geometry& geo{*(cell->Geometry())};
     // Ddetermine size of triangle (length of longest edge)
     const Eigen::MatrixXd corners{lf::geometry::Corners(geo)};
     const double h0 = (corners.col(1) - corners.col(0)).norm();
@@ -149,7 +149,7 @@ lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
 
 /* SAM_LISTING_BEGIN_4 */
 lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd &u_vec) {
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& u_vec) {
   // Get pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       disc_bvp.pwlinfespace_p_->Mesh();
@@ -160,9 +160,9 @@ lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
   // normals = edge direction vectors turned by 90 degrees
   lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> edge_normals(mesh_p, 1);
   lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> edge_startpt(mesh_p, 1);
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     // Obtain information about the shape of the edge
-    const lf::geometry::Geometry &geo{*(edge->Geometry())};
+    const lf::geometry::Geometry& geo{*(edge->Geometry())};
     const Eigen::MatrixXd corners{lf::geometry::Corners(geo)};
     // Starting point of the edge
     edge_startpt(*edge) = corners.col(0);
@@ -183,7 +183,7 @@ lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
   lf::mesh::utils::CodimMeshDataSet<double> edge_flux_jump(mesh_p, 1, 0.0);
   lf::mesh::utils::CodimMeshDataSet<bool> bd_ed_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Implemented for triangles only");
     // Retrieve constant diffusion coefficient
@@ -198,16 +198,16 @@ lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
               << ": alpha*grad u_h = " << nablau_K.transpose() << std::endl;
     */
     // Obtain shape of cell
-    const lf::geometry::Geometry &cell_geo{*(cell->Geometry())};
+    const lf::geometry::Geometry& cell_geo{*(cell->Geometry())};
     const Eigen::MatrixXd cell_vert{lf::geometry::Corners(cell_geo)};
     // Visit all three edges of the triangle
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     LF_ASSERT_MSG(edges.size() == 3, "Triangle must have three edges!");
     for (int l = 0; l < 3; ++l) {
       if (!bd_ed_flags(*edges[l])) {
         // Determine orientation of edge normal
-        const lf::mesh::Entity &edge = *edges[l];
-        const Eigen::Vector2d &normal{edge_normals(edge)};
+        const lf::mesh::Entity& edge = *edges[l];
+        const Eigen::Vector2d& normal{edge_normals(edge)};
         const int ori =
             (normal.dot(cell_vert.col((l + 2) % 3) - edge_startpt(edge)) > 0)
                 ? 1
@@ -225,7 +225,7 @@ lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
   }
   // Now we have all required information in the auxiliary MeshDataSets
   // and we traverse the edges again and compute the scaled jump norms.
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     const double ed_flux = edge_flux_jump(*edge);
     edge_res(*edge) = (ed_flux * ed_flux) / alpha_max(*edge);
   }
@@ -313,11 +313,11 @@ std::tuple<double, double, double> solveAndEstimate(
 
   // Sum volume residuals and edge residuals
   double eta_vol = 0.0;
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     eta_vol += vol_res(*cell);
   }
   double eta_ed = 0.0;
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     eta_ed += ed_res(*edge);
   }
 

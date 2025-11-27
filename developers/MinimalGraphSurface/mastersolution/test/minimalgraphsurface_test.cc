@@ -16,11 +16,6 @@
 #include <lf/uscalfe/fe_space_lagrange_o1.h>
 
 #include <Eigen/Core>
-#include <lf/mesh/test_utils/test_meshes.h>
-#include <lf/fe/fe_tools.h>
-#include <lf/fe/fe.h>
-#include <lf/uscalfe/fe_space_lagrange_o1.h>
-#include <lf/mesh/utils/mesh_function_traits.h>
 
 namespace MinimalGraphSurface::test {
 

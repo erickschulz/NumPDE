@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main(int, char **) {
+int main(int, char**) {
   cout << "Demonstration of initialization of sparse matrix in eigen" << endl;
 
   /* SAM_LISTING_BEGIN_1 */

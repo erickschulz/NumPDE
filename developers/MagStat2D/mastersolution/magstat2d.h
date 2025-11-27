@@ -44,23 +44,21 @@ class MagStat2DElementMatrixProvider {
  public:
   // The size of the element matrix is $6\times 6$.
   using ElemMat = Eigen::Matrix<double, 6, 6>;
-  MagStat2DElementMatrixProvider(const MagStat2DElementMatrixProvider &) =
+  MagStat2DElementMatrixProvider(const MagStat2DElementMatrixProvider&) =
       delete;
-  MagStat2DElementMatrixProvider(MagStat2DElementMatrixProvider &&) noexcept =
+  MagStat2DElementMatrixProvider(MagStat2DElementMatrixProvider&&) noexcept =
       default;
-  MagStat2DElementMatrixProvider &operator=(
-      const MagStat2DElementMatrixProvider &) = delete;
-  MagStat2DElementMatrixProvider &operator=(MagStat2DElementMatrixProvider &&) =
+  MagStat2DElementMatrixProvider& operator=(
+      const MagStat2DElementMatrixProvider&) = delete;
+  MagStat2DElementMatrixProvider& operator=(MagStat2DElementMatrixProvider&&) =
       delete;
   MagStat2DElementMatrixProvider() = delete;
   virtual ~MagStat2DElementMatrixProvider() = default;
 
   MagStat2DElementMatrixProvider(MESH_FUNCTION mu) : mu_(mu) {}
 
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemMat MK_;
@@ -72,7 +70,7 @@ class MagStat2DElementMatrixProvider {
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 typename MagStat2DElementMatrixProvider<MESH_FUNCTION>::ElemMat
 MagStat2DElementMatrixProvider<MESH_FUNCTION>::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   LF_VERIFY_MSG(cell.Geometry()->isAffine(),
@@ -135,22 +133,20 @@ template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 class MagStat2DElementVectorProvider {
  public:
   using ElemVec = Eigen::Matrix<double, 6, 1>;
-  MagStat2DElementVectorProvider(const MagStat2DElementVectorProvider &) =
+  MagStat2DElementVectorProvider(const MagStat2DElementVectorProvider&) =
       delete;
-  MagStat2DElementVectorProvider(MagStat2DElementVectorProvider &&) noexcept =
+  MagStat2DElementVectorProvider(MagStat2DElementVectorProvider&&) noexcept =
       default;
-  MagStat2DElementVectorProvider &operator=(
-      const MagStat2DElementVectorProvider &) = delete;
-  MagStat2DElementVectorProvider &operator=(MagStat2DElementVectorProvider &&) =
+  MagStat2DElementVectorProvider& operator=(
+      const MagStat2DElementVectorProvider&) = delete;
+  MagStat2DElementVectorProvider& operator=(MagStat2DElementVectorProvider&&) =
       delete;
   virtual ~MagStat2DElementVectorProvider() = default;
 
   MagStat2DElementVectorProvider(MESH_FUNCTION j_source)
       : j_source_(j_source) {}
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemVec phiK_;
@@ -162,7 +158,7 @@ class MagStat2DElementVectorProvider {
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 typename MagStat2DElementVectorProvider<MESH_FUNCTION>::ElemVec
 MagStat2DElementVectorProvider<MESH_FUNCTION>::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Area of the triangle
@@ -232,7 +228,7 @@ MagStat2DElementVectorProvider<MESH_FUNCTION>::Eval(
  * @param f MeshFunction providing source vector field
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
-Eigen::VectorXd computeMagStat2DRhsVector(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd computeMagStat2DRhsVector(const lf::assemble::DofHandler& dofh,
                                           MESH_FUNCTION j_source) {
   // Total number of FE d.o.f.s
   lf::assemble::size_type N = dofh.NumDofs();
@@ -253,7 +249,7 @@ Eigen::VectorXd computeMagStat2DRhsVector(const lf::assemble::DofHandler &dofh,
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 lf::assemble::COOMatrix<double> buildMagStat2DGalerkinMatrix(
-    const lf::assemble::DofHandler &dofh, MESH_FUNCTION mu) {
+    const lf::assemble::DofHandler& dofh, MESH_FUNCTION mu) {
   // Total number of FE d.o.f.s
   lf::assemble::size_type N = dofh.NumDofs();
   // Full Galerkin matrix in triplet format
@@ -276,7 +272,7 @@ lf::assemble::COOMatrix<double> buildMagStat2DGalerkinMatrix(
 /* SAM_LISTING_BEGIN_3 */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION_J,
           lf::mesh::utils::MeshFunction MESH_FUNCTION_MU>
-Eigen::VectorXd solveMagStat2DBVP(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd solveMagStat2DBVP(const lf::assemble::DofHandler& dofh,
                                   MESH_FUNCTION_MU mu,
                                   MESH_FUNCTION_J j_source) {
   // Size of linear system
@@ -296,7 +292,7 @@ Eigen::VectorXd solveMagStat2DBVP(const lf::assemble::DofHandler &dofh,
   std::vector<std::pair<bool, double>> ess_dof_select{};
 #if SOLUTION
   for (lf::assemble::gdof_idx_t dofnum = 0; dofnum < N_dofs; ++dofnum) {
-    const lf::mesh::Entity &entity{dofh.Entity(dofnum)};
+    const lf::mesh::Entity& entity{dofh.Entity(dofnum)};
     if (bd_flags(entity)) {
       // Entity carrying a d.o.f. is located on the boundary.
       // The value of the d.o.f. will be set to zero
@@ -345,9 +341,9 @@ Eigen::VectorXd solveMagStat2DBVP(const lf::assemble::DofHandler &dofh,
  */
 class MeshFunctionWF1 {
  public:
-  MeshFunctionWF1(const lf::assemble::DofHandler &dofh, Eigen::VectorXd coeffs)
+  MeshFunctionWF1(const lf::assemble::DofHandler& dofh, Eigen::VectorXd coeffs)
       : dofh_(dofh), coeffs_(std::move(coeffs)) {
-    const lf::mesh::Mesh &mesh = *dofh.Mesh();
+    const lf::mesh::Mesh& mesh = *dofh.Mesh();
     LF_ASSERT_MSG(dofh_.NumDofs() == coeffs_.size(),
                   "Size mismatch for coeff vector");
     LF_ASSERT_MSG(dofh.NumDofs() == (mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -356,11 +352,11 @@ class MeshFunctionWF1 {
 
   // Evaluation operator: returns the values of the vectorfield in the space of
   // Whitney 1-forms at a number of points inside a cell
-  std::vector<Eigen::Vector2d> operator()(const lf::mesh::Entity &cell,
-                                          const Eigen::MatrixXd &local) const;
+  std::vector<Eigen::Vector2d> operator()(const lf::mesh::Entity& cell,
+                                          const Eigen::MatrixXd& local) const;
 
  private:
-  const lf::assemble::DofHandler &dofh_;
+  const lf::assemble::DofHandler& dofh_;
   Eigen::VectorXd coeffs_;
 };
 
@@ -379,9 +375,9 @@ class MeshFunctionWF1 {
  */
 class MeshFunctionWF0 {
  public:
-  MeshFunctionWF0(const lf::assemble::DofHandler &dofh, Eigen::VectorXd coeffs)
+  MeshFunctionWF0(const lf::assemble::DofHandler& dofh, Eigen::VectorXd coeffs)
       : dofh_(dofh), coeffs_(std::move(coeffs)) {
-    const lf::mesh::Mesh &mesh = *dofh.Mesh();
+    const lf::mesh::Mesh& mesh = *dofh.Mesh();
     LF_ASSERT_MSG(dofh_.NumDofs() == coeffs_.size(),
                   "Size mismatch for coeff vector");
     LF_ASSERT_MSG(dofh.NumDofs() == (mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -390,11 +386,11 @@ class MeshFunctionWF0 {
 
   // Evaluation operator: returns the values of a function in the space of
   // Whitney 0-forms at a number of points inside a cell
-  std::vector<double> operator()(const lf::mesh::Entity &cell,
-                                 const Eigen::MatrixXd &local) const;
+  std::vector<double> operator()(const lf::mesh::Entity& cell,
+                                 const Eigen::MatrixXd& local) const;
 
  private:
-  const lf::assemble::DofHandler &dofh_;
+  const lf::assemble::DofHandler& dofh_;
   Eigen::VectorXd coeffs_;
 };
 
@@ -408,9 +404,9 @@ class MeshFunctionWF0 {
  * @param DofHandler for Whitney finite element space of 0-forms and 1-forms
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
-Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler& dofh,
                                    MESH_FUNCTION vf) {
-  const lf::mesh::Mesh &mesh = *dofh.Mesh();
+  const lf::mesh::Mesh& mesh = *dofh.Mesh();
   const Eigen::Index N = dofh.NumDofs();
   LF_ASSERT_MSG(N == (mesh.NumEntities(2) + mesh.NumEntities(1)),
                 "DofH must manage 1 dof/node and 1 dof/edge");
@@ -419,7 +415,7 @@ Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler &dofh,
   // Reference coordinates of midpoint of edge
   Eigen::MatrixXd mpc(1, 1);
   mpc(0, 0) = 0.5;
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     // Obtain number of global d.o.f. assciated with edge
     std::span<const lf::assemble::gdof_idx_t> edofs{
         dofh.InteriorGlobalDofIndices(*edge)};

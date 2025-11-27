@@ -63,7 +63,7 @@ TEST(MagDiffWire, MatTest) {
   const std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_ptr,
                                                               refsteps);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput summary information about hierarchy of nested meshes
   // std::cout << "\t Sequence of nested meshes created\n";
   // multi_mesh.PrintInfo(std::cout);
@@ -163,7 +163,7 @@ TEST(MagDiffWire, sdirkTest) {
   const std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_ptr,
                                                               refsteps);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput summary information about hierarchy of nested meshes
   std::cout << "\t Sequence of nested meshes created\n";
   multi_mesh.PrintInfo(std::cout);
@@ -213,7 +213,7 @@ TEST(MagDiffWire, sdirkTest) {
             << "L2 ratio" << '\n';
   std::cout << "---------------------------------------------" << '\n';
   double L2err_prev = 100.;
-  for (const auto &err : errs) {
+  for (const auto& err : errs) {
     auto [N, L2err, H1err] = err;
     double ratio = L2err_prev / L2err;
     out_file << std::left << std::setw(10) << N << std::left << std::setw(16)

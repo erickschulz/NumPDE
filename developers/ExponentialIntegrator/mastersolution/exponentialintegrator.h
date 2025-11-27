@@ -13,13 +13,13 @@
 
 namespace ExponentialIntegrator {
 
-Eigen::MatrixXd phim(const Eigen::MatrixXd &Z);
+Eigen::MatrixXd phim(const Eigen::MatrixXd& Z);
 
 // Calculate a single step of the exponential Euler method.
 /* SAM_LISTING_BEGIN_0 */
 template <class Function, class Jacobian>
-Eigen::VectorXd exponentialEulerStep(const Eigen::VectorXd &y0, Function &&f,
-                                     Jacobian &&df, double h) {
+Eigen::VectorXd exponentialEulerStep(const Eigen::VectorXd& y0, Function&& f,
+                                     Jacobian&& df, double h) {
 #if SOLUTION
   return y0 + h * phim(h * df(y0)) * f(y0);
 #else

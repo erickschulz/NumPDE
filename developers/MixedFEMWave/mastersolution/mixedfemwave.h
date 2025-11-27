@@ -29,10 +29,10 @@ lf::quad::QuadRule make_TriaQR_TrapezoidalRule();
 template <typename FFUNCTION>
 Eigen::VectorXd computeRHS(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_V,
-    FFUNCTION &&f, double t) {
+    FFUNCTION&& f, double t) {
   // TOOLS AND DATA
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh_V{fe_space_V->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_V{fe_space_V->LocGlobMap()};
   // Pointer to mesh
   auto mesh_p = dofh_V.Mesh();
   // Dimension of finite element space
@@ -91,14 +91,14 @@ lf::mesh::utils::CodimMeshDataSet<double> areasOfAdjacentCells(
 template <typename FFUNCTION>
 Eigen::VectorXd computeRHS_alt(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_V,
-    FFUNCTION &&f, double t) {
+    FFUNCTION&& f, double t) {
   // The current mesh object
-  const lf::mesh::Mesh &mesh{*(fe_space_V->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space_V->Mesh())};
   // Flag nodes on the boundary
   const auto bd_node_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(fe_space_V->Mesh(), 2)};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh_V{fe_space_V->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_V{fe_space_V->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs_V(dofh_V.NumDofs());
   // Right hand side vector
@@ -106,7 +106,7 @@ Eigen::VectorXd computeRHS_alt(
   // Determine area of mesh neighborhood of every node
   const auto areas{areasOfAdjacentCells(fe_space_V->Mesh())};
   // Loop over all nodes
-  for (const lf::mesh::Entity *node : mesh.Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh.Entities(2)) {
     // Find global index of dof associated with the node
     const std::span<const lf::assemble::gdof_idx_t> node_dofs(
         dofh_V.GlobalDofIndices(*node));
@@ -132,16 +132,16 @@ Eigen::VectorXd computeRHS_alt(
 /* SAM_LISTING_END_4 */
 #endif
 
-Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q);
+Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler& dofh_Q);
 
 /* SAM_LISTING_BEGIN_6 */
 template <typename RHOFUNCTION>
 Eigen::SparseMatrix<double> computeMV(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_V,
-    RHOFUNCTION &&rho) {
+    RHOFUNCTION&& rho) {
   // TOOLS AND DATA
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_V->Mesh();
-  const lf::assemble::DofHandler &dofh_V{fe_space_V->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_V{fe_space_V->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs_V(dofh_V.NumDofs());
   // For returning the matrix
   Eigen::SparseMatrix<double> M_V(N_dofs_V, N_dofs_V);
@@ -184,9 +184,9 @@ Eigen::SparseMatrix<double> computeMV(
 template <typename RHOFUNCTION>
 Eigen::SparseMatrix<double> computeMV_alt(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_V,
-    RHOFUNCTION &&rho) {
-  const lf::mesh::Mesh &mesh{*(fe_space_V->Mesh())};
-  const lf::assemble::DofHandler &dofh_V{fe_space_V->LocGlobMap()};
+    RHOFUNCTION&& rho) {
+  const lf::mesh::Mesh& mesh{*(fe_space_V->Mesh())};
+  const lf::assemble::DofHandler& dofh_V{fe_space_V->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs_V(dofh_V.NumDofs());
 
   // Reserve space for a sparse diagonal matrix
@@ -196,7 +196,7 @@ Eigen::SparseMatrix<double> computeMV_alt(
   // Determine area of mesh neighborhood of every node
   const auto areas{areasOfAdjacentCells(fe_space_V->Mesh())};
   // Loop over all nodes
-  for (const lf::mesh::Entity *node : mesh.Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh.Entities(2)) {
     // Obtain position vector of node
     const Eigen::Vector2d node_pos{
         lf::geometry::Corners(*(node->Geometry())).col(0)};
@@ -218,25 +218,25 @@ Eigen::SparseMatrix<double> computeMV_alt(
 class BElemMatProvider {
  public:
   explicit BElemMatProvider() = default;
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
-  Eigen::Matrix<double, 2, 3> Eval(const lf::mesh::Entity &tria);
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  Eigen::Matrix<double, 2, 3> Eval(const lf::mesh::Entity& tria);
 };
 
-Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler &dofh_V,
-                                     const lf::assemble::DofHandler &dofh_Q);
+Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler& dofh_V,
+                                     const lf::assemble::DofHandler& dofh_Q);
 
 /* SAM_LISTING_BEGIN_L */
 template <typename RHOFUNCTION, typename FFUNCTION,
           typename RECORDER = std::function<void(double, double)>>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> leapfrogMixedWave(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_V,
-    const lf::assemble::UniformFEDofHandler &dofh_Q, RHOFUNCTION &&rho,
-    FFUNCTION &&f, double T, unsigned int nb_timesteps,
-    RECORDER &&rec = [](double, double) {}) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_V,
+    const lf::assemble::UniformFEDofHandler& dofh_Q, RHOFUNCTION&& rho,
+    FFUNCTION&& f, double T, unsigned int nb_timesteps,
+    RECORDER&& rec = [](double, double) {}) {
   // Size of timestep
   double stepsize = T / nb_timesteps;
   // Index mapper for linear Lagrangian FE space
-  const lf::assemble::DofHandler &dofh_V{fe_space_V->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_V{fe_space_V->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs_Q(dofh_Q.NumDofs());
   const lf::uscalfe::size_type N_dofs_V(dofh_V.NumDofs());

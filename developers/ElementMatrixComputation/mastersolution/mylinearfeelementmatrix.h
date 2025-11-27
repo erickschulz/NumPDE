@@ -18,7 +18,7 @@ namespace ElementMatrixComputation {
 class MyLinearFEElementMatrix {
  public:
   /** @brief Default implement: all cells are active */
-  bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
+  bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
   /*
    * @brief main routine for the computation of element matrices
    *
@@ -27,7 +27,7 @@ class MyLinearFEElementMatrix {
    * @return a 4x4 matrix, containing the element matrix. The bottom row/column
    *         is not used in the case of a triangle.
    */
-  Eigen::Matrix<double, 4, 4> Eval(const lf::mesh::Entity &cell);
+  Eigen::Matrix<double, 4, 4> Eval(const lf::mesh::Entity& cell);
 };
 
 }  // namespace ElementMatrixComputation

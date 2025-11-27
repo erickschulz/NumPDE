@@ -28,8 +28,8 @@ namespace ConsFV {
 // reconstruction, see \eqref{eq:lccf}.
 // Cauchy problem over time \Blue{$[0,T]$}, equidistant mesh
 template <typename FunctionU0, typename FunctionF, typename FnSlopes>
-Eigen::VectorXd highresevl(double a, double b, unsigned N, FunctionU0 &&u0,
-                           double T, FunctionF &&F, FnSlopes &&slopes) {
+Eigen::VectorXd highresevl(double a, double b, unsigned N, FunctionU0&& u0,
+                           double T, FunctionF&& F, FnSlopes&& slopes) {
   double h = (b - a) / N;  // mesh width
   // positions of grid points
   Eigen::VectorXd x = Eigen::VectorXd::LinSpaced(N, a + 0.5 * h, b - 0.5 * h);
@@ -37,7 +37,7 @@ Eigen::VectorXd highresevl(double a, double b, unsigned N, FunctionU0 &&u0,
   Eigen::VectorXd mu0 = x.unaryExpr(u0);
 
   // right hand side lambda function for ODE solver
-  auto odefun = [&](const Eigen::VectorXd &mu, Eigen::VectorXd &dmdt,
+  auto odefun = [&](const Eigen::VectorXd& mu, Eigen::VectorXd& dmdt,
                     double t) {
     dmdt = -1. / h * slopelimfluxdiff<FunctionF, FnSlopes>(mu, F, slopes);
   };

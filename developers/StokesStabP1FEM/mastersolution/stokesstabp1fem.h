@@ -32,20 +32,18 @@ namespace StokesStabP1FEM {
 class P1StabFEMElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, 9, 9>;
-  P1StabFEMElementMatrixProvider(const P1StabFEMElementMatrixProvider &) =
+  P1StabFEMElementMatrixProvider(const P1StabFEMElementMatrixProvider&) =
       delete;
-  P1StabFEMElementMatrixProvider(P1StabFEMElementMatrixProvider &&) noexcept =
+  P1StabFEMElementMatrixProvider(P1StabFEMElementMatrixProvider&&) noexcept =
       default;
-  P1StabFEMElementMatrixProvider &operator=(
-      const P1StabFEMElementMatrixProvider &) = delete;
-  P1StabFEMElementMatrixProvider &operator=(P1StabFEMElementMatrixProvider &&) =
+  P1StabFEMElementMatrixProvider& operator=(
+      const P1StabFEMElementMatrixProvider&) = delete;
+  P1StabFEMElementMatrixProvider& operator=(P1StabFEMElementMatrixProvider&&) =
       delete;
   P1StabFEMElementMatrixProvider() = default;
   virtual ~P1StabFEMElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemMat MK_;
@@ -62,21 +60,19 @@ template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 class P1StabFEMElementVectorProvider {
  public:
   using ElemVec = Eigen::Matrix<double, 9, 1>;
-  P1StabFEMElementVectorProvider(const P1StabFEMElementVectorProvider &) =
+  P1StabFEMElementVectorProvider(const P1StabFEMElementVectorProvider&) =
       delete;
-  P1StabFEMElementVectorProvider(P1StabFEMElementVectorProvider &&) noexcept =
+  P1StabFEMElementVectorProvider(P1StabFEMElementVectorProvider&&) noexcept =
       default;
-  P1StabFEMElementVectorProvider &operator=(
-      const P1StabFEMElementVectorProvider &) = delete;
-  P1StabFEMElementVectorProvider &operator=(P1StabFEMElementVectorProvider &&) =
+  P1StabFEMElementVectorProvider& operator=(
+      const P1StabFEMElementVectorProvider&) = delete;
+  P1StabFEMElementVectorProvider& operator=(P1StabFEMElementVectorProvider&&) =
       delete;
   virtual ~P1StabFEMElementVectorProvider() = default;
 
   P1StabFEMElementVectorProvider(MESH_FUNCTION f) : f_(f) {}
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemVec phiK_;
@@ -88,7 +84,7 @@ class P1StabFEMElementVectorProvider {
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 typename P1StabFEMElementVectorProvider<MESH_FUNCTION>::ElemVec
 P1StabFEMElementVectorProvider<MESH_FUNCTION>::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Area of the triangle
@@ -117,7 +113,7 @@ P1StabFEMElementVectorProvider<MESH_FUNCTION>::Eval(
  * @param dofh DofHandler object for all FE spaces (= monolithic FE space)
  */
 lf::assemble::COOMatrix<double> buildP1StabFEMGalerkinMatrix(
-    const lf::assemble::DofHandler &dofh);
+    const lf::assemble::DofHandler& dofh);
 
 /**
  * @brief Taylor-Hood FE solultion of pipe flow problem
@@ -128,7 +124,7 @@ lf::assemble::COOMatrix<double> buildP1StabFEMGalerkinMatrix(
  */
 /* SAM_LISTING_BEGIN_2 */
 template <lf::mesh::utils::MeshFunction FUNCTOR_F>
-Eigen::VectorXd solveP1StabFEMStokesBVP(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd solveP1StabFEMStokesBVP(const lf::assemble::DofHandler& dofh,
                                         FUNCTOR_F f, bool print = true) {
   // Number of d.o.f. in FE spaces
   size_t n = dofh.NumDofs();
@@ -152,7 +148,7 @@ Eigen::VectorXd solveP1StabFEMStokesBVP(const lf::assemble::DofHandler &dofh,
   // Flag vector for d.o.f. on the boundary
   std::vector<std::pair<bool, double>> ess_dof_select(n + 1, {false, 0.0});
   // Visit nodes on the boundary
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     if (bd_flags(*node)) {
       // Indices of global shape functions sitting at node
       std::span<const lf::assemble::gdof_idx_t> dof_idx{

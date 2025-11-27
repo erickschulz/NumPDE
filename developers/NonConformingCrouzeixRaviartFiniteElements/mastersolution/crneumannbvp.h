@@ -19,12 +19,12 @@ namespace NonConformingCrouzeixRaviartFiniteElements {
 /* SAM_LISTING_BEGIN_1 */
 template <typename GAMMA_COEFF, typename F_FUNCTOR>
 Eigen::VectorXd solveCRNeumannBVP(std::shared_ptr<CRFeSpace> fe_space,
-                                  GAMMA_COEFF &&gamma, F_FUNCTOR &&f) {
+                                  GAMMA_COEFF&& gamma, F_FUNCTOR&& f) {
   Eigen::VectorXd sol;
 // TODO: task 2-14.u)
 #if SOLUTION
   // Obtain local to global index mapping for shape functions
-  const lf::assemble::DofHandler &dof_handler{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dof_handler{fe_space->LocGlobMap()};
   const size_type num_dofs = dof_handler.NumDofs();
   // Prepare coefficient and source functions as MeshFunction
   lf::mesh::utils::MeshFunctionGlobal mf_one{

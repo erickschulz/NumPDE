@@ -60,7 +60,7 @@ Eigen::VectorXd solveBurgersGodunov(double T, unsigned int N) {
  * @return a vector mu_sub of size N, that represents mu on a sub-grid of size N
  */
 /* SAM_LISTING_BEGIN_2 */
-Eigen::VectorXd reduce(const Eigen::VectorXd &mu, unsigned int N) {
+Eigen::VectorXd reduce(const Eigen::VectorXd& mu, unsigned int N) {
   Eigen::VectorXd mu_sub(N + 1);
   int fraction = mu.size() / N;
   for (int j = 0; j < N + 1; ++j) {

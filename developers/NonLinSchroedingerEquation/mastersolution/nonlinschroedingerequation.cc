@@ -18,7 +18,7 @@
 namespace NonLinSchroedingerEquation {
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity &cell) {
+Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   Eigen::Matrix3d element_matrix;
@@ -35,7 +35,7 @@ Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity &cell) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-double Norm(const Eigen::VectorXcd &mu, const Eigen::SparseMatrix<double> &D) {
+double Norm(const Eigen::VectorXcd& mu, const Eigen::SparseMatrix<double>& D) {
 #if SOLUTION
   return std::sqrt(mu.dot(D * mu).real());
 #else
@@ -48,8 +48,8 @@ double Norm(const Eigen::VectorXcd &mu, const Eigen::SparseMatrix<double> &D) {
 #endif
 }
 
-double KineticEnergy(const Eigen::VectorXcd &mu,
-                     const Eigen::SparseMatrix<double> &A) {
+double KineticEnergy(const Eigen::VectorXcd& mu,
+                     const Eigen::SparseMatrix<double>& A) {
 #if SOLUTION
   return 0.5 * mu.dot(A * mu).real();
 #else
@@ -62,8 +62,8 @@ double KineticEnergy(const Eigen::VectorXcd &mu,
 #endif
 }
 
-double InteractionEnergy(const Eigen::VectorXcd &mu,
-                         const Eigen::SparseMatrix<double> &D) {
+double InteractionEnergy(const Eigen::VectorXcd& mu,
+                         const Eigen::SparseMatrix<double>& D) {
 #if SOLUTION
   Eigen::VectorXd mu_abs2 = mu.cwiseAbs2();
   return 0.25 * mu_abs2.dot(D * mu_abs2);

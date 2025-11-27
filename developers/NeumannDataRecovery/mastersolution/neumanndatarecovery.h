@@ -45,7 +45,7 @@ Eigen::Matrix<double, 2, 3> GradsBaryCoords(
  * are computed subsequently.
  */
 Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
-    const lf::geometry::Geometry &geo);
+    const lf::geometry::Geometry& geo);
 
 /** @brief Compute the piecewise constant Neumann data directly from a piecewise
  * linear finite-element solution
@@ -59,7 +59,7 @@ Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
  */
 lf::mesh::utils::CodimMeshDataSet<double> getNeumannData(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &mu);
+    const Eigen::VectorXd& mu);
 
 }  // namespace NeumannDataRecovery
 

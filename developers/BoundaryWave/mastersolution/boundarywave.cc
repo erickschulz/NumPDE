@@ -11,12 +11,12 @@ namespace BoundaryWave {
 
 /* SAM_LISTING_BEGIN_1 */
 lf::assemble::COOMatrix<double> buildM(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p) {
   // I. TOOLS AND DATA
   // Pointer to current fe_space and mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p(fe_space_p->Mesh());
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -30,7 +30,7 @@ lf::assemble::COOMatrix<double> buildM(
   // Creating a predicate that will guarantee that the computations are carried
   // only on the edges of the mesh using the boundary flags
   // Actually a redundant step, because 'bdflags' is a predicate already.
-  auto edges_predicate = [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+  auto edges_predicate = [&bd_flags](const lf::mesh::Entity& edge) -> bool {
     return bd_flags(edge);
   };
   // Coefficient function used in the class template MassEdgeMatrixProvider
@@ -52,12 +52,12 @@ lf::assemble::COOMatrix<double> buildM(
 
 /* SAM_LISTING_BEGIN_2 */
 lf::assemble::COOMatrix<double> buildA(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p) {
   // I. TOOLS AND DATA
   // Pointer to current fe_space and mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p(fe_space_p->Mesh());
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 

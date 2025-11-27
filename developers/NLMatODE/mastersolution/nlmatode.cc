@@ -14,13 +14,13 @@
 namespace NLMatODE {
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::MatrixXd matode(const Eigen::MatrixXd &Y0, double T) {
+Eigen::MatrixXd matode(const Eigen::MatrixXd& Y0, double T) {
   // Use the Ode45 class to find an approximation
   // of the matrix IVP $Y' = -(Y-Y')*Y$ at time $T$
   Eigen::MatrixXd YT;
 #if SOLUTION
   // Define the RHS
-  auto F = [](const Eigen::MatrixXd &M) { return -(M - M.transpose()) * M; };
+  auto F = [](const Eigen::MatrixXd& M) { return -(M - M.transpose()) * M; };
   Ode45<Eigen::MatrixXd> O(F);
 
   // Set tolerances
@@ -40,7 +40,7 @@ Eigen::MatrixXd matode(const Eigen::MatrixXd &Y0, double T) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-bool checkinvariant(const Eigen::MatrixXd &M, double T) {
+bool checkinvariant(const Eigen::MatrixXd& M, double T) {
   // Check if $Y'*Y$ is preserved at the time $T$ by matode.
 #if SOLUTION
   Eigen::MatrixXd N = matode(M, T);
@@ -74,7 +74,7 @@ double cvgDiscreteGradientMethod() {
   Eigen::MatrixXd Y_ex = matode(Y0, T);
 
   // define the rhs
-  auto F = [](const Eigen::MatrixXd &M) { return -(M - M.transpose()) * M; };
+  auto F = [](const Eigen::MatrixXd& M) { return -(M - M.transpose()) * M; };
 
   Eigen::MatrixXd I = Eigen::MatrixXd::Identity(5, 5);
   Eigen::ArrayXd MM(8);

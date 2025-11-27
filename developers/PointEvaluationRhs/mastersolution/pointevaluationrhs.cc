@@ -210,8 +210,8 @@ Eigen::Vector2d GlobalInverseQuad(Eigen::Matrix<double, 2, 4> vert,
 }
 
 std::pair<double, double> normsSolutionPointLoadDirichletBVP(
-    const lf::assemble::DofHandler &dofh, Eigen::Vector2d source_point,
-    Eigen::VectorXd &sol_vec) {
+    const lf::assemble::DofHandler& dofh, Eigen::Vector2d source_point,
+    Eigen::VectorXd& sol_vec) {
   std::pair<double, double> result(0, 0);
   const unsigned int N_dofs = dofh.NumDofs();
   sol_vec.resize(N_dofs);
@@ -262,10 +262,10 @@ std::pair<double, double> normsSolutionPointLoadDirichletBVP(
 }
 
 /* SAM_LISTING_BEGIN_6 */
-Eigen::VectorXd DeltaLocalVectorAssembler::Eval(const lf::mesh::Entity &cell) {
+Eigen::VectorXd DeltaLocalVectorAssembler::Eval(const lf::mesh::Entity& cell) {
   Eigen::VectorXd result;
   // get the coordinates of the corners of this cell
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   auto vertices = lf::geometry::Corners(*geo_ptr);
 #if SOLUTION
   Eigen::Vector2d x_hat;

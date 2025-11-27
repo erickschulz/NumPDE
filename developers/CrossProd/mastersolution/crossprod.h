@@ -22,8 +22,8 @@ namespace CrossProd {
 
 /* SAM_LISTING_BEGIN_1 */
 template <class Function, class Jacobian>
-std::vector<Eigen::VectorXd> solve_imp_mid(Function &&f, Jacobian &&Jf,
-                                           double T, const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> solve_imp_mid(Function&& f, Jacobian&& Jf,
+                                           double T, const Eigen::VectorXd& y0,
                                            unsigned int M) {
   std::vector<Eigen::VectorXd> res(M + 1);
   // Construct the implicit mid-point method with the class
@@ -51,8 +51,8 @@ std::vector<Eigen::VectorXd> solve_imp_mid(Function &&f, Jacobian &&Jf,
 
 /* SAM_LISTING_BEGIN_2 */
 template <class Function, class Jacobian>
-std::vector<Eigen::VectorXd> solve_lin_mid(Function &&f, Jacobian &&Jf,
-                                           double T, const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> solve_lin_mid(Function&& f, Jacobian&& Jf,
+                                           double T, const Eigen::VectorXd& y0,
                                            unsigned int M) {
   std::vector<Eigen::VectorXd> res;
   // Implement the linear implicit mid-point method for
@@ -69,8 +69,8 @@ std::vector<Eigen::VectorXd> solve_lin_mid(Function &&f, Jacobian &&Jf,
   Eigen::VectorXd ytemp1 = y0;
   Eigen::VectorXd ytemp2 = y0;
   // Pointers for efficient swapping of state vectors
-  Eigen::VectorXd *yold = &ytemp1;
-  Eigen::VectorXd *ynew = &ytemp2;
+  Eigen::VectorXd* yold = &ytemp1;
+  Eigen::VectorXd* ynew = &ytemp2;
   Eigen::MatrixXd eye = Eigen::MatrixXd::Identity(3, 3);
   // Loop over all fixed steps
   for (unsigned int k = 0; k < M; ++k) {

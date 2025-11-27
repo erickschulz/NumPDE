@@ -25,7 +25,7 @@ namespace ParametricFiniteElements {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
 double integrationElement(unsigned int n, unsigned int j, unsigned int l,
-                          FUNCTOR &&Psi, Eigen::Vector2d xhat) {
+                          FUNCTOR&& Psi, Eigen::Vector2d xhat) {
   // Mesh width
   double h = 1.0 / n;
   double detJ = 0.0;
@@ -52,7 +52,7 @@ double integrationElement(unsigned int n, unsigned int j, unsigned int l,
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
 Eigen::Matrix2d jacobianInverseTransposed(unsigned int n, unsigned int j,
-                                          unsigned int l, FUNCTOR &&Psi,
+                                          unsigned int l, FUNCTOR&& Psi,
                                           Eigen::Vector2d xhat) {
   // Mesh width
   double h = 1.0 / n;
@@ -116,7 +116,7 @@ Eigen::MatrixXd bhats_grad(Eigen::Vector2d xhat) {
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR1, typename FUNCTOR2>
 Eigen::MatrixXd geoThermElemMat(unsigned int n, unsigned int j, unsigned int l,
-                                FUNCTOR1 &&alpha, FUNCTOR2 &&Psi) {
+                                FUNCTOR1&& alpha, FUNCTOR2&& Psi) {
   // Mesh width
   double h = 1.0 / n;
 
@@ -226,8 +226,8 @@ int geoThermLocalToGlobal(unsigned int n, unsigned int j, unsigned int l,
 /* SAM_LISTING_BEGIN_5 */
 template <typename FUNCTOR1, typename FUNCTOR2>
 std::vector<Eigen::Triplet<double>> assembleGeoTherm(unsigned int n,
-                                                     FUNCTOR1 &&alpha,
-                                                     FUNCTOR2 &&Psi) {
+                                                     FUNCTOR1&& alpha,
+                                                     FUNCTOR2&& Psi) {
   // Reserve triplets for Galerkin Matrix A
   std::vector<Eigen::Triplet<double>> triplets;
   triplets.reserve(4 * 4 * n * n);
@@ -265,10 +265,10 @@ std::vector<Eigen::Triplet<double>> assembleGeoTherm(unsigned int n,
  * on the Dirichlet Boundary Gamma_D with the m-th unit vector
  */
 /* SAM_LISTING_BEGIN_6 */
-void geoThermBdElim(unsigned int n, std::vector<Eigen::Triplet<double>> &A) {
+void geoThermBdElim(unsigned int n, std::vector<Eigen::Triplet<double>>& A) {
 #if SOLUTION
   // Identify Triplets on Boundary with Dirichlet Condition
-  for (auto &a : A) {
+  for (auto& a : A) {
     if (a.row() < n + 1) {
       a = Eigen::Triplet(a.row(), a.col(), 0.0);
     }
@@ -291,8 +291,8 @@ void geoThermBdElim(unsigned int n, std::vector<Eigen::Triplet<double>> &A) {
  */
 /* SAM_LISTING_BEGIN_7 */
 template <typename FUNCTOR1, typename FUNCTOR2>
-Eigen::VectorXd geoThermSolve(unsigned int n, FUNCTOR1 &&alpha,
-                              FUNCTOR2 &&Psi) {
+Eigen::VectorXd geoThermSolve(unsigned int n, FUNCTOR1&& alpha,
+                              FUNCTOR2&& Psi) {
   // Total Number of dofs
   int N_dofs = (n + 1) * (n + 1);
 
@@ -339,8 +339,8 @@ Eigen::VectorXd geoThermSolve(unsigned int n, FUNCTOR1 &&alpha,
  */
 /* SAM_LISTING_BEGIN_8 */
 template <typename FUNCTOR>
-double geoThermSurfInt(unsigned int n, FUNCTOR &&Psi,
-                       const Eigen::VectorXd &mu) {
+double geoThermSurfInt(unsigned int n, FUNCTOR&& Psi,
+                       const Eigen::VectorXd& mu) {
   // Mesh width
   double h = 1.0 / n;
 

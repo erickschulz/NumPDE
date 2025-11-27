@@ -21,13 +21,13 @@ namespace RadauThreeTimestepping {
 /**
  * @brief time depedent heat source
  */
-Eigen::VectorXd rhsVectorheatSource(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd rhsVectorheatSource(const lf::assemble::DofHandler& dofh,
                                     double time);
 
 /**
  * @brief solve heat equation with rhsVectorHeat source as source
  */
-Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler& dofh,
                                    unsigned int m, double final_time);
 
 /**
@@ -42,8 +42,8 @@ Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler &dofh,
  * rows and columns that are to be dropped
  */
 template <typename SCALAR, typename SELECTOR>
-void dropMatrixRowsColumns(SELECTOR &&selectvals,
-                           lf::assemble::COOMatrix<SCALAR> &A) {
+void dropMatrixRowsColumns(SELECTOR&& selectvals,
+                           lf::assemble::COOMatrix<SCALAR>& A) {
   const lf::assemble::size_type N(A.cols());
   LF_ASSERT_MSG(A.rows() == N, "Matrix must be square!");
   // Set the rows and columns of boundary DOFs to zero
@@ -77,7 +77,7 @@ class LinFEMassMatrixProvider {
   /**
    * @brief Default implement: all cells are active
    */
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
 
   /**
    * @brief Main method for computing the element vector
@@ -86,7 +86,7 @@ class LinFEMassMatrixProvider {
    *
    * The implementation uses an analytic formula defined over triangular cells
    **/
-  Eigen::Matrix3d Eval(const lf::mesh::Entity &tria);
+  Eigen::Matrix3d Eval(const lf::mesh::Entity& tria);
 };
 
 /**
@@ -108,7 +108,7 @@ class TrapRuleLinFEElemVecProvider {
   /**
    * @brief Default implement: all cells are active
    */
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
 
   /**
    * @brief Main method for computing the element vector
@@ -118,7 +118,7 @@ class TrapRuleLinFEElemVecProvider {
    * The implementation uses simple vertex based quadrature and an approximation
    * of the volume of a cell just using the integration element at the
    * barycenter.*/
-  Eigen::Vector3d Eval(const lf::mesh::Entity &tria);
+  Eigen::Vector3d Eval(const lf::mesh::Entity& tria);
 
  private:
   // f_ provides the evaluation of the source function at coordinates
@@ -135,7 +135,7 @@ TrapRuleLinFEElemVecProvider(FUNCTOR) -> TrapRuleLinFEElemVecProvider<FUNCTOR>;
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR>
 Eigen::Vector3d TrapRuleLinFEElemVecProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &tria) {
+    const lf::mesh::Entity& tria) {
   Eigen::Vector3d ElemVec;
 #if SOLUTION
   // Throw error in case no triangular cell
@@ -167,13 +167,13 @@ class Radau3MOLTimestepper {
  public:
   // Disabled constructors
   Radau3MOLTimestepper() = delete;
-  Radau3MOLTimestepper(const Radau3MOLTimestepper &) = delete;
-  Radau3MOLTimestepper(Radau3MOLTimestepper &&) = delete;
-  Radau3MOLTimestepper &operator=(const Radau3MOLTimestepper &) = delete;
-  Radau3MOLTimestepper &operator=(const Radau3MOLTimestepper &&) = delete;
+  Radau3MOLTimestepper(const Radau3MOLTimestepper&) = delete;
+  Radau3MOLTimestepper(Radau3MOLTimestepper&&) = delete;
+  Radau3MOLTimestepper& operator=(const Radau3MOLTimestepper&) = delete;
+  Radau3MOLTimestepper& operator=(const Radau3MOLTimestepper&&) = delete;
 
   // Main constructor; precomputations are done here
-  Radau3MOLTimestepper(const lf::assemble::DofHandler &dofh);
+  Radau3MOLTimestepper(const lf::assemble::DofHandler& dofh);
 
   // Destructor
   virtual ~Radau3MOLTimestepper() = default;
@@ -181,12 +181,12 @@ class Radau3MOLTimestepper {
   /* Class member functions */
   // Discrete evolution operator for Radau IIA 3rd order
   Eigen::VectorXd discreteEvolutionOperator(double time, double tau,
-                                            const Eigen::VectorXd &mu) const;
+                                            const Eigen::VectorXd& mu) const;
 
  private:
 #if SOLUTION
   double tau_;
-  const lf::assemble::DofHandler &dofh_;  // dangerous
+  const lf::assemble::DofHandler& dofh_;  // dangerous
   // Matrices in triplet format holding Galerkin matrices
   Eigen::SparseMatrix<double> A_;     // Element matrix
   Eigen::SparseMatrix<double> A_Kp_;  // Element Kronecker product matrix
@@ -200,7 +200,7 @@ class Radau3MOLTimestepper {
   // precompute the LU decomposition for more efficiency.
   Eigen::SparseLU<Eigen::SparseMatrix<double>> solver_;
 #else
-  const lf::assemble::DofHandler &dofh_;  // dangerous
+  const lf::assemble::DofHandler& dofh_;  // dangerous
                                           //====================
                                           // Your code goes here
                                           //====================

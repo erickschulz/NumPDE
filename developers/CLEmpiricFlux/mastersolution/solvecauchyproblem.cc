@@ -16,7 +16,7 @@
 namespace CLEmpiricFlux {
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::Vector2d findSupport(const UniformCubicSpline &f,
+Eigen::Vector2d findSupport(const UniformCubicSpline& f,
                             Eigen::Vector2d initsupp, double t) {
   Eigen::Vector2d result;
 #if SOLUTION
@@ -33,8 +33,8 @@ Eigen::Vector2d findSupport(const UniformCubicSpline &f,
 
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
-Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
-                                FUNCTOR &&numFlux) {
+Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd& mu0, double h,
+                                FUNCTOR&& numFlux) {
   int m = mu0.size();
   Eigen::VectorXd mu1(m);
 #if SOLUTION
@@ -57,7 +57,7 @@ Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
 
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR>
-Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
+Eigen::VectorXd RalstonODESolver(FUNCTOR&& rhs, Eigen::VectorXd mu0, double tau,
                                  int n) {
 #if SOLUTION
   for (int i = 0; i < n; ++i) {
@@ -75,8 +75,8 @@ Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
 /* SAM_LISTING_END_3 */
 
 /* SAM_LISTING_BEGIN_4 */
-Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline &f,
-                                   const Eigen::VectorXd &mu0, double h,
+Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline& f,
+                                   const Eigen::VectorXd& mu0, double h,
                                    double T) {
   Eigen::VectorXd muT(mu0.size());
 #if SOLUTION
@@ -84,7 +84,7 @@ Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline &f,
                         h / std::abs(f.derivative(1.0)));
   double n = (int)std::floor(T / tau);
   GodunovFlux godunovFlux(f);
-  auto rhs = [h, &godunovFlux](const Eigen::VectorXd &mu) {
+  auto rhs = [h, &godunovFlux](const Eigen::VectorXd& mu) {
     return semiDiscreteRhs(mu, h, godunovFlux);
   };
   muT = RalstonODESolver(rhs, mu0, tau, n);

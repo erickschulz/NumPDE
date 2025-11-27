@@ -23,17 +23,17 @@
 int main() {
   // parameter functions:
   // boundary conditions
-  const auto g = [](const Eigen::Vector2d &x) {
+  const auto g = [](const Eigen::Vector2d& x) {
     return x(0) > x(1) ? 1.0 : 0.0;
   };
   // velocity field
-  const auto v = [](const Eigen::Vector2d &x) {
+  const auto v = [](const Eigen::Vector2d& x) {
     return Eigen::Vector2d(1.0, 1.0);
   };
   // diffusion coefficient
-  const auto eps = [](const Eigen::Vector2d &x) { return 10E-10; };
+  const auto eps = [](const Eigen::Vector2d& x) { return 10E-10; };
   // source function
-  const auto f = [](const Eigen::Vector2d &x) { return 0.0; };
+  const auto f = [](const Eigen::Vector2d& x) { return 0.0; };
 
   // Read Mesh from file
   std::string mesh_file = "meshes/mesh_square.msh";

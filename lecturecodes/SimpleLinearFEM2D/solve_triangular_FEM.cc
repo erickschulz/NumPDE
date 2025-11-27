@@ -17,7 +17,7 @@ int main() {
             << square_mesh._elements.rows() << " elements" << std::endl;
 
   // source function f
-  FHandle_t f = [](const Eigen::Vector2d &x) {
+  FHandle_t f = [](const Eigen::Vector2d& x) {
     return (8.0 * pi * pi + 1) * std::cos(2 * pi * x(0)) *
            std::cos(2 * pi * x(1));
   };

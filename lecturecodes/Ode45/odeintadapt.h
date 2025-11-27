@@ -11,7 +11,7 @@
 /* SAM_LISTING_BEGIN_0 */
 // Auxiliary function: default norm for an \eigen vector type
 template <class State>
-double _norm(const State &y) {
+double _norm(const State& y) {
   return y.norm();
 }
 
@@ -19,9 +19,9 @@ double _norm(const State &y) {
 template <class DiscEvolOp, class State,
           class NormFunc = decltype(_norm<State>)>
 std::vector<std::pair<double, State>> odeintadapt(
-    DiscEvolOp &&Psilow, DiscEvolOp &&Psihigh, const State &y0, double T,
+    DiscEvolOp&& Psilow, DiscEvolOp&& Psihigh, const State& y0, double T,
     double h0, double reltol, double abstol, double hmin,
-    NormFunc &norm = _norm<State>) {
+    NormFunc& norm = _norm<State>) {
   double t = 0;   // initial time $\cob{t_0=0}$\Label[line]{odeintadapt:1}
   State y = y0;   // current state
   double h = h0;  // timestep to start with

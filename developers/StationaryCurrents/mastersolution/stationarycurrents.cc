@@ -43,7 +43,7 @@ readMeshWithTags(std::string filename) {
   }
   // Obtain pointer to mesh object
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{reader.mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Output information on the mesh
   lf::mesh::utils::PrintInfo(std::cout, mesh);
   // A set of integers associated with edges of the mesh (codim = 1 entities)
@@ -51,7 +51,7 @@ readMeshWithTags(std::string filename) {
   // Counter for nodes on a particular part of the boundary
   std::array<int, NPhysGrp> edcnt{0};
   // Loop over edges, check their physical groups, and mark their endpoints
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     LF_ASSERT_MSG(edge->RefEl() == lf::base::RefEl::kSegment(),
                   " edge must be a SEGMENT!");
     for (int j = 0; j < NPhysGrp; ++j) {
@@ -74,23 +74,23 @@ lf::mesh::utils::CodimMeshDataSet<int> tagNodes(
     std::shared_ptr<const lf::mesh::Mesh> mesh_p,
     lf::mesh::utils::CodimMeshDataSet<int> edgeids) {
   // Current mesh object
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // A set of integer ids associated with nodes of the mesh (codim = 2 entities)
   lf::mesh::utils::CodimMeshDataSet<int> nodeids{mesh_p, 2, -1};
 
   // Loop over edges and spread their ids, if non-negative
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     LF_ASSERT_MSG(edgeids.DefinedOn(*edge),
                   "No flag available for edge " << *edge);
     const int id = edgeids(*edge);
     if (id >= 0) {
       // Obtain iterator over set of endpoints
-      std::span<const lf::mesh::Entity *const> sub_ent_range{
+      std::span<const lf::mesh::Entity* const> sub_ent_range{
           edge->SubEntities(1)};
       LF_ASSERT_MSG(sub_ent_range.size() == 2, " Edge with #endpoints != 2!");
       // Access endpoints
-      const lf::mesh::Entity &ep0{*sub_ent_range[0]};
-      const lf::mesh::Entity &ep1{*sub_ent_range[1]};
+      const lf::mesh::Entity& ep0{*sub_ent_range[0]};
+      const lf::mesh::Entity& ep1{*sub_ent_range[1]};
       // Set physical group ids for the endpoints
       nodeids(ep0) = id;
       nodeids(ep1) = id;
@@ -115,9 +115,9 @@ Eigen::Matrix<double, 2, 3> GradsBaryCoords(
   return X.inverse().block<2, 3>(1, 0);
 }
 
-double computeMeshwidth(const lf::mesh::Mesh &mesh) {
+double computeMeshwidth(const lf::mesh::Mesh& mesh) {
   double h = 0.0;
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     h = std::max(h, lf::geometry::Volume(*(edge->Geometry())));
   }
   return h;
@@ -146,7 +146,7 @@ std::tuple<double, double, double> computePotential(std::string basename) {
   std::string mesh_path = "meshes/" + basename + ".msh";
   // Read mesh and label nodes
   auto [mesh_p, edgeids] = readMeshWithTags(mesh_path);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Distribute tags to nodes
   auto nodeids{tagNodes(mesh_p, edgeids)};
 #if SOLUTION
@@ -168,7 +168,7 @@ std::tuple<double, double, double> computePotential(std::string basename) {
   // Output solution into a VTK file
   std::cout << "VTK output for " << basename << std::endl;
   auto mds = lf::mesh::utils::make_CodimMeshDataSet<double>(mesh_p, 2, 0.0);
-  for (const lf::mesh::Entity *node : mesh.Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh.Entities(2)) {
     auto gdof_idx{(fe_space->LocGlobMap()).GlobalDofIndices(*node)};
     LF_ASSERT_MSG(gdof_idx.size() == 1, " A node can hold only one dof!");
     const lf::assemble::gdof_idx_t nd_idx = gdof_idx[0];

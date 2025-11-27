@@ -40,12 +40,12 @@ class RHSProvider {
  public:
   // Disabled constructors
   RHSProvider() = delete;
-  RHSProvider(const RHSProvider &) = delete;
-  RHSProvider(RHSProvider &&) = delete;
-  RHSProvider &operator=(const RHSProvider &) = delete;
-  RHSProvider &operator=(const RHSProvider &&) = delete;
+  RHSProvider(const RHSProvider&) = delete;
+  RHSProvider(RHSProvider&&) = delete;
+  RHSProvider& operator=(const RHSProvider&) = delete;
+  RHSProvider& operator=(const RHSProvider&&) = delete;
   // Main constructor; precomputations to be done here
-  RHSProvider(const lf::assemble::DofHandler &dofh,
+  RHSProvider(const lf::assemble::DofHandler& dofh,
               std::function<double(double)> g);
   // Destructor
   virtual ~RHSProvider() = default;
@@ -82,11 +82,11 @@ class RHSProvider {
 template <typename GFUNCTION>
 Eigen::VectorXd evolveIBVPGaussLobatto(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    double T, unsigned int M, GFUNCTION &&g) {
+    double T, unsigned int M, GFUNCTION&& g) {
   // timestep size
   const double tau = T / M;
 
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
   const int N = dofh.NumDofs();
 
   // Coefficient vector, initial value = 0
@@ -98,13 +98,13 @@ Eigen::VectorXd evolveIBVPGaussLobatto(
   // Arrange blocks by triplet manipulations
   // First: Two copies of \tilde{M} on the diagonal
   lf::assemble::COOMatrix<double> COO_M = initMbig(fe_space);
-  for (const Eigen::Triplet<double> &triplet : COO_M.triplets()) {
+  for (const Eigen::Triplet<double>& triplet : COO_M.triplets()) {
     lhs.AddToEntry(triplet.row(), triplet.col(), triplet.value());
     lhs.AddToEntry(triplet.row() + N, triplet.col() + N, triplet.value());
   }
   // Scaled copies of \tilde{A} added to diagonal and set as off-diagonal blocks
   lf::assemble::COOMatrix<double> COO_A = initAbig(fe_space);
-  for (const Eigen::Triplet<double> &triplet : COO_A.triplets()) {
+  for (const Eigen::Triplet<double>& triplet : COO_A.triplets()) {
     const int row = triplet.row();
     const int col = triplet.col();
     const double value = 0.5 * tau * triplet.value();

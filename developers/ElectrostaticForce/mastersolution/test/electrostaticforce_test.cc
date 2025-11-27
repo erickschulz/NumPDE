@@ -70,12 +70,12 @@ TEST(ElectrostaticForce, solvePoissonBVPBoundaryConditions) {
   auto mesh_p = reader.mesh();
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
 
   Eigen::VectorXd approx_sol = ElectrostaticForce::solvePoissonBVP(fe_space_p);
 
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 2)};
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     if (bd_flags(*node)) {
       auto dof_idx = dofh.GlobalDofIndices(*node);
       auto endpoints = lf::geometry::Corners(*(node->Geometry()));

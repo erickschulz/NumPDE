@@ -35,7 +35,7 @@ Eigen::SparseMatrix<double> compBmat(int Ml, int Mr, double h);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR, typename NUMFLUX>
-Eigen::VectorXd G(const Eigen::VectorXd &mu, FUNCTOR &&f, NUMFLUX &&F, int Ml,
+Eigen::VectorXd G(const Eigen::VectorXd& mu, FUNCTOR&& f, NUMFLUX&& F, int Ml,
                   int Mr, double h) {
   const int N_half = (Ml + Mr + 1);
   const int N = 2 * N_half;
@@ -94,13 +94,13 @@ Eigen::VectorXd G(const Eigen::VectorXd &mu, FUNCTOR &&f, NUMFLUX &&F, int Ml,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR, typename NUMFLUX>
-Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR &&f, NUMFLUX &&F, double T,
+Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR&& f, NUMFLUX&& F, double T,
                      int Ml, int Mr, double h, unsigned int m) {
 #if SOLUTION
   Eigen::SparseMatrix<double> B = compBmat(Ml, Mr, h);
   Eigen::SparseMatrix<double> Binv = B.cwiseInverse();
 
-  auto G_bound = [&f, &F, T, Ml, Mr, h](const Eigen::VectorXd &mu) {
+  auto G_bound = [&f, &F, T, Ml, Mr, h](const Eigen::VectorXd& mu) {
     return G(mu, std::forward<FUNCTOR>(f), std::forward<NUMFLUX>(F), Ml, Mr, h);
   };
   // Timestepping based on explicit midpoint rule, a 2-stage explicit Rune-Kutta
@@ -133,7 +133,7 @@ Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR &&f, NUMFLUX &&F, double T,
 double Feo(double v, double w);
 
 struct Solution {
-  Solution(const Solution &other) : x_(other.x_), u_(other.u_) {
+  Solution(const Solution& other) : x_(other.x_), u_(other.u_) {
     std::cout << "Called copy contructor" << std::endl;
   }
   Solution(Eigen::VectorXd x, Eigen::VectorXd u)

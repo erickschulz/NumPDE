@@ -34,7 +34,7 @@ int main() {
   auto mesh_p = reader.mesh();
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
   // Mass matrix

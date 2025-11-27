@@ -20,14 +20,14 @@ class AnisotropicDiffusionElementMatrixProvider {
   /** @brief Constructor storing the vector field of modelling anisotropy */
   AnisotropicDiffusionElementMatrixProvider(
       std::function<Eigen::Vector2d(Eigen::Vector2d)> anisotropy_vec_field)
-      : anisotropy_vec_field_(anisotropy_vec_field){};
+      : anisotropy_vec_field_(anisotropy_vec_field) {};
   /** @brief Default implement: all cells are active */
-  bool isActive(const lf::mesh::Entity &) { return true; }
+  bool isActive(const lf::mesh::Entity&) { return true; }
   /** @brief Main method for computing the element matrix
    * @param cell refers to current cell (triangle or quadrilateral) for which
    * the element matrix is desired. The implementation uses local edge-midpoint
    * quadrature rule. */
-  Eigen::MatrixXd Eval(const lf::mesh::Entity &cell);
+  Eigen::MatrixXd Eval(const lf::mesh::Entity& cell);
 
  private:
   // This vector-valued function of the form d:coords -> vector is used to

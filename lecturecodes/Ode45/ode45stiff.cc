@@ -78,7 +78,7 @@ void case2() {
   }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   if (argc != 2) {
     std::cerr << "Usage: " << argv[0] << "[1-2]" << std::endl;
     std::cout
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
     int select;
     try {
       select = std::stoi(argv[1]);
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
       std::cout << e.what() << std::endl;
       select = 0;
     }

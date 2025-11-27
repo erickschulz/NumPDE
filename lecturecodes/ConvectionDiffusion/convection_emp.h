@@ -40,10 +40,10 @@ class ConvectionElementMatrixProvider {
    * matrix should be computed.
    * @return a 3x3 matrix containing the element matrix.
    */
-  Eigen::Matrix3d Eval(const lf::mesh::Entity &entity);
+  Eigen::Matrix3d Eval(const lf::mesh::Entity& entity);
 
   /** @brief Default implementation: all cells are active */
-  bool isActive(const lf::mesh::Entity & /*entity*/) const { return true; }
+  bool isActive(const lf::mesh::Entity& /*entity*/) const { return true; }
 
  private:
   FUNCTOR v_;  // functor for the velocity field.
@@ -51,11 +51,11 @@ class ConvectionElementMatrixProvider {
 
 template <typename FUNCTOR>
 Eigen::Matrix3d ConvectionElementMatrixProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   LF_ASSERT_MSG(lf::base::RefEl::kTria() == entity.RefEl(),
                 "Function only defined for triangular cells");
 
-  const lf::geometry::Geometry *geo_ptr = entity.Geometry();
+  const lf::geometry::Geometry* geo_ptr = entity.Geometry();
   Eigen::Matrix3d loc_mat;
 
   const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_ptr);
