@@ -70,8 +70,13 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        python3 -m pip install --upgrade pip
-        pip3 install matplotlib numpy
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          python3 -m pip install --upgrade pip
+          pip3 install matplotlib numpy
+        else
+          # macOS: use --break-system-packages or brew
+          python3 -m pip install --break-system-packages matplotlib numpy
+        fi
 
     - name: Setup ccache
       run: |
