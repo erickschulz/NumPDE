@@ -163,7 +163,7 @@ bool isPhysicalTwoShockSolution(Eigen::Vector2d ul, Eigen::Vector2d us,
   if (!checkSWEPhysicalShock(ul, us)) return false;
   if (!checkSWEPhysicalShock(us, ur)) return false;
 
-  // If all tests passed, we have a physical shock
+    // If all tests passed, we have a physical shock
 #endif
   return true;
 }

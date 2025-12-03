@@ -1,4 +1,7 @@
 # We'll mostly use the Google style
+# IMPORTANT: This project uses clang-format version 18
+# Install: Ubuntu: apt-get install clang-format-18
+#          macOS:  brew install llvm@18
 BasedOnStyle: Google
 CommentPragmas: '^ NOLINT'
 QualifierAlignment: Left

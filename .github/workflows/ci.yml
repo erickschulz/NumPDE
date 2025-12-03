@@ -8,21 +8,25 @@ on:
 
 jobs:
   format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
-    - name: Install clang-format
-      run: sudo apt-get update && sudo apt-get install -y clang-format
+    - name: Install clang-format-18
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+        sudo apt-get update
+        sudo apt-get install -y clang-format-18
     - name: Check formatting
       run: |
         echo "Checking if the code is well formatted"
-        clang-format --version
+        clang-format-18 --version
         echo "Checking developers folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always developers/
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always developers/
         echo "Checking include folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always include/
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always include/
         echo "Checking lecturecodes folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format --color always lecturecodes/
+        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always lecturecodes/
 
   build-and-test:
     runs-on: ${{ matrix.os }}
@@ -47,17 +51,48 @@ jobs:
         restore-keys: |
           hunter-${{ runner.os }}-
 
+    - name: Cache ccache
+      uses: actions/cache@v3
+      with:
+        path: ~/.ccache
+        key: ccache-${{ matrix.os }}-${{ github.sha }}
+        restore-keys: |
+          ccache-${{ matrix.os }}-
+
+    - name: Install build dependencies
+      run: |
+        if [ "${{ runner.os }}" = "Linux" ]; then
+          sudo apt-get update
+          sudo apt-get install -y ccache
+        else
+          brew install ccache
+        fi
+
+    - name: Install Python dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install matplotlib numpy
+
+    - name: Setup ccache
+      run: |
+        ccache --set-config=max_size=500M
+        ccache --set-config=compression=true
+        ccache -z
+
     - name: Get Dependencies
       run: |
         mkdir -p build
         cd build
         export CXX=${{ matrix.compiler }}
+        export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
         cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=Release -DHUNTER_CONFIGURATION_TYPES=Release -Wdev -DCMAKE_CXX_FLAGS_DEBUG="${{ matrix.cxxflags }}" ..
 
     - name: Build
       run: |
         cd build
+        export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
         make -j $(nproc)
+        ccache -s
 
     - name: Test
       run: |
@@ -68,11 +103,15 @@ jobs:
         ../scripts/ci/run_lecturecodes.sh
 
   tidy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
-    - name: Install clang-tidy
-      run: sudo apt-get update && sudo apt-get install -y clang-tidy
+    - name: Install clang-tidy-18
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy-18
 
     - name: Cache Hunter
       uses: actions/cache@v3
@@ -81,16 +120,16 @@ jobs:
         key: hunter-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
         restore-keys: |
           hunter-${{ runner.os }}-
-          
+
     - name: Run tidy
       run: |
         mkdir -p build
         cd build
         cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=Release -DHUNTER_CONFIGURATION_TYPES=Release -Wdev -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DMYSOLUTION=OFF ..
         echo "Running clang-tidy on developers folder"
-        clang-tidy --version
-        ../scripts/ci/run-clang-tidy.py -p . -config-file ../.clang-tidy "../developers/.*\\.cc"
+        clang-tidy-18 --version
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-18 -p . -config-file ../.clang-tidy "../developers/.*\\.cc"
         echo "Checking if std::system is used in developers folder"
         ../scripts/ci/forbid_stdsystem.sh ../developers/
         echo "Running clang-tidy on lecturecodes folder"
-        ../scripts/ci/run-clang-tidy.py -p . -config-file ../.clang-tidy "../lecturecodes/.*\\.cc"
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-18 -p . -config-file ../.clang-tidy "../lecturecodes/.*\\.cc"

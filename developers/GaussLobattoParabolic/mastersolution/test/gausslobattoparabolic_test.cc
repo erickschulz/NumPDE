@@ -100,7 +100,7 @@ TEST(GaussLobattoParabolic, RHSProvider) {
       std::make_shared<const lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   RHSProvider rhs_provider(fe_space->LocGlobMap(),
-                           (double (*)(double))&std::sin);
+                           (double (*)(double)) & std::sin);
 
   Eigen::VectorXd phi = rhs_provider(1.0);
   int N = phi.size();
