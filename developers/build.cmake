@@ -27,7 +27,7 @@ function(build PROBLEM_NAME DIR SOLUTION)
   # problem
   build_problem(${PROBLEM_TARGET}_dev mastersolution ${PROBLEM_TARGET})
   target_compile_definitions(${PROBLEM_TARGET}_dev PRIVATE SOLUTION=${SOLUTION})
-  target_compile_definitions(${PROBLEM_TARGET}_dev.static PRIVATE SOLUTION=${SOLUTION})
+  target_compile_definitions(${PROBLEM_TARGET}_dev.obj PRIVATE SOLUTION=${SOLUTION})
 
   # tests
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/mastersolution/test)

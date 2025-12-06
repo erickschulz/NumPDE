@@ -8,8 +8,6 @@
 
 #include "../magstat2d.h"
 
-#include <numbers>
-
 #include <gtest/gtest.h>
 #include <lf/fe/fe_tools.h>
 #include <lf/fe/mesh_function_fe.h>
@@ -20,6 +18,7 @@
 #include <lf/uscalfe/fe_space_lagrange_o2.h>
 
 #include <Eigen/Core>
+#include <numbers>
 
 /* Test in the google testing framework
 

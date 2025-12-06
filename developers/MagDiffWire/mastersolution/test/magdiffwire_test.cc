@@ -13,7 +13,6 @@
 #include <lf/mesh/test_utils/test_meshes.h>
 
 #include <Eigen/Core>
-
 #include <numbers>
 
 /* Test in the google testing framework

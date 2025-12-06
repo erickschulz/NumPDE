@@ -18,7 +18,6 @@
 #include <lf/uscalfe/fe_space_lagrange_o2.h>
 
 #include <Eigen/Core>
-
 #include <numbers>
 
 /* Test in the google testing framework
