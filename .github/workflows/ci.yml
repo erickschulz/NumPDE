@@ -79,9 +79,12 @@ jobs:
         ../scripts/ci/run_lecturecodes.sh
 
   build-macos:
-    name: Build & Test (macOS)
-    runs-on: macos-latest
+    name: Build & Test (macOS ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     needs: format
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
     env:
       CXX: clang++
       CXXFLAGS: "-Werror=#warnings"
@@ -93,9 +96,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ env.HUNTER_ROOT }}
-        key: hunter-macos-${{ hashFiles('**/CMakeLists.txt') }}
+        key: hunter-${{ matrix.os }}-${{ hashFiles('**/CMakeLists.txt') }}
         restore-keys: |
-          hunter-macos-
+          hunter-${{ matrix.os }}-
 
     - name: Install dependencies
       run: |
