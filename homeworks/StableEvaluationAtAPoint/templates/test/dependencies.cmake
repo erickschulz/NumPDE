@@ -4,7 +4,6 @@
 
 set(SOURCES
   ${DIR}/test/stableevaluationatapoint_test.cc
-  ${DIR}/stableevaluationatapoint.cc
 )
 
 set(LIBRARIES

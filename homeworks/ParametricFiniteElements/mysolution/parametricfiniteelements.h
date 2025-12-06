@@ -62,7 +62,7 @@ Eigen::Matrix2d jacobianInverseTransposed(unsigned int n, unsigned int j,
 /* SAM_LISTING_END_2 */
 
 /* Returns the basis functions on the Reference Element at node xhat */
-Eigen::Vector4d bhats(Eigen::Vector2d xhat) {
+inline Eigen::Vector4d bhats(Eigen::Vector2d xhat) {
   Eigen::Vector4d res;
 
   res(0) = (1 - xhat(0)) * (1 - xhat(1));
@@ -75,7 +75,7 @@ Eigen::Vector4d bhats(Eigen::Vector2d xhat) {
 
 /* Returns the gradients of the basis functions on Reference Element at node
  * xhat */
-Eigen::MatrixXd bhats_grad(Eigen::Vector2d xhat) {
+inline Eigen::MatrixXd bhats_grad(Eigen::Vector2d xhat) {
   Eigen::MatrixXd res(2, 4);
 
   res(0, 0) = xhat(1) - 1;
@@ -124,7 +124,7 @@ Eigen::MatrixXd geoThermElemMat(unsigned int n, unsigned int j, unsigned int l,
 /* Returns the global index of the local shape function local_dof on element
  * K_jl */
 /* SAM_LISTING_BEGIN_4 */
-int geoThermLocalToGlobal(unsigned int n, unsigned int j, unsigned int l,
+inline int geoThermLocalToGlobal(unsigned int n, unsigned int j, unsigned int l,
                           unsigned int local_dof) {
   // Map local indices of basis functions to global indices
   int global_dof;
@@ -159,7 +159,7 @@ std::vector<Eigen::Triplet<double>> assembleGeoTherm(unsigned int n,
  * on the Dirichlet Boundary Gamma_D with the m-th unit vector
  */
 /* SAM_LISTING_BEGIN_6 */
-void geoThermBdElim(unsigned int n, std::vector<Eigen::Triplet<double>>& A) {
+inline void geoThermBdElim(unsigned int n, std::vector<Eigen::Triplet<double>>& A) {
 //====================
 // Your code goes here
 //====================

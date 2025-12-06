@@ -8,8 +8,6 @@
 
 set(SOURCES
   ${DIR}/test/odesolve_test.cc
-  ${DIR}/odesolve.h
-  ${DIR}/odesolve.cc
 )
 
 set(LIBRARIES

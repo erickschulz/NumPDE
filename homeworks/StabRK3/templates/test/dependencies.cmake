@@ -4,8 +4,6 @@
 
 set(SOURCES
   ${DIR}/test/stabrk3_test.cc
-  ${DIR}/stabrk3.h 
-  ${DIR}/stabrk3.cc
 )
 
 set(LIBRARIES

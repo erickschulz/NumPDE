@@ -8,8 +8,6 @@
 
 set(SOURCES
   ${DIR}/test/sdirk_test.cc
-  ${DIR}/sdirk.h 
-  ${DIR}/sdirk.cc
 )
 
 set(LIBRARIES
