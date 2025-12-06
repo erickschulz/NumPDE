@@ -14,6 +14,8 @@
 
 #include <Eigen/Core>
 
+#include <numbers>
+
 /* Test in the google testing framework
 
   The following assertions are available, syntax

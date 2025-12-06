@@ -8,6 +8,8 @@
 
 #include "stokesstabp1fem.h"
 
+#include <numbers>
+
 #include <lf/mesh/test_utils/test_meshes.h>
 #include <lf/mesh/utils/mesh_function_global.h>
 

@@ -11,6 +11,8 @@
 #include <lf/mesh/test_utils/test_meshes.h>
 #include <lf/mesh/utils/mesh_function_global.h>
 
+#include <numbers>
+
 namespace StokesStabP1FEM {
 
 /* SAM_LISTING_BEGIN_1 */

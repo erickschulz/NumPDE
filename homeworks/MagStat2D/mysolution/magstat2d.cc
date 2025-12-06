@@ -8,6 +8,8 @@
 
 #include "magstat2d.h"
 
+#include <numbers>
+
 #include <lf/mesh/test_utils/test_meshes.h>
 #include <lf/mesh/utils/mesh_function_constant.h>
 

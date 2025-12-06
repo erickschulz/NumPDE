@@ -20,6 +20,7 @@
 #include <cstddef>
 #include <iomanip>
 #include <memory>
+#include <numbers>
 
 namespace MagDiffWire {
 
