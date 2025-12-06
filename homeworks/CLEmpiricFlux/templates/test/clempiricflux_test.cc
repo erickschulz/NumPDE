@@ -14,9 +14,9 @@
 // In the interest of not changing the problem text over at
 // https://gitlab.math.ethz.ch/ralfh/npdeflipped, I will tell clang-tidy to
 // ignore the bugprone-suspicious-include warning. (Manuel Saladin, 2024-05-28)
-#include "../clempiricflux.cc"       // NOLINT(bugprone-suspicious-include)
-#include "../solvecauchyproblem.cc"  // NOLINT(bugprone-suspicious-include)
-#include "../uniformcubicspline.cc"  // NOLINT(bugprone-suspicious-include)
+#include "../clempiricflux.h"
+#include "../solvecauchyproblem.h"
+#include "../uniformcubicspline.h"
 
 namespace CLEmpiricFlux::test {
 

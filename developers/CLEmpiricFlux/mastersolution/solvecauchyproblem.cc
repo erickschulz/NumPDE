@@ -31,8 +31,6 @@ Eigen::Vector2d findSupport(const UniformCubicSpline& f,
 }
 /* SAM_LISTING_END_1 */
 
-
-
 /* SAM_LISTING_BEGIN_4 */
 Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline& f,
                                    const Eigen::VectorXd& mu0, double h,

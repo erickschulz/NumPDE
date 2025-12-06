@@ -11,27 +11,7 @@
 #include <Eigen/Core>
 #include <cassert>
 
-namespace {
 
-template <typename T>
-constexpr T Square(T x) {
-  return x * x;
-}
-
-template <typename T>
-constexpr T Cube(T x) {
-  return x * x * x;
-}
-
-constexpr int getJ(double a, double b, unsigned int n, double u) {
-  return u < b ? (int)(n * ((u - a) / (b - a)) + 1.0) : n;
-}
-
-constexpr double zeta(double a, double b, unsigned int n, double j) {
-  return a + j * (b - a) / n;
-}
-
-}  // namespace
 
 namespace CLEmpiricFlux {
 
