@@ -10,9 +10,9 @@
  */
 
 #include <Eigen/Core>
+#include <algorithm>  // For std::min, std::max
+#include <cmath>      // For std::abs, std::floor, std::ceil
 #include <utility>
-#include <cmath>     // For std::abs, std::floor, std::ceil
-#include <algorithm> // For std::min, std::max
 
 #include "clempiricflux.h"
 #include "uniformcubicspline.h"
@@ -90,7 +90,6 @@ Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd& mu0, double h,
   return mu1;
 }
 /* SAM_LISTING_END_2 */
-
 
 /**
  * @brief Implements Ralston's method to solve a homogenous ODE

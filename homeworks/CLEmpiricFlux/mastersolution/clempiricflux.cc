@@ -13,8 +13,6 @@
 
 namespace CLEmpiricFlux {
 
-
-
 GodunovFlux::GodunovFlux(const UniformCubicSpline& f) : _f(f) {};
 
 /* SAM_LISTING_BEGIN_9 */

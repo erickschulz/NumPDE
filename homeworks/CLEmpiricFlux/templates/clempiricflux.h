@@ -10,9 +10,9 @@
  */
 
 #include <Eigen/Core>
-#include <cassert> // Required for assert in findRoots
-#include <cmath>   // Required for std::abs in findRoots
-#include <algorithm> // Required for std::max in GodunovFlux::operator()
+#include <algorithm>  // Required for std::max in GodunovFlux::operator()
+#include <cassert>    // Required for assert in findRoots
+#include <cmath>      // Required for std::abs in findRoots
 
 #include "uniformcubicspline.h"
 

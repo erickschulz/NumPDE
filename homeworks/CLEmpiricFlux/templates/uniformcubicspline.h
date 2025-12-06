@@ -10,7 +10,7 @@
  */
 
 #include <Eigen/Core>
-#include <cassert> // Required for assert in helper functions
+#include <cassert>  // Required for assert in helper functions
 
 namespace CLEmpiricFlux {
 

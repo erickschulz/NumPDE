@@ -11,8 +11,6 @@
 #include <Eigen/Core>
 #include <cassert>
 
-
-
 namespace CLEmpiricFlux {
 
 UniformCubicSpline::UniformCubicSpline(double a, double b, Eigen::VectorXd f,

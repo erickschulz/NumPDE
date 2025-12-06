@@ -4,8 +4,6 @@
 
 set(SOURCES
   ${DIR}/test/gradientflow_test.cc
-  ${DIR}/gradientflow.h
-  ${DIR}/gradientflow.cc
 )
 
 set(LIBRARIES
