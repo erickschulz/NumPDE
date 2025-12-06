@@ -31,7 +31,7 @@ Eigen::Matrix<double, 2, 3> GradsBaryCoords(
 }
 
 Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
-    const lf::geometry::Geometry &geo) {
+    const lf::geometry::Geometry& geo) {
   // Only available for flat triangles and quadrilaterals
   LF_ASSERT_MSG(geo.DimGlobal() == 2, "Only implemented for 2D meshes");
   // Return variable
@@ -76,7 +76,7 @@ Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
 /* SAM_LISTING_BEGIN_1 */
 lf::mesh::utils::CodimMeshDataSet<double> getNeumannData(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &mu) {
+    const Eigen::VectorXd& mu) {
   lf::mesh::utils::CodimMeshDataSet<double> edge_vals(fe_space->Mesh(), 1, 0.0);
   // ========================================
   // Your code here

@@ -24,16 +24,16 @@ dataDiscreteBVP::dataDiscreteBVP(std::shared_ptr<const lf::mesh::Mesh> mesh_p,
 }
 /* SAM_LISTING_END_2 */
 
-Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
+Eigen::VectorXd solveBVP(const dataDiscreteBVP& disc_bvp) {
   // For conveneicne we set up references to essential objects for FE
   // discretization in the lowest-order Lagrangian finite element space
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &linfespc{
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& linfespc{
       *disc_bvp.pwlinfespace_p_};
   // The underlying finite-element mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{linfespc.Mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{linfespc.LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{linfespc.LocGlobMap()};
   // Dimension of finite element space, number of unknowns
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
@@ -67,7 +67,7 @@ Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
   lf::assemble::FixFlaggedSolutionCompAlt<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t dof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(dof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(dof_idx)};
         return (bd_flags(node) ? std::make_pair(true, 0.0)
                                : std::make_pair(false, 0.0));
       },
@@ -88,7 +88,7 @@ Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp) {
 
 /* SAM_LISTING_BEGIN_3 */
 lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd & /*u_vec*/) {
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& /*u_vec*/) {
   // Get pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       disc_bvp.pwlinfespace_p_->Mesh();
@@ -104,7 +104,7 @@ lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
 
 /* SAM_LISTING_BEGIN_4 */
 lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd &u_vec) {
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& u_vec) {
   // Get pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       disc_bvp.pwlinfespace_p_->Mesh();
@@ -192,11 +192,11 @@ std::tuple<double, double, double> solveAndEstimate(
 
   // Sum volume residuals and edge residuals
   double eta_vol = 0.0;
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     eta_vol += vol_res(*cell);
   }
   double eta_ed = 0.0;
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     eta_ed += ed_res(*edge);
   }
 

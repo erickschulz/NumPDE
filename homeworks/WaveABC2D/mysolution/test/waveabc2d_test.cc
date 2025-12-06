@@ -40,8 +40,8 @@ TEST(WaveABC2D, WaveABC2DTimestepper_const) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   auto rho = [](Eigen::Vector2d) -> double { return 4.0; };
-  auto mu0 = [](const Eigen::Vector2d &x) -> double { return 1.0; };
-  auto nu0 = [](const Eigen::Vector2d &x) -> double { return 1.0; };
+  auto mu0 = [](const Eigen::Vector2d& x) -> double { return 1.0; };
+  auto nu0 = [](const Eigen::Vector2d& x) -> double { return 1.0; };
   auto stepper =
       WaveABC2DTimestepper<decltype(rho), decltype(mu0), decltype(nu0)>(
           fe_space_p, rho, 500, 1.0);
@@ -64,10 +64,10 @@ TEST(WaveABC2D, WaveABC2DTimestepper) {
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   auto rho = [](Eigen::Vector2d) -> double { return 4.0; };
 
-  auto mu0 = [](const Eigen::Vector2d &x) -> double {
+  auto mu0 = [](const Eigen::Vector2d& x) -> double {
     return std::sin(x.norm());
   };
-  auto nu0 = [](const Eigen::Vector2d &x) -> double { return std::cos(x(1)); };
+  auto nu0 = [](const Eigen::Vector2d& x) -> double { return std::cos(x(1)); };
 
   auto stepper =
       WaveABC2DTimestepper<decltype(rho), decltype(mu0), decltype(nu0)>(
@@ -91,10 +91,10 @@ TEST(WaveABC2D, energies) {
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   auto rho = [](Eigen::Vector2d) -> double { return 4.0; };
 
-  auto mu0 = [](const Eigen::Vector2d &x) -> double {
+  auto mu0 = [](const Eigen::Vector2d& x) -> double {
     return std::sin(x.norm());
   };
-  auto nu0 = [](const Eigen::Vector2d &x) -> double { return std::cos(x(1)); };
+  auto nu0 = [](const Eigen::Vector2d& x) -> double { return std::cos(x(1)); };
 
   auto stepper =
       WaveABC2DTimestepper<decltype(rho), decltype(mu0), decltype(nu0)>(

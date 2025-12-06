@@ -77,7 +77,7 @@ lf::assemble::size_type CRReferenceFiniteElement::NumRefShapeFunctions(
 /* SAM_LISTING_BEGIN_4 */
 Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>
 CRReferenceFiniteElement::EvalReferenceShapeFunctions(
-    const Eigen::MatrixXd &refcoords) const {
+    const Eigen::MatrixXd& refcoords) const {
   // Data
   const auto num_points =
       static_cast<lf::assemble::size_type>(refcoords.cols());
@@ -97,7 +97,7 @@ CRReferenceFiniteElement::EvalReferenceShapeFunctions(
 /* SAM_LISTING_BEGIN_5 */
 Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>
 CRReferenceFiniteElement::GradientsReferenceShapeFunctions(
-    const Eigen::MatrixXd &refcoords) const {
+    const Eigen::MatrixXd& refcoords) const {
   // Data
   const auto num_points =
       static_cast<lf::assemble::size_type>(refcoords.cols());
@@ -136,7 +136,7 @@ lf::assemble::size_type CRReferenceFiniteElement::NumEvaluationNodes() const {
 /* SAM_LISTING_BEGIN_7 */
 Eigen::Matrix<double, 1, Eigen::Dynamic>
 CRReferenceFiniteElement::NodalValuesToDofs(
-    const Eigen::Matrix<double, 1, Eigen::Dynamic> &nodvals) const {
+    const Eigen::Matrix<double, 1, Eigen::Dynamic>& nodvals) const {
   LF_VERIFY_MSG(nodvals.cols() == NumEvaluationNodes(),
                 "nodvals = " << nodvals << " <-> " << NumEvaluationNodes());
 

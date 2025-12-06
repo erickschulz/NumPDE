@@ -30,7 +30,7 @@ namespace QuasiInterpolation {
  * @param edges range of edges
  * @return length of a longest edge in the range and zero if the range is empty
  */
-double maxLength(const std::span<const lf::mesh::Entity *const> &edges);
+double maxLength(const std::span<const lf::mesh::Entity* const>& edges);
 
 /**
  * @brief Produces a mapping of vertices $p$ to the corresponding $(K_p,j)$,
@@ -41,7 +41,7 @@ double maxLength(const std::span<const lf::mesh::Entity *const> &edges);
  * @return data set storing a mapping as described above
  */
 lf::mesh::utils::CodimMeshDataSet<
-    std::pair<const lf::mesh::Entity *, unsigned int>>
+    std::pair<const lf::mesh::Entity*, unsigned int>>
 findKp(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
 
 /**
@@ -56,8 +56,8 @@ findKp(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
 /* SAM_LISTING_BEGIN_1 */
 template <typename MESHFUNCTION>
 Eigen::VectorXd quasiInterpolate(
-    const lf::uscalfe::FeSpaceLagrangeO1<double> &fe_space,
-    MESHFUNCTION &&v_mf) {
+    const lf::uscalfe::FeSpaceLagrangeO1<double>& fe_space,
+    MESHFUNCTION&& v_mf) {
   // Get quadrature points and weights on the reference triangle for a
   // quadrature rule that integrates quadratic polynomials exactly
   lf::quad::QuadRule quadrule =
@@ -71,10 +71,10 @@ Eigen::VectorXd quasiInterpolate(
   // Retrieve the map $p \mapsto (K_p, j)$
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space.Mesh();
   lf::mesh::utils::CodimMeshDataSet<
-      std::pair<const lf::mesh::Entity *, unsigned int>>
+      std::pair<const lf::mesh::Entity*, unsigned int>>
       Kp_mesh_data_set = findKp(mesh_p);
 
-  const lf::assemble::DofHandler &dofh{fe_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space.LocGlobMap()};
   const int N = dofh.NumDofs();
   // Vector for returning the basis expansion coefficients of the
   // quasi-interpolant
@@ -105,7 +105,7 @@ Eigen::VectorXd quasiInterpolate(
 template <typename MESHFUNCTION_U, typename MESHFUNCTION_GRAD_U>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> interpolationError(
     std::shared_ptr<lf::refinement::MeshHierarchy> mesh_hierarchy_p,
-    MESHFUNCTION_U &&mf_u, MESHFUNCTION_GRAD_U &&mf_grad_u) {
+    MESHFUNCTION_U&& mf_u, MESHFUNCTION_GRAD_U&& mf_grad_u) {
   // Make sure that the coefficient types are compatible
   // static_assert(lf::mesh::utils::MeshFunction<MESHFUNCTION_U>);
   // static_assert(lf::mesh::utils::MeshFunction<MESHFUNCTION_GRAD_U>);

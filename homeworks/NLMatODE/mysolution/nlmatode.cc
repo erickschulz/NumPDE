@@ -14,7 +14,7 @@
 namespace NLMatODE {
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::MatrixXd matode(const Eigen::MatrixXd &Y0, double T) {
+Eigen::MatrixXd matode(const Eigen::MatrixXd& Y0, double T) {
   // Use the Ode45 class to find an approximation
   // of the matrix IVP $Y' = -(Y-Y')*Y$ at time $T$
   Eigen::MatrixXd YT;
@@ -26,7 +26,7 @@ Eigen::MatrixXd matode(const Eigen::MatrixXd &Y0, double T) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-bool checkinvariant(const Eigen::MatrixXd &M, double T) {
+bool checkinvariant(const Eigen::MatrixXd& M, double T) {
   // Check if $Y'*Y$ is preserved at the time $T$ by matode.
   //====================
   // Your code goes here

@@ -16,18 +16,18 @@
 
 namespace PointEvaluationRhs {
 
-double computeH1seminormLinearFE(const lf::assemble::DofHandler &dofh,
-                                 const Eigen::VectorXd &mu);
+double computeH1seminormLinearFE(const lf::assemble::DofHandler& dofh,
+                                 const Eigen::VectorXd& mu);
 
-double computeL2normLinearFE(const lf::assemble::DofHandler &dofh,
-                             const Eigen::VectorXd &mu);
+double computeL2normLinearFE(const lf::assemble::DofHandler& dofh,
+                             const Eigen::VectorXd& mu);
 
 class MassLocalMatrixAssembler {
  private:
  public:
   explicit MassLocalMatrixAssembler() = default;
-  bool isActive(const lf::mesh::Entity &entity) { return true; }
-  Eigen::MatrixXd Eval(const lf::mesh::Entity &entity);
+  bool isActive(const lf::mesh::Entity& entity) { return true; }
+  Eigen::MatrixXd Eval(const lf::mesh::Entity& entity);
 };
 
 }  // namespace PointEvaluationRhs

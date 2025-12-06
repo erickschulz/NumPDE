@@ -17,7 +17,7 @@
 namespace TaylorHoodNonMonolithic {
 /* SAM_LISTING_BEGIN_1 */
 THBElementMatrixProvider::ElemMat THBElementMatrixProvider::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Element matrix to be filled

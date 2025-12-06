@@ -16,8 +16,8 @@ namespace TestQuadratureRules {
  * @return Returns boolean (true if the passed quadrature rule for a triangular
  * reference element has order <order>)
  */
-bool testQuadOrderTria(const lf::quad::QuadRule &quad_rule, unsigned int order);
-bool testQuadOrderQuad(const lf::quad::QuadRule &quad_rule, unsigned int order);
-unsigned int calcQuadOrder(const lf::quad::QuadRule &quad_rule);
+bool testQuadOrderTria(const lf::quad::QuadRule& quad_rule, unsigned int order);
+bool testQuadOrderQuad(const lf::quad::QuadRule& quad_rule, unsigned int order);
+unsigned int calcQuadOrder(const lf::quad::QuadRule& quad_rule);
 
 }  // namespace TestQuadratureRules

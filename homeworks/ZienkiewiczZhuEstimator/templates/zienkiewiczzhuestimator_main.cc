@@ -25,7 +25,7 @@
 
 using namespace ZienkiewiczZhuEstimator;
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   std::cout << "\n" << std::endl;
   std::cout << "PROBLEM - ZienkiewiczZhuEstimator " << std::endl;
   progress_bar progress{std::clog, 70u, "Computing"};
@@ -66,7 +66,7 @@ int main(int /*argc*/, const char ** /*argv*/) {
     fe_space_p =
         std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
     // Obtain reference to scalar dofh
-    const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
     // Produce a dof handler for the vector-valued finite element space
     lf::assemble::UniformFEDofHandler vec_dofh(
         mesh_p, {{lf::base::RefEl::kPoint(), 2},
@@ -251,7 +251,7 @@ int main(int /*argc*/, const char ** /*argv*/) {
 
   // Save approximate solution in VTK format
   // Output results to vtk file
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
   lf::io::VtkWriter vtk_writer(mesh_p, "ZienkiewiczZhuEstimator_solution.vtk");
   // Write nodal data taking the values of the discrete solution at the

@@ -21,8 +21,8 @@ namespace {
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::Vector4d computeLoadVector(
-    const Eigen::MatrixXd &vertices,
-    std::function<double(const Eigen::Vector2d &)> f) {
+    const Eigen::MatrixXd& vertices,
+    std::function<double(const Eigen::Vector2d&)> f) {
   // Number of nodes of the element: triangles = 3, rectangles = 4
   const int num_nodes = vertices.cols();
   // Vector for returning element vector
@@ -38,13 +38,13 @@ Eigen::Vector4d computeLoadVector(
 
 }  // namespace
 
-Eigen::Vector4d MyLinearLoadVector::Eval(const lf::mesh::Entity &cell) {
+Eigen::Vector4d MyLinearLoadVector::Eval(const lf::mesh::Entity& cell) {
   // Topological type of the cell
   const lf::base::RefEl ref_el{cell.RefEl()};
 
   // Obtain the vertex coordinates of the cell, which completely
   // describe its shape.
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
 
   // Matrix storing corner coordinates in its columns
   auto vertices = geo_ptr->Global(ref_el.NodeCoords());

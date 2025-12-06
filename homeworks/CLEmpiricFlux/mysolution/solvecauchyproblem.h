@@ -25,7 +25,7 @@ namespace CLEmpiricFlux {
  * @param initsupp interval containing the support of u at initial time
  * @return interval containg the support of u at time t
  */
-Eigen::Vector2d findSupport(const UniformCubicSpline &f,
+Eigen::Vector2d findSupport(const UniformCubicSpline& f,
                             Eigen::Vector2d initsupp, double t);
 
 /**
@@ -41,7 +41,7 @@ Eigen::Vector2d findSupport(const UniformCubicSpline &f,
  */
 /* SAM_LISTING_BEGIN_6 */
 template <typename FUNCTOR>
-Eigen::VectorXd computeInitVec(const UniformCubicSpline &f, FUNCTOR &&u0,
+Eigen::VectorXd computeInitVec(const UniformCubicSpline& f, FUNCTOR&& u0,
                                double h, double T) {
   Eigen::VectorXd mu0;
   //====================
@@ -62,8 +62,8 @@ Eigen::VectorXd computeInitVec(const UniformCubicSpline &f, FUNCTOR &&u0,
  * semi-discretized equation
  */
 template <typename FUNCTOR>
-Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
-                                FUNCTOR &&numFlux);
+Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd& mu0, double h,
+                                FUNCTOR&& numFlux);
 
 /**
  * @brief Implements Ralston's method to solve a homogenous ODE
@@ -76,7 +76,7 @@ Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
  * @return vector of size N containg the approximate solution at time n * tau
  */
 template <typename FUNCTOR>
-Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
+Eigen::VectorXd RalstonODESolver(FUNCTOR&& rhs, Eigen::VectorXd mu0, double tau,
                                  int n);
 
 /**
@@ -89,8 +89,8 @@ Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
  * @param T final time, T > 0.0
  * @return cell averages at final time, i.e.of the solution u(x,T)
  */
-Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline &f,
-                                   const Eigen::VectorXd &mu0, double h,
+Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline& f,
+                                   const Eigen::VectorXd& mu0, double h,
                                    double T);
 
 }  // namespace CLEmpiricFlux

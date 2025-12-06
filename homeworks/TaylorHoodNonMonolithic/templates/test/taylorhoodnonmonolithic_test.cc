@@ -120,9 +120,9 @@ TEST(TaylorHoodNonMonolithic, Uzawa) {
   // For recording progress of the iteration
   std::vector<std::tuple<Eigen::VectorXd, Eigen::VectorXd, Eigen::VectorXd>>
       rec_data;
-  auto rec = [&rec_data](const Eigen::VectorXd &mu_x,
-                         const Eigen::VectorXd &mu_y,
-                         const Eigen::VectorXd &pi) -> void {
+  auto rec = [&rec_data](const Eigen::VectorXd& mu_x,
+                         const Eigen::VectorXd& mu_y,
+                         const Eigen::VectorXd& pi) -> void {
     rec_data.emplace_back(mu_x, mu_y, pi);
   };
   [[maybe_unused]] auto [res_mu_x, res_mu_y, res_pi] =
@@ -131,7 +131,7 @@ TEST(TaylorHoodNonMonolithic, Uzawa) {
   std::cout << "CG Uzawa took " << rec_data.size() << "steps\n";
   int step = 1;
   for (auto vecs : rec_data) {
-    auto &[mu_x, mu_y, pi] = vecs;
+    auto& [mu_x, mu_y, pi] = vecs;
     const Eigen::VectorXd res_x = phi_x - A * mu_x - B_x.transpose() * pi;
     const Eigen::VectorXd res_y = phi_y - A * mu_y - B_y.transpose() * pi;
     const Eigen::VectorXd res_pi = B_x * mu_x + B_y * mu_y;

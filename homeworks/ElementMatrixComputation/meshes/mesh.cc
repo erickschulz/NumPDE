@@ -53,13 +53,13 @@ std::shared_ptr<lf::mesh::Mesh> Generate2DTestMesh() {
       std::array<size_type, 4>({5, 6, 9, 8})};
 
   // Create nodes
-  for (const auto &node : node_coord) {
+  for (const auto& node : node_coord) {
     mesh_factory_ptr->AddPoint(
         Eigen::Vector2d({node[0] * scale, node[1] * scale}));
   }
 
   // generate triangles
-  for (const auto &node : tria_nodes) {
+  for (const auto& node : tria_nodes) {
     mesh_factory_ptr->AddEntity(
         lf::base::RefEl::kTria(),
         std::span<const size_type>({node[0], node[1], node[2]}),
@@ -67,7 +67,7 @@ std::shared_ptr<lf::mesh::Mesh> Generate2DTestMesh() {
   }
 
   // generate Parallelograms
-  for (const auto &node : parg_nodes) {
+  for (const auto& node : parg_nodes) {
     Eigen::MatrixXd quad_coord(2, 4);
     for (int n_pt = 0; n_pt < 4; ++n_pt) {
       quad_coord(0, n_pt) = node_coord[node[n_pt]][0];

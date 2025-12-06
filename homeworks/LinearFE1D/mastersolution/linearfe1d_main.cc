@@ -28,10 +28,9 @@ int main() {
   auto const_one = [](double x) { return 1.0; };
 
   // Solving the BVPs
-  Eigen::VectorXd uA, uB, uC;
-  uA = LinearFE1D::solveA(mesh, identity, const_one);
-  uB = LinearFE1D::solveB(mesh, identity, const_one, 0.1, 0.5);
-  uC = LinearFE1D::solveC(mesh, identity, identity);
+  Eigen::VectorXd uA = LinearFE1D::solveA(mesh, identity, const_one);
+  Eigen::VectorXd uB = LinearFE1D::solveB(mesh, identity, const_one, 0.1, 0.5);
+  Eigen::VectorXd uC = LinearFE1D::solveC(mesh, identity, identity);
 
   // PRINTING RESULTS TO.csv FILE
   // Defining CSV output file format

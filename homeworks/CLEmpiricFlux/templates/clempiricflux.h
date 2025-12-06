@@ -17,7 +17,7 @@ namespace CLEmpiricFlux {
 
 class GodunovFlux {
  public:
-  GodunovFlux(const UniformCubicSpline &f);
+  GodunovFlux(const UniformCubicSpline& f);
   // evaluate the Godunov numerical flux F(v, w)
   double operator()(double v, double w) const;
 

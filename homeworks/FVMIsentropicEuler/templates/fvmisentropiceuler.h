@@ -25,7 +25,7 @@ namespace FVMIsentropicEuler {
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename PFUNCTOR>
-Eigen::Vector2d numfluxHLLEIseEul(PFUNCTOR &&p, PFUNCTOR &&pd,
+Eigen::Vector2d numfluxHLLEIseEul(PFUNCTOR&& p, PFUNCTOR&& pd,
                                   Eigen::Vector2d v, Eigen::Vector2d w) {
   assert((v[0] > 0.0) && "v-density must be positive!");
   assert((w[0] > 0.0) && "w-density must be positive!");
@@ -51,8 +51,8 @@ Eigen::Vector2d numfluxHLLEIseEul(PFUNCTOR &&p, PFUNCTOR &&pd,
  */
 /* SAM_LISTING_BEGIN_0 */
 template <typename FFUNCTOR, typename SLOPEFUNCTOR>
-Eigen::VectorXd slopelimfluxdiff_scalar(const Eigen::VectorXd &mu, FFUNCTOR &&F,
-                                        SLOPEFUNCTOR &&slopes) {
+Eigen::VectorXd slopelimfluxdiff_scalar(const Eigen::VectorXd& mu, FFUNCTOR&& F,
+                                        SLOPEFUNCTOR&& slopes) {
   size_t n = mu.size();  // Number of active dual grid cells
   Eigen::VectorXd sigma = Eigen::VectorXd::Zero(n);  // Vector of slopes
   Eigen::VectorXd fd = Eigen::VectorXd::Zero(n);     // Flux differences
@@ -87,8 +87,8 @@ Eigen::VectorXd slopelimfluxdiff_scalar(const Eigen::VectorXd &mu, FFUNCTOR &&F,
  */
 /* SAM_LISTING_BEGIN_S */
 template <typename FFUNCTOR, typename SLOPEFUNCTOR>
-Eigen::MatrixXd slopelimfluxdiff_sys(const Eigen::MatrixXd &mu, FFUNCTOR &&F,
-                                     SLOPEFUNCTOR &&slopes) {
+Eigen::MatrixXd slopelimfluxdiff_sys(const Eigen::MatrixXd& mu, FFUNCTOR&& F,
+                                     SLOPEFUNCTOR&& slopes) {
   Eigen::Index n = mu.cols();  // Number of active dual grid cells
   // All slopes for all components of cell states
   Eigen::MatrixXd sigma = Eigen::MatrixXd::Zero(mu.rows(), mu.cols());
@@ -107,12 +107,12 @@ Eigen::MatrixXd slopelimfluxdiff_sys(const Eigen::MatrixXd &mu, FFUNCTOR &&F,
  */
 /* SAM_LISTING_BEGIN_F */
 template <typename PFUNCTOR, typename RECORDER = std::function<
-                                 void(double, const Eigen::MatrixXd &)> >
+                                 void(double, const Eigen::MatrixXd&)> >
 Eigen::MatrixXd musclIseEul(
-    double a, double b, double T, const Eigen::MatrixXd &mu0_mat, PFUNCTOR &&p,
-    PFUNCTOR &&dp,
-    RECORDER &&rec = [](double /*t*/,
-                        const Eigen::MatrixXd & /*mu_mat*/) -> void {}) {
+    double a, double b, double T, const Eigen::MatrixXd& mu0_mat, PFUNCTOR&& p,
+    PFUNCTOR&& dp,
+    RECORDER&& rec = [](double /*t*/,
+                        const Eigen::MatrixXd& /*mu_mat*/) -> void {}) {
   // Matrix whose columns store the states
   Eigen::MatrixXd mu(mu0_mat.rows(), mu0_mat.cols());
   mu << mu0_mat;

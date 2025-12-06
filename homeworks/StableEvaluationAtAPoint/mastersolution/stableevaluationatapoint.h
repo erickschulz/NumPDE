@@ -26,7 +26,7 @@
 namespace StableEvaluationAtAPoint {
 
 /** @brief Approximates the mesh size for the given mesh.*/
-double MeshSize(const std::shared_ptr<const lf::mesh::Mesh> &mesh_p);
+double MeshSize(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p);
 
 /** @brief Returns the outer normal of the unit squre at point x*/
 Eigen::Vector2d OuterNormalUnitSquare(Eigen::Vector2d x);
@@ -51,7 +51,7 @@ class FundamentalSolution {
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
-double PSL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&v,
+double PSL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR&& v,
            const Eigen::Vector2d x) {
   double value = 0.0;
   FundamentalSolution G(x);
@@ -59,9 +59,9 @@ double PSL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&v,
   auto bd_flags_edge{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
 
   // Loop over boundary edges
-  for (const lf::mesh::Entity *e : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* e : mesh_p->Entities(1)) {
     if (bd_flags_edge(*e)) {
-      const lf::geometry::Geometry *geo_ptr = e->Geometry();
+      const lf::geometry::Geometry* geo_ptr = e->Geometry();
       LF_ASSERT_MSG(geo_ptr != nullptr, "Missing geometry!");
 
       // Fetch coordinates of corner points
@@ -86,7 +86,7 @@ double PSL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&v,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
-double PDL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&v,
+double PDL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR&& v,
            const Eigen::Vector2d x) {
   double value = 0.0;
   FundamentalSolution G(x);
@@ -94,9 +94,9 @@ double PDL(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&v,
   auto bd_flags_edge{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
 
   // Loop over boundary edges
-  for (const lf::mesh::Entity *e : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* e : mesh_p->Entities(1)) {
     if (bd_flags_edge(*e)) {
-      const lf::geometry::Geometry *geo_ptr = e->Geometry();
+      const lf::geometry::Geometry* geo_ptr = e->Geometry();
       LF_ASSERT_MSG(geo_ptr != nullptr, "Missing geometry!");
 
       // Fetch coordinates of corner points
@@ -171,17 +171,17 @@ double StablePointEvaluation(
 /** @brief Solves the Laplace equation using Dirichlet conditions g */
 template <typename FUNCTOR>
 Eigen::VectorXd SolveBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
-    FUNCTOR &&g) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
+    FUNCTOR&& g) {
   Eigen::VectorXd discrete_solution;
 
   // Extract mesh and Dofhandler
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   auto N_dofs = dofh.NumDofs();
 
   // Obtain specification for shape functions on edges
-  const auto *rsf_edge_p =
+  const auto* rsf_edge_p =
       fe_space_p->ShapeFunctionLayout(lf::base::RefEl::kSegment());
 
   // Dirichlet data
@@ -235,14 +235,14 @@ Eigen::VectorXd SolveBVP(
  */
 double EvaluateFEFunction(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &uFE, Eigen::Vector2d global, double tol = 10E-10);
+    const Eigen::VectorXd& uFE, Eigen::Vector2d global, double tol = 10E-10);
 
 /** @brief Returns the result of evaluating u_h(x) directly or by the stable
  * scheme */
 template <typename FUNCTOR>
 std::pair<double, double> ComparePointEval(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    FUNCTOR &&g, Eigen::Vector2d x) {
+    FUNCTOR&& g, Eigen::Vector2d x) {
   double direct_eval = 0.0;
   double stable_eval = 0.0;
   // Compute FE solution:

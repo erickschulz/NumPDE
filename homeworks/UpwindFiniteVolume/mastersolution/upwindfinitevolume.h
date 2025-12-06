@@ -25,7 +25,7 @@ namespace UpwindFiniteVolume {
  * @return Matrix providing the coefficients.
  */
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const Eigen::Matrix<double, 2, 3> &triangle);
+    const Eigen::Matrix<double, 2, 3>& triangle);
 
 /**
  * @brief Compute the upwind flux $J_{ik}(\mu_i, \mu_k)$
@@ -45,17 +45,17 @@ double computeUpwindFlux(double mui, double muk, double vhat, double dik,
  * @param a1, a2, a3 Corners of the triangle.
  * @return Vector2d describing the circumcenter.
  */
-Eigen::Vector2d computeCircumcenters(const Eigen::Vector2d &a1,
-                                     const Eigen::Vector2d &a2,
-                                     const Eigen::Vector2d &a3);
+Eigen::Vector2d computeCircumcenters(const Eigen::Vector2d& a1,
+                                     const Eigen::Vector2d& a2,
+                                     const Eigen::Vector2d& a3);
 
 template <typename FUNCTOR>
 class ElementMatrixProvider {
  public:
   explicit ElementMatrixProvider(FUNCTOR v, double eps) : v_(v), eps_(eps) {}
 
-  Eigen::Matrix3d Eval(const lf::mesh::Entity &entity);
-  bool isActive(const lf::mesh::Entity & /*entity*/) const { return true; }
+  Eigen::Matrix3d Eval(const lf::mesh::Entity& entity);
+  bool isActive(const lf::mesh::Entity& /*entity*/) const { return true; }
 
  private:
   FUNCTOR v_;
@@ -71,13 +71,13 @@ class ElementMatrixProvider {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
 Eigen::Matrix3d ElementMatrixProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   Eigen::Matrix3d A = Eigen::Matrix3d::Zero();
 
   LF_VERIFY_MSG(entity.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type!");
 
-  const lf::geometry::Geometry *geo_p = entity.Geometry();
+  const lf::geometry::Geometry* geo_p = entity.Geometry();
   const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
   Eigen::Vector2d circumcenter =
@@ -128,8 +128,8 @@ class ElementVectorProvider {
  public:
   explicit ElementVectorProvider(FUNCTOR f) : f_(f) {}
 
-  Eigen::Vector3d Eval(const lf::mesh::Entity &entity);
-  bool isActive(const lf::mesh::Entity & /*entity*/) const { return true; }
+  Eigen::Vector3d Eval(const lf::mesh::Entity& entity);
+  bool isActive(const lf::mesh::Entity& /*entity*/) const { return true; }
 
  private:
   FUNCTOR f_;
@@ -144,11 +144,11 @@ class ElementVectorProvider {
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
 Eigen::Vector3d ElementVectorProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   LF_VERIFY_MSG(entity.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type!");
 
-  const lf::geometry::Geometry *geo_p = entity.Geometry();
+  const lf::geometry::Geometry* geo_p = entity.Geometry();
   const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
   Eigen::Vector2d circumcenter =

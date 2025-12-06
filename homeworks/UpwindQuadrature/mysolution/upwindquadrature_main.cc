@@ -31,13 +31,13 @@ int main() {
 
   // coefficient functions:
   // Dirichlet functor
-  const auto g = [](const Eigen::Vector2d &x) {
+  const auto g = [](const Eigen::Vector2d& x) {
     return x(1) == 0 ? 0.5 - std::abs(x(0) - 0.5) : 0.0;
   };
   lf::mesh::utils::MeshFunctionGlobal mf_g{g};
 
   // velocity field
-  const auto v = [](const Eigen::Vector2d &x) {
+  const auto v = [](const Eigen::Vector2d& x) {
     return (Eigen::Vector2d() << -x(1), x(0)).finished();
   };
 
@@ -60,7 +60,7 @@ int main() {
   // Construct dofhanlder for linear finite elements on the mesh.
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // PREPARING DATA TO IMPOSE DIRICHLET CONDITIONS
   // Create a dataset of boolean flags indicating edges on the boundary of the

@@ -23,10 +23,10 @@
 
 namespace StableEvaluationAtAPoint {
 
-double MeshSize(const std::shared_ptr<const lf::mesh::Mesh> &mesh_p) {
+double MeshSize(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p) {
   double mesh_size = 0.0;
   // Find maximal edge length
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     // Compute the length of the edge
     double edge_length = lf::geometry::Volume(*(edge->Geometry()));
     mesh_size = std::max(edge_length, mesh_size);
@@ -147,9 +147,9 @@ double Jstar(std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
   auto uFE_mf = lf::fe::MeshFunctionFE(fe_space, uFE);
 
   // Loop over all cells
-  for (const lf::mesh::Entity *entity : mesh->Entities(0)) {
+  for (const lf::mesh::Entity* entity : mesh->Entities(0)) {
     // Standard way to apply a local quadrature rule
-    const lf::geometry::Geometry &geo{*entity->Geometry()};
+    const lf::geometry::Geometry& geo{*entity->Geometry()};
     // Quadrature points on actual cell
     const Eigen::MatrixXd zeta{geo.Global(zeta_ref)};
     const Eigen::VectorXd gram_dets{geo.IntegrationElement(zeta_ref)};
@@ -184,18 +184,18 @@ double StablePointEvaluation(
 
 double EvaluateFEFunction(
     std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &uFE, Eigen::Vector2d global, double tol) {
+    const Eigen::VectorXd& uFE, Eigen::Vector2d global, double tol) {
   // Extract mesh
   auto mesh_p = fe_space->Mesh();
   // wrap coefficient vector into a FE mesh-function
   lf::fe::MeshFunctionFE mf(fe_space, uFE);
 
-  for (const lf::mesh::Entity *entity_p : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* entity_p : mesh_p->Entities(0)) {
     LF_ASSERT_MSG(lf::base::RefEl::kTria() == entity_p->RefEl(),
                   "Function only defined for triangular cells");
 
     // compute geometric information about the cell
-    const lf::geometry::Geometry *geo_p = entity_p->Geometry();
+    const lf::geometry::Geometry* geo_p = entity_p->Geometry();
     Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
     // transform global coordinates to local coordinates on the cell

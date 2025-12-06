@@ -17,19 +17,19 @@
 
 namespace LeastSquaresAdvection {
 lf::mesh::utils::AllCodimMeshDataSet<bool> flagEntitiesOnInflow(
-    const std::shared_ptr<const lf::mesh::Mesh> &mesh_p,
+    const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
     Eigen::Vector2d velocity) {
   LF_ASSERT_MSG(mesh_p->DimMesh() == 2, "Only implemented for 2D meshes!");
   const lf::mesh::utils::CodimMeshDataSet<bool> bd_ed_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
   lf::mesh::utils::AllCodimMeshDataSet<bool> inflow_flags{mesh_p, false};
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     const lf::base::size_type num_vert = cell->RefEl().NumNodes();
     const Eigen::Matrix<double, 2, Eigen::Dynamic> corners{
         lf::geometry::Corners(*cell->Geometry())};
     // Loop over the edges of the cell
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     const lf::base::size_type num_edges = cell->RefEl().NumSubEntities(1);
     LF_ASSERT_MSG(edges.size() == num_edges, "Num edges mismatch!");
     LF_ASSERT_MSG(num_edges == num_vert,
@@ -52,7 +52,7 @@ lf::mesh::utils::AllCodimMeshDataSet<bool> flagEntitiesOnInflow(
         // Compare direction of velocity and that of the exterior normal
         if (ed_n.dot(velocity) <= 0.0) {
           inflow_flags(*edges[edge_idx]) = true;
-          for (const lf::mesh::Entity *node : edges[edge_idx]->SubEntities(1)) {
+          for (const lf::mesh::Entity* node : edges[edge_idx]->SubEntities(1)) {
             inflow_flags(*node) = true;
           }
         }

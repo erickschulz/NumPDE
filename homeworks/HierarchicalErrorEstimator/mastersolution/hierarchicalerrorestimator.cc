@@ -13,17 +13,17 @@ namespace HEST {
 Eigen::VectorXd trfLinToQuad(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_lin_p,
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO2<double>> fes_quad_p,
-    const Eigen::VectorXd &mu) {
+    const Eigen::VectorXd& mu) {
   using gdof_idx_t = lf::assemble::gdof_idx_t;
   // Obtain local-to-global index mappings
-  const lf::assemble::DofHandler &dh_lin{fes_lin_p->LocGlobMap()};
-  const lf::assemble::DofHandler &dh_quad{fes_quad_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dh_lin{fes_lin_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dh_quad{fes_quad_p->LocGlobMap()};
   LF_ASSERT_MSG(dh_lin.Mesh() == dh_quad.Mesh(),
                 "DofHandlers must be based on the same mesh");
   LF_ASSERT_MSG(dh_lin.NumDofs() == mu.size(), "Vector length mismath");
   // Underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{dh_lin.Mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   LF_ASSERT_MSG(
       (dh_lin.NumDofs() == mesh.NumEntities(2)) &&
           (dh_quad.NumDofs() == mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -33,7 +33,7 @@ Eigen::VectorXd trfLinToQuad(
   // midpoints of the edges.
   Eigen::VectorXd nu(dh_quad.NumDofs());
   // Visit nodes (codimension =2) and copy values
-  for (const lf::mesh::Entity *node : mesh.Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh.Entities(2)) {
     std::span<const gdof_idx_t> lf_dof_idx{dh_lin.GlobalDofIndices(*node)};
     LF_ASSERT_MSG(lf_dof_idx.size() == 1,
                   "Exactly one LFE basis functiona at a node");
@@ -46,7 +46,7 @@ Eigen::VectorXd trfLinToQuad(
     nu[qf_dof_idx[0]] = mu[lf_dof_idx[0]];
   }
   // Run through all edges
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     // Obtain global numbers of LFE DOFs associated with the endpoints of
     // the edge, that is, of those DOFs covering the edge.
     std::span<const gdof_idx_t> lf_dof_idx{dh_lin.GlobalDofIndices(*edge)};

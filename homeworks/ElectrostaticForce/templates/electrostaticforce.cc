@@ -11,7 +11,7 @@
 namespace ElectrostaticForce {
 
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   LF_VERIFY_MSG(entity.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << entity.RefEl());
 
@@ -62,13 +62,13 @@ Eigen::Vector2d computeExactForce() {
 /* SAM_LISTING_END_1 */
 
 Eigen::VectorXd solvePoissonBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p) {
   Eigen::VectorXd approx_sol;  // to return
 
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
   // Producing Dirichlet data
@@ -130,7 +130,7 @@ Eigen::VectorXd solvePoissonBVP(
 
 /* SAM_LISTING_BEGIN_4 */
 Eigen::Vector2d computeForceBoundaryFunctional(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::VectorXd approx_sol) {
   Eigen::Vector2d approx_force;  // to return
 
@@ -138,12 +138,12 @@ Eigen::Vector2d computeForceBoundaryFunctional(
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Obtain arrays of boolean flags for the edges and nodes of the mesh, 'true'
   // indicates that the edge or node lies on the boundary
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
   // This predicate returns 'true' if the edge belongs to the interior boundary
-  auto interior_bd_flags = [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+  auto interior_bd_flags = [&bd_flags](const lf::mesh::Entity& edge) -> bool {
     if (bd_flags(edge)) {
       auto endpoints = lf::geometry::Corners(*(edge.Geometry()));
       if (endpoints.col(0).norm() < 0.27) {
@@ -163,8 +163,8 @@ Eigen::Vector2d computeForceBoundaryFunctional(
 
   // PERFORMING INTEGRATION
   approx_force.setZero();
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
-    for (const lf::mesh::Entity *edge : cell->SubEntities(1)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
+    for (const lf::mesh::Entity* edge : cell->SubEntities(1)) {
       if (interior_bd_flags(*edge)) {
         auto endpoints = lf::geometry::Corners(*(edge->Geometry()));
         edge_length = (endpoints.col(1) - endpoints.col(0)).norm();
@@ -201,14 +201,14 @@ Eigen::Vector2d computeForceBoundaryFunctional(
 
 /* SAM_LISTING_BEGIN_5 */
 Eigen::Vector2d computeForceDomainFunctional(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::VectorXd approx_sol) {
   Eigen::Vector2d approx_force;  // to return
 
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
 
   Eigen::Vector2d a(-16.0 / 15.0, 0.0);
   Eigen::Vector2d b(-1.0 / 15.0, 0.0);
@@ -226,7 +226,7 @@ Eigen::Vector2d computeForceDomainFunctional(
 
   // PERFORMING INTEGRATION
   approx_force.setZero();
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     auto endpoints = lf::geometry::Corners(*(cell->Geometry()));
     mid_pts.col(0) = 0.5 * (endpoints.col(0) + endpoints.col(1));
     mid_pts.col(1) = 0.5 * (endpoints.col(1) + endpoints.col(2));
@@ -258,13 +258,13 @@ Eigen::Vector2d computeForceDomainFunctional(
 /* SAM_LISTING_END_5 */
 
 /* SAM_LISTING_BEGIN_6 */
-double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh> &mesh_p) {
+double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p) {
   double mesh_size = 0.0;
 
   // Find maximal edge length
   double edge_length;
   // Loop over all edges of the mesh
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     // Compute the length of the edge
     auto endpoints = lf::geometry::Corners(*(edge->Geometry()));
     edge_length = (endpoints.col(0) - endpoints.col(1)).norm();

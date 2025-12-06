@@ -12,7 +12,7 @@ namespace NitscheMethod {
 
 // Do-nothing implementation
 Eigen::Matrix2d NitscheBoundaryMatProvider::Eval(
-    const lf::mesh::Entity &edge) const {
+    const lf::mesh::Entity& edge) const {
   LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                 "Entity must be an edge");
   // No implementation given here
@@ -22,7 +22,7 @@ Eigen::Matrix2d NitscheBoundaryMatProvider::Eval(
 // Implementation of local computation of element matrix for Nitsche's method
 /* SAM_LISTING_BEGIN_5 */
 Eigen::Matrix3d LinearFENitscheElementMatrix::Eval(
-    const lf::mesh::Entity &cell) const {
+    const lf::mesh::Entity& cell) const {
   LF_ASSERT_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Only implemented for triangles");
   // The element matrix returned from this function
@@ -50,7 +50,7 @@ Eigen::SparseMatrix<double> assembleNitscheGalerkinMatrix(
   // (Pointer to) underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{lin_fes_p->Mesh()};
   // Obtain local-to-global index mapper
-  const lf::assemble::DofHandler &dofh{lin_fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{lin_fes_p->LocGlobMap()};
   // Provider object for element matrices for negative Laplacian and linear
   // Lagrangian finite elements
   lf::uscalfe::LinearFELaplaceElementMatrix lapl_elmat_builder{};
@@ -79,7 +79,7 @@ Eigen::SparseMatrix<double> computeNitscheGalerkinMatrix(
   // Pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{lin_fes_p->Mesh()};
   // Obtain local-to-global index mapper "D.o.f. handler"
-  const lf::assemble::DofHandler &dofh{lin_fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{lin_fes_p->LocGlobMap()};
   // Flag all edge (co-dimension-1 entities) on the boundary
   lf::mesh::utils::CodimMeshDataSet<bool> bd_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};

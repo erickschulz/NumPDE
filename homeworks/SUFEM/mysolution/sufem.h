@@ -48,13 +48,13 @@ class AdvectionElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
 
-  AdvectionElementMatrixProvider(const AdvectionElementMatrixProvider &) =
+  AdvectionElementMatrixProvider(const AdvectionElementMatrixProvider&) =
       delete;
-  AdvectionElementMatrixProvider(AdvectionElementMatrixProvider &&) noexcept =
+  AdvectionElementMatrixProvider(AdvectionElementMatrixProvider&&) noexcept =
       default;
-  AdvectionElementMatrixProvider &operator=(
-      const AdvectionElementMatrixProvider &) = delete;
-  AdvectionElementMatrixProvider &operator=(AdvectionElementMatrixProvider &&) =
+  AdvectionElementMatrixProvider& operator=(
+      const AdvectionElementMatrixProvider&) = delete;
+  AdvectionElementMatrixProvider& operator=(AdvectionElementMatrixProvider&&) =
       delete;
 
   /**
@@ -77,7 +77,7 @@ class AdvectionElementMatrixProvider {
    * This method is meant to be overloaded if assembly should be restricted to a
    * subset of cells.
    */
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
   /**
    * @brief main routine for the computation of element matrices
    *
@@ -95,7 +95,7 @@ class AdvectionElementMatrixProvider {
    * missing for the type of the cell or if there is no quadrature rule
    * specified for the given cell type.
    */
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 
   /** Virtual destructor */
   virtual ~AdvectionElementMatrixProvider() = default;
@@ -131,12 +131,12 @@ AdvectionElementMatrixProvider<VELOCITY>::AdvectionElementMatrixProvider(
 /* SAM_LISTING_BEGIN_5 */
 template <typename VELOCITY>
 typename SUFEM::AdvectionElementMatrixProvider<VELOCITY>::ElemMat
-AdvectionElementMatrixProvider<VELOCITY>::Eval(const lf::mesh::Entity &cell) {
+AdvectionElementMatrixProvider<VELOCITY>::Eval(const lf::mesh::Entity& cell) {
   // Topological type of the cell
   const lf::base::RefEl ref_el{cell.RefEl()};
   // Obtain precomputed information about values of local shape functions
   // and their gradients at quadrature points.
-  lf::uscalfe::PrecomputedScalarReferenceFiniteElement<double> &pfe =
+  lf::uscalfe::PrecomputedScalarReferenceFiniteElement<double>& pfe =
       fe_precomp_[ref_el.Id()];
   if (!pfe.isInitialized()) {
     // Accident: cell is of a type not covered by finite element
@@ -150,7 +150,7 @@ AdvectionElementMatrixProvider<VELOCITY>::Eval(const lf::mesh::Entity &cell) {
   }
 
   // Query the shape of the cell
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   LF_ASSERT_MSG(geo_ptr != nullptr, "Invalid geometry!");
   LF_ASSERT_MSG((geo_ptr->DimLocal() == 2),
                 "Only 2D implementation available!");
@@ -206,15 +206,15 @@ class MeshFunctionDiffTensor {
   static_assert(lf::mesh::utils::MeshFunction<VELOCITY>);
 
  public:
-  MeshFunctionDiffTensor(const MeshFunctionDiffTensor &) = default;
-  MeshFunctionDiffTensor(MeshFunctionDiffTensor &&) noexcept = default;
-  MeshFunctionDiffTensor &operator=(const MeshFunctionDiffTensor &) = delete;
-  MeshFunctionDiffTensor &operator=(MeshFunctionDiffTensor &&) = delete;
+  MeshFunctionDiffTensor(const MeshFunctionDiffTensor&) = default;
+  MeshFunctionDiffTensor(MeshFunctionDiffTensor&&) noexcept = default;
+  MeshFunctionDiffTensor& operator=(const MeshFunctionDiffTensor&) = delete;
+  MeshFunctionDiffTensor& operator=(MeshFunctionDiffTensor&&) = delete;
   explicit MeshFunctionDiffTensor(VELOCITY velo) : velo_(std::move(velo)) {}
   virtual ~MeshFunctionDiffTensor() = default;
   // Local evaluation operator
   [[nodiscard]] std::vector<Eigen::Matrix2d> operator()(
-      const lf::mesh::Entity &e, const Eigen::MatrixXd &local) const;
+      const lf::mesh::Entity& e, const Eigen::MatrixXd& local) const;
 
  private:
   VELOCITY velo_;
@@ -223,11 +223,11 @@ class MeshFunctionDiffTensor {
 /* SAM_LISTING_BEGIN_7 */
 template <typename VELOCITY>
 std::vector<Eigen::Matrix2d> MeshFunctionDiffTensor<VELOCITY>::operator()(
-    const lf::mesh::Entity &e, const Eigen::MatrixXd &local) const {
+    const lf::mesh::Entity& e, const Eigen::MatrixXd& local) const {
   std::vector<Eigen::Matrix2d> ret;  // Element matrix
-  const lf::geometry::Geometry &geo{*e.Geometry()};
+  const lf::geometry::Geometry& geo{*e.Geometry()};
   const double area = lf::geometry::Volume(geo);
-  const Eigen::MatrixXd &corners_refc(e.RefEl().NodeCoords());
+  const Eigen::MatrixXd& corners_refc(e.RefEl().NodeCoords());
   const auto velo_cvals(velo_(e, corners_refc));  // $\Vv$ at cell corners
   const auto velovals(velo_(e, local));           // $\Vv$ in given points
 
@@ -235,7 +235,7 @@ std::vector<Eigen::Matrix2d> MeshFunctionDiffTensor<VELOCITY>::operator()(
   /*********************************************************
   Adjust the following loop to fill in 'ret' correctly
   *********************************************************/
-  for (auto &velovec : velovals) {
+  for (auto& velovec : velovals) {
     ret.push_back(Eigen::Matrix2d());
   }
   return ret;
@@ -258,7 +258,7 @@ lf::assemble::COOMatrix<double> buildSUGalerkinMatrix(
   // Local computations for diffusive part
   lf::fe::DiffusionElementMatrixProvider diff_elmat(fe_space, mf_diff);
   // The local-to-global index map for the finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs = dofh.NumDofs();
   // Galerkin matrix in triplet format
   lf::assemble::COOMatrix<double> A_COO(N_dofs, N_dofs);
@@ -272,7 +272,7 @@ lf::assemble::COOMatrix<double> buildSUGalerkinMatrix(
 /** Mark mesh nodes located on the (closed) inflow boundary */
 template <typename VELOCITY>
 lf::mesh::utils::CodimMeshDataSet<bool> flagNodesOnInflowBoundary(
-    const std::shared_ptr<const lf::mesh::Mesh> &mesh_p, VELOCITY velo) {
+    const std::shared_ptr<const lf::mesh::Mesh>& mesh_p, VELOCITY velo) {
   static_assert(lf::mesh::utils::MeshFunction<VELOCITY>);
   // Array for flags
   lf::mesh::utils::CodimMeshDataSet<bool> nd_inflow_flags(mesh_p, 2, false);
@@ -286,9 +286,9 @@ lf::mesh::utils::CodimMeshDataSet<bool> flagNodesOnInflowBoundary(
   lf::mesh::utils::CodimMeshDataSet<bool> ed_bd_flags(
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1));
   // Run through all cells of the mesh and determine
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     // Fetch geometry object for current cell
-    const lf::geometry::Geometry &K_geo{*(cell->Geometry())};
+    const lf::geometry::Geometry& K_geo{*(cell->Geometry())};
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Only implemented for triangles");
     LF_ASSERT_MSG(K_geo.DimGlobal() == 2, "Mesh must be planar");
@@ -297,11 +297,11 @@ lf::mesh::utils::CodimMeshDataSet<bool> flagNodesOnInflowBoundary(
     // Get velocity values in the midpoints of the edges
     auto velo_mp_vals = velo(*cell, mp_hat);
     // Retrieve pointers to all edges of the triangle
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     LF_ASSERT_MSG(edges.size() == 3, "Triangle must have three edges!");
     for (int k = 0; k < 3; ++k) {
       if (ed_bd_flags(*edges[k])) {
-        const lf::geometry::Geometry &ed_geo{*(edges[k]->Geometry())};
+        const lf::geometry::Geometry& ed_geo{*(edges[k]->Geometry())};
         const Eigen::MatrixXd ed_pts{lf::geometry::Corners(ed_geo)};
         // Direction vector of the edge
         const Eigen::Vector2d dir = ed_pts.col(1) - ed_pts.col(0);
@@ -315,7 +315,7 @@ lf::mesh::utils::CodimMeshDataSet<bool> flagNodesOnInflowBoundary(
             ((velo_mp_vals[k].dot(ed_normal) > 0) ? 1 : -1) * ori;
         if (v_rel_ori < 0) {
           // Inflow: obtain endpoints of the edge and mark them
-          std::span<const lf::mesh::Entity *const> endpoints{
+          std::span<const lf::mesh::Entity* const> endpoints{
               edges[k]->SubEntities(1)};
           LF_ASSERT_MSG(endpoints.size() == 2, "Edge must have two endpoints!");
           nd_inflow_flags(*endpoints[0]) = true;
@@ -339,7 +339,7 @@ Eigen::VectorXd solveAdvectionDirichlet(
   lf::assemble::COOMatrix<double> A_COO =
       SUFEM::buildSUGalerkinMatrix(fe_space, velo);
   // Zero right-hand side vector
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs = dofh.NumDofs();
   Eigen::VectorXd phi = Eigen::VectorXd::Zero(N_dofs);
   // ** Set boundary conditions **
@@ -362,7 +362,7 @@ Eigen::VectorXd solveAdvectionDirichlet(
 /* SAM_LISTING_END_8 */
 
 void testSUFEMConvergence(unsigned int reflevels = 6,
-                          const char *filename = nullptr);
+                          const char* filename = nullptr);
 
 }  // namespace SUFEM
 

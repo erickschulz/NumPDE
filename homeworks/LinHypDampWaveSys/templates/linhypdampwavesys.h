@@ -21,8 +21,8 @@ void visWavSol(double c, double r, double T, unsigned int N,
 
 /* SAM_LISTING_BEGIN_1 */
 template <typename FFunctor, typename gFunctor>
-Eigen::MatrixXd linsysoderhs(const Eigen::MatrixXd &mu, double h,
-                             FFunctor &&numflux, gFunctor &&g) {
+Eigen::MatrixXd linsysoderhs(const Eigen::MatrixXd& mu, double h,
+                             FFunctor&& numflux, gFunctor&& g) {
   unsigned n = mu.cols();                             // length of state vector
   Eigen::MatrixXd fd = Eigen::MatrixXd::Zero(2, n);   // flux difference vector
   Eigen::MatrixXd rhs = Eigen::MatrixXd::Zero(2, n);  // return vector
@@ -36,11 +36,11 @@ Eigen::MatrixXd linsysoderhs(const Eigen::MatrixXd &mu, double h,
 
 /* SAM_LISTING_BEGIN_3 */
 template <typename FFunctor, typename gFunctor, typename u0Functor,
-          typename RECORDER = std::function<void(const Eigen::MatrixXd &)>>
+          typename RECORDER = std::function<void(const Eigen::MatrixXd&)>>
 Eigen::MatrixXd fvEulLinSys(
     double a, double b, double T, unsigned int N, unsigned int M,
-    u0Functor &&u0, FFunctor &numflux, gFunctor &&f,
-    RECORDER &&recorder = [](const Eigen::MatrixXd &) -> void {}) {
+    u0Functor&& u0, FFunctor& numflux, gFunctor&& f,
+    RECORDER&& recorder = [](const Eigen::MatrixXd&) -> void {}) {
   // Determine constants of scheme
   double dt = T / M;
   double h = (b - a) / N;
@@ -56,11 +56,11 @@ Eigen::MatrixXd fvEulLinSys(
 
 /* SAM_LISTING_BEGIN_4 */
 template <typename u0Functor,
-          typename RECORDER = std::function<void(const Eigen::MatrixXd &)>>
+          typename RECORDER = std::function<void(const Eigen::MatrixXd&)>>
 Eigen::Matrix<double, 2, Eigen::Dynamic> ev1DampWave(
-    double c, double r, double T, unsigned int N, u0Functor &&u0,
+    double c, double r, double T, unsigned int N, u0Functor&& u0,
     Fluxtype nf_selector,
-    RECORDER &&recorder = [](const Eigen::MatrixXd &) -> void {}) {
+    RECORDER&& recorder = [](const Eigen::MatrixXd&) -> void {}) {
   // Some parameters for the numerical scheme
   double maxspeed = c;
   double a = -T * maxspeed;

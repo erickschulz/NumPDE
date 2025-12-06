@@ -95,7 +95,7 @@ Eigen::VectorXd compNonlinearTerm(
   struct data_t {
     Eigen::VectorXd u;
     Eigen::Vector3d u_loc;
-    explicit data_t(Eigen::VectorXd u) : u(std::move(u)){};
+    explicit data_t(Eigen::VectorXd u) : u(std::move(u)) {};
   } data(u);
 
   // Run over all Elements in the mesh

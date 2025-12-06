@@ -17,7 +17,9 @@
 #include <lf/mesh/utils/mesh_function_global.h>
 
 #include <cstddef>
+#include <iomanip>
 #include <memory>
+#include <numbers>
 #include <span>
 
 namespace HodgeLaplacian2D {

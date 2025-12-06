@@ -38,8 +38,8 @@ double godnfn(double v, double w);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FunctionF, typename SourceFunction>
-Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd &mu, FunctionF &&F,
-                               SourceFunction &&s, double h) {
+Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd& mu, FunctionF&& F,
+                               SourceFunction&& s, double h) {
   //====================
   // ADAPT THE CODE below so that it handels the source function s correctly
   //====================
@@ -72,7 +72,7 @@ Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd &mu, FunctionF &&F,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename U0Functor>
-Eigen::VectorXd traceMass(U0Functor &&u0, unsigned int N) {
+Eigen::VectorXd traceMass(U0Functor&& u0, unsigned int N) {
   // Spacial boundaries
   double a = -5.0;
   double b = 10.0;

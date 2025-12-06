@@ -29,23 +29,23 @@ class SUAdvectionElemMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>;
 
-  SUAdvectionElemMatrixProvider(const SUAdvectionElemMatrixProvider &) = delete;
-  SUAdvectionElemMatrixProvider(SUAdvectionElemMatrixProvider &&) noexcept =
+  SUAdvectionElemMatrixProvider(const SUAdvectionElemMatrixProvider&) = delete;
+  SUAdvectionElemMatrixProvider(SUAdvectionElemMatrixProvider&&) noexcept =
       default;
-  SUAdvectionElemMatrixProvider &operator=(
-      const SUAdvectionElemMatrixProvider &) = delete;
-  SUAdvectionElemMatrixProvider &operator=(SUAdvectionElemMatrixProvider &&) =
+  SUAdvectionElemMatrixProvider& operator=(
+      const SUAdvectionElemMatrixProvider&) = delete;
+  SUAdvectionElemMatrixProvider& operator=(SUAdvectionElemMatrixProvider&&) =
       delete;
-  SUAdvectionElemMatrixProvider(MESHFUNCTION_V &v, bool use_delta = true);
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
-  ElemMat Eval(const lf::mesh::Entity &cell);
+  SUAdvectionElemMatrixProvider(MESHFUNCTION_V& v, bool use_delta = true);
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  ElemMat Eval(const lf::mesh::Entity& cell);
   virtual ~SUAdvectionElemMatrixProvider() = default;
 
  private:
   // six-point quadrature rule
   const lf::quad::QuadRule qr_{lf::quad::make_TriaQR_P6O4()};
   // A mesh function object providing the velocity field
-  MESHFUNCTION_V &v_;
+  MESHFUNCTION_V& v_;
   // Values of reference shape functions at quadrature points
   Eigen::MatrixXd val_ref_lsf_;
   // Gradients of reference shape functions at quadrature points
@@ -58,7 +58,7 @@ class SUAdvectionElemMatrixProvider {
 /* SAM_LISTING_BEGIN_1 */
 template <class MESHFUNCTION_V>
 SUAdvectionElemMatrixProvider<MESHFUNCTION_V>::SUAdvectionElemMatrixProvider(
-    MESHFUNCTION_V &v, bool use_delta)
+    MESHFUNCTION_V& v, bool use_delta)
     : v_(v), use_delta_(use_delta) {
   const lf::uscalfe::FeLagrangeO2Tria<double> ref_fe;
   LF_ASSERT_MSG(ref_fe.RefEl() == lf::base::RefEl::kTria(),
@@ -80,11 +80,11 @@ SUAdvectionElemMatrixProvider<MESHFUNCTION_V>::SUAdvectionElemMatrixProvider(
 template <class MESHFUNCTION_V>
 typename SUAdvectionElemMatrixProvider<MESHFUNCTION_V>::ElemMat
 SUAdvectionElemMatrixProvider<MESHFUNCTION_V>::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_ASSERT_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Only implemented for triangles");
   // Obtain geometry information
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   LF_ASSERT_MSG(geo_ptr->DimGlobal() == 2,
                 "Only implemented for planar triangles");
   // Gram determinant at quadrature points
@@ -109,7 +109,7 @@ SUAdvectionElemMatrixProvider<MESHFUNCTION_V>::Eval(
   // Maximal modulus of velocity in quadrature nodes
   const double vmax =
       std::max_element(v_vals.begin(), v_vals.end(),
-                       [](Eigen::Vector2d &a, Eigen::Vector2d &b) -> bool {
+                       [](Eigen::Vector2d& a, Eigen::Vector2d& b) -> bool {
                          return (a.norm() < b.norm());
                        })
           ->norm();
@@ -155,7 +155,7 @@ void cvgL2SUPG();
 
 void visSolution(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO2<double>> fe_space,
-    Eigen::VectorXd &u);
+    Eigen::VectorXd& u);
 }  // namespace AdvectionSUPG
 
 #endif  // #ifndef ADVSUPG_H_H

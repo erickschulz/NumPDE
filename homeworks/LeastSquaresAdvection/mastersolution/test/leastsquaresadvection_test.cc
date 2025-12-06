@@ -49,7 +49,7 @@ TEST(LeastSquaresAdvection, PleaseNameTest) { EXPECT_TRUE(true); }
 
 template <lf::mesh::utils::MeshFunction REACTION_COEFF,
           lf::mesh::utils::MeshFunction TESTFN>
-double evalBLF(REACTION_COEFF &mf_kappa, TESTFN &mf_w,
+double evalBLF(REACTION_COEFF& mf_kappa, TESTFN& mf_w,
                Eigen::Vector2d velocity) {
   // Simple mesh of the unit square
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
@@ -60,7 +60,7 @@ double evalBLF(REACTION_COEFF &mf_kappa, TESTFN &mf_w,
   // Compute basis expansion coefficients of the test function
   const Eigen::VectorXd mu_vec = lf::fe::NodalProjection(*fe_space, mf_w);
   // Fetch DofHandler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const size_t N = dofh.NumDofs();
   // Sparse matrix in triplet format
   lf::assemble::COOMatrix<double> A_coo(N, N);
@@ -133,7 +133,7 @@ void testInflowSquare(unsigned int selector = 0, bool print = false) {
   if (print) {
     std::cout << "##### Inflow edges\n";
   }
-  for (const lf::mesh::Entity *ed : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* ed : mesh_p->Entities(1)) {
     if (inflow_flags(*ed)) {
       auto corners{(lf::geometry::Corners(*(ed->Geometry())))};
       if (print) {
@@ -146,7 +146,7 @@ void testInflowSquare(unsigned int selector = 0, bool print = false) {
   if (print) {
     std::cout << "##### Inflow nodes\n";
   }
-  for (const lf::mesh::Entity *nd : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* nd : mesh_p->Entities(2)) {
     if (inflow_flags(*nd)) {
       auto corners{(lf::geometry::Corners(*(nd->Geometry())))};
       if (print) {
@@ -208,7 +208,7 @@ TEST(LeastSquaresAdvection, SUBPROBLEM_F) {
   // Ready to build the mesh data structure
   std::shared_ptr<lf::mesh::Mesh> mesh_p = mesh_factory_ptr->Build();
   // Pointer to single cell of the mesh
-  const lf::mesh::Entity *cell_p = mesh_p->EntityByIndex(0, 0);
+  const lf::mesh::Entity* cell_p = mesh_p->EntityByIndex(0, 0);
   LF_ASSERT_MSG(cell_p != nullptr, "Invalid cell!");
   // Mesh function for reaction coefficient
   lf::mesh::utils::MeshFunctionGlobal mf_kappa{

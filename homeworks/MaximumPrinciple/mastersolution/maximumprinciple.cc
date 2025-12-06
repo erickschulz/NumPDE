@@ -25,7 +25,7 @@ namespace MaximumPrinciple {
  * @return Global Galerkin matrix of size M^2 times M^2.
  */
 /* SAM_LISTING_BEGIN_1 */
-Eigen::SparseMatrix<double> assemble(int M, const Eigen::Matrix3d &B_K) {
+Eigen::SparseMatrix<double> assemble(int M, const Eigen::Matrix3d& B_K) {
   int M2 = M * M;
   Eigen::SparseMatrix<double> A(M2, M2);
   double near_neighbour_contribution = 2.0 * B_K(0, 1);

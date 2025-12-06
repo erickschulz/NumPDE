@@ -19,8 +19,8 @@ namespace SemImpRK {
 // Solve the autonomous IVP y' = f(y), y(0) = y0 using the Rosenbrock method
 /* SAM_LISTING_BEGIN_0 */
 template <class Func, class Jac>
-std::vector<Eigen::VectorXd> SolveRosenbrock(Func &&f, Jac &&df,
-                                             const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> SolveRosenbrock(Func&& f, Jac&& df,
+                                             const Eigen::VectorXd& y0,
                                              unsigned int M, double T) {
   // Will contain all states computed by the ROW-SSM
   std::vector<Eigen::VectorXd> res(M + 1);
@@ -33,7 +33,7 @@ std::vector<Eigen::VectorXd> SolveRosenbrock(Func &&f, Jac &&df,
   // Main loop: conduct M timesteps
   for (unsigned int i = 1; i <= M; ++i) {
     // Current state
-    Eigen::VectorXd &yprev = res[i - 1];
+    Eigen::VectorXd& yprev = res[i - 1];
     // Fetch Jacobian, which is supposed to be an Eigen matrix type
     J = df(yprev);
     W = Eigen::MatrixXd::Identity(J.rows(), J.cols()) - a * h * J;

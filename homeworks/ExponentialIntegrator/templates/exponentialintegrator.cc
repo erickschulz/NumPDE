@@ -20,7 +20,7 @@ namespace ExponentialIntegrator {
 
 // Function $\phi$ used in the Exponential Euler
 // single step method for an autonomous ODE.
-Eigen::MatrixXd phim(const Eigen::MatrixXd &Z) {
+Eigen::MatrixXd phim(const Eigen::MatrixXd& Z) {
   int n = Z.cols();
   assert(n == Z.rows() && "Matrix must be square.");
   Eigen::MatrixXd C(2 * n, 2 * n);
@@ -36,8 +36,8 @@ void testExpEulerLogODE() {
   Eigen::VectorXd y0(1);
   y0 << 0.1;
   // Function and Jacobian and exact solution
-  auto f = [](const Eigen::VectorXd &y) { return y(0) * (1.0 - y(0)); };
-  auto df = [](const Eigen::VectorXd &y) {
+  auto f = [](const Eigen::VectorXd& y) { return y(0) * (1.0 - y(0)); };
+  auto df = [](const Eigen::VectorXd& y) {
     Eigen::MatrixXd dfy(1, 1);
     dfy << 1.0 - 2.0 * y(0);
     return dfy;

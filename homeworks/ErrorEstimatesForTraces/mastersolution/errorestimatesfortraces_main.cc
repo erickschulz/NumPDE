@@ -16,7 +16,7 @@
 
 using namespace ErrorEstimatesForTraces;
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   std::cout << "NUMPDE PROBLEM 3-5 " << std::endl;
 
   int N_meshes = 4;
@@ -33,7 +33,7 @@ int main(int /*argc*/, const char ** /*argv*/) {
     // Finite element space
     auto fe_space = std::make_shared<linear_lagrange>(mesh_p);
     // Obtain local->global index mapping for current finite element space
-    const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
     // Dimension of finite element space
     const lf::base::size_type N_dofs(dofh.NumDofs());
     results(i - 1, 0) = N_dofs;

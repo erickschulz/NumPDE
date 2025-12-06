@@ -19,8 +19,8 @@
 namespace CrossProd {
 
 // Compute the Kronecker product A and B.
-inline Eigen::MatrixXd kron(const Eigen::MatrixXd &A,
-                            const Eigen::MatrixXd &B) {
+inline Eigen::MatrixXd kron(const Eigen::MatrixXd& A,
+                            const Eigen::MatrixXd& B) {
   Eigen::MatrixXd C(A.rows() * B.rows(), A.cols() * B.cols());
   for (unsigned int i = 0; i < A.rows(); ++i) {
     for (unsigned int j = 0; j < A.cols(); ++j) {
@@ -35,7 +35,7 @@ inline Eigen::MatrixXd kron(const Eigen::MatrixXd &A,
 class implicitRKIntegrator {
  public:
   // Constructor for the implicit RK method.
-  implicitRKIntegrator(const Eigen::MatrixXd &A, const Eigen::VectorXd &b)
+  implicitRKIntegrator(const Eigen::MatrixXd& A, const Eigen::VectorXd& b)
       : A(A), b(b), s(b.size()) {
     assert(A.cols() == A.rows() && "Matrix must be square.");
     assert(A.cols() == b.size() && "Incompatible matrix/vector size.");
@@ -47,8 +47,8 @@ class implicitRKIntegrator {
   constructor. Performs N equidistant steps upto time T
   with initial data y0. */
   template <class Function, class Jacobian>
-  std::vector<Eigen::VectorXd> solve(Function &&f, Jacobian &&Jf, double T,
-                                     const Eigen::VectorXd &y0,
+  std::vector<Eigen::VectorXd> solve(Function&& f, Jacobian&& Jf, double T,
+                                     const Eigen::VectorXd& y0,
                                      unsigned int M) const {
     // Iniz step size
     double h = T / M;
@@ -64,8 +64,8 @@ class implicitRKIntegrator {
     Eigen::VectorXd ytemp1 = y0;
     Eigen::VectorXd ytemp2 = y0;
     // Pointers to swap previous value
-    Eigen::VectorXd *yold = &ytemp1;
-    Eigen::VectorXd *ynew = &ytemp2;
+    Eigen::VectorXd* yold = &ytemp1;
+    Eigen::VectorXd* ynew = &ytemp2;
 
     // Loop over all fixed steps
     for (unsigned int k = 0; k < M; ++k) {
@@ -85,8 +85,8 @@ class implicitRKIntegrator {
   // starting from value y0 and storing next value in y1
   /* SAM_LISTING_BEGIN_0 */
   template <class Function, class Jacobian>
-  void step(Function &&f, Jacobian &&Jf, double h, const Eigen::VectorXd &y0,
-            Eigen::VectorXd &y1) const {
+  void step(Function&& f, Jacobian&& Jf, double h, const Eigen::VectorXd& y0,
+            Eigen::VectorXd& y1) const {
     int d = y0.size();
     const Eigen::MatrixXd eye = Eigen::MatrixXd::Identity(d, d);
 

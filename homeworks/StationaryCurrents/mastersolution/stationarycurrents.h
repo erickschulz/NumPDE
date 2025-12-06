@@ -82,15 +82,15 @@ lf::mesh::utils::CodimMeshDataSet<int> tagNodes(
 template <typename SIGMAFUNCTOR>
 Eigen::VectorXd solveMixedBVP(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    lf::mesh::utils::CodimMeshDataSet<int> &nodeflags,
-    std::vector<double> &&voltvals, SIGMAFUNCTOR &&sigma) {
+    lf::mesh::utils::CodimMeshDataSet<int>& nodeflags,
+    std::vector<double>&& voltvals, SIGMAFUNCTOR&& sigma) {
   // Mesh functions for coefficients
   lf::mesh::utils::MeshFunctionGlobal mf_sigma{sigma};
   lf::mesh::utils::MeshFunctionConstant<double> mf_gamma{0.0};
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space = number of nodes of the mesh
   const lf::base::size_type N_dofs(dofh.NumDofs());
   LF_ASSERT_MSG(N_dofs == mesh.NumEntities(2),
@@ -113,7 +113,7 @@ Eigen::VectorXd solveMixedBVP(
   const int NContacts = voltvals.size();
   // Selector functor for Dirichlet data
   auto selector = [&](lf::assemble::gdof_idx_t idx) -> std::pair<bool, double> {
-    const lf::mesh::Entity &node{dofh.Entity(idx)};
+    const lf::mesh::Entity& node{dofh.Entity(idx)};
     const int ids = nodeflags(node);
     if ((ids >= 0) && (ids < NContacts)) return {true, voltvals[ids]};
     return {false, 42.0};
@@ -143,10 +143,10 @@ Eigen::VectorXd solveMixedBVP(
 template <typename SIGMAFUNCTION>
 double contactFluxMF(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma,
-    const lf::mesh::utils::CodimMeshDataSet<int> &edgeids, int contact_id = 0) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma,
+    const lf::mesh::utils::CodimMeshDataSet<int>& edgeids, int contact_id = 0) {
   // The underlying finite element mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Variable for summing boundary flux
   double s = 0.0;
   // Counter for edges on selected contact
@@ -162,12 +162,12 @@ double contactFluxMF(
       (Eigen::Matrix<double, 2, 3>() << 0.5, 0.5, 0.0, 0.0, 0.5, 0.5)
           .finished()};
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     const lf::base::RefEl ref_el_type{cell->RefEl()};
     LF_ASSERT_MSG(ref_el_type == lf::base::RefEl::kTria(),
                   "contactFlux: implemented for triangles only");
     // Obtain array of edge pointers (sub-entities of co-dimension 1)
-    std::span<const lf::mesh::Entity *const> sub_ent_range{
+    std::span<const lf::mesh::Entity* const> sub_ent_range{
         cell->SubEntities(1)};
     // Must be three edges
     LF_ASSERT_MSG(sub_ent_range.size() == 3, "Triangle must have three edges!");
@@ -175,7 +175,7 @@ double contactFluxMF(
     const std::vector<Eigen::VectorXd> grad_at_mp{mf_grad(*cell, mp_refc)};
     // Visit edges, check flags, and add contribution to flux integral
     for (lf::base::sub_idx_t j = 0; j < ref_el_type.NumSubEntities(1); ++j) {
-      const lf::mesh::Entity &edge{*sub_ent_range[j]};
+      const lf::mesh::Entity& edge{*sub_ent_range[j]};
       LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                     "Not an edge!");
       if (edgeids(edge) == contact_id) {
@@ -189,7 +189,7 @@ double contactFluxMF(
         ed_cnt++;
       }
     }  // end loop over edges
-  }    // end loop over cells
+  }  // end loop over cells
   std::cout << "Summed flux for " << ed_cnt << " edges." << std::endl;
   return s;
 }  // end contactFluxMF
@@ -200,22 +200,22 @@ double contactFluxMF(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFlux(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   // Underlying FE mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Local-to-Global map for local/global shape function indices
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Reference coordinates of "midpoint" of a triangle
   const Eigen::MatrixXd zeta_ref{
       (Eigen::Matrix<double, 2, 1>() << 1.0 / 3.0, 1.0 / 3.0).finished()};
   // Summation variable
   double s = 0.0;
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Not implemented for " << *cell);
     // Obtain geometry information for entity
-    const lf::geometry::Geometry &geo{*cell->Geometry()};
+    const lf::geometry::Geometry& geo{*cell->Geometry()};
     // Compute the gradients of the barycentric coordinate functions
     const Eigen::Matrix<double, 2, 3> grad_bary_coords{
         GradsBaryCoords(lf::geometry::Corners(geo))};

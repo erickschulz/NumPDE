@@ -27,7 +27,7 @@ TEST(CoupledBVPs, BVPsolver) {
   // Define a suitable mesh-hierarchy for convergence analysis
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p, 3);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
 
   // We define an appropriate manufactured solution u with boundary condition g,
   // source term f, and coefficient alpha
@@ -92,7 +92,7 @@ TEST(CoupledBVPs, solveModulatedHeatFlow2) {
   // Define a suitable mesh-hierarchy for convergence analysis
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p, 3);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
 
   // We define a source term for w
   auto f = [](Eigen::Vector2d x) -> double { return std::sin(M_PI * x(0)); };

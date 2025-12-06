@@ -25,8 +25,8 @@
 
 int main() {
   // coefficient functions
-  auto g = [](const Eigen::Vector2d & /*x*/) { return 1.0; };
-  auto gamma = [](const Eigen::Vector2d &x) { return 1.0 + x(0) * x(0); };
+  auto g = [](const Eigen::Vector2d& /*x*/) { return 1.0; };
+  auto gamma = [](const Eigen::Vector2d& x) { return 1.0 + x(0) * x(0); };
 
   // The equation is solved on  the four test meshes
   // disk1.msh, disk2.msh, disk3.msh and disk4.msh
@@ -40,7 +40,7 @@ int main() {
     // Construct dofhanlder for linear finite elements on the current mesh.
     auto fe_space =
         std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-    const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
     // Create a dataset of boolean flags indicating edges on the boundary of the
     // mesh

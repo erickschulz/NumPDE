@@ -33,7 +33,7 @@ int main() {
 
   // Print conserved quantity
   auto rho = [&prb](double z) { return prb.rho(z); };
-  auto rec = [rho, limits](double t, const Eigen::VectorXd &zeta) -> void {
+  auto rec = [rho, limits](double t, const Eigen::VectorXd& zeta) -> void {
     Eigen::VectorXd weighted_samples = zeta.unaryExpr(rho) / (zeta.size() - 1);
     double rho_z_integral =
         weighted_samples.sum() * (limits.second - limits.first);

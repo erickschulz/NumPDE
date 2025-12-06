@@ -18,7 +18,7 @@
 namespace NonLinSchroedingerEquation {
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity &cell) {
+Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   Eigen::Matrix3d element_matrix;
@@ -30,7 +30,7 @@ Eigen::Matrix3d MassElementMatrixProvider::Eval(const lf::mesh::Entity &cell) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-double Norm(const Eigen::VectorXcd &mu, const Eigen::SparseMatrix<double> &D) {
+double Norm(const Eigen::VectorXcd& mu, const Eigen::SparseMatrix<double>& D) {
   //====================
   // Your code goes here
   // Replace this dummy value by the approximate
@@ -39,8 +39,8 @@ double Norm(const Eigen::VectorXcd &mu, const Eigen::SparseMatrix<double> &D) {
   //====================
 }
 
-double KineticEnergy(const Eigen::VectorXcd &mu,
-                     const Eigen::SparseMatrix<double> &A) {
+double KineticEnergy(const Eigen::VectorXcd& mu,
+                     const Eigen::SparseMatrix<double>& A) {
   //====================
   // Your code goes here
   // Replace this dummy value by the kinetic energy
@@ -49,8 +49,8 @@ double KineticEnergy(const Eigen::VectorXcd &mu,
   //====================
 }
 
-double InteractionEnergy(const Eigen::VectorXcd &mu,
-                         const Eigen::SparseMatrix<double> &D) {
+double InteractionEnergy(const Eigen::VectorXcd& mu,
+                         const Eigen::SparseMatrix<double>& D) {
   //====================
   // Your code goes here
   // Replace this dummy value by the interaction

@@ -18,12 +18,12 @@ namespace ParametricElementMatrices {
  *
  * where K is a cell.
  * @param cell current cell */
-Eigen::VectorXd FESourceElemVecProvider::Eval(const lf::mesh::Entity &cell) {
+Eigen::VectorXd FESourceElemVecProvider::Eval(const lf::mesh::Entity& cell) {
   Eigen::VectorXd element_vector;  // local vector to return;
 
   /* TOOLS AND DATA */
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_->LocGlobMap()};
   // Obtain cell data
   auto cell_geometry = cell.Geometry();
   auto cell_global_idx = dofh.GlobalDofIndices(cell);

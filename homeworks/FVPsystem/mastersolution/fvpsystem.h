@@ -31,11 +31,10 @@ namespace FVPsystem {
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename u0Functor,
-          typename RECORDER = std::function<void(const Eigen::MatrixXd &)>>
+          typename RECORDER = std::function<void(const Eigen::MatrixXd&)>>
 Eigen::MatrixXd ev1ExpPSystem(
     double a, double b, double T, unsigned int N, unsigned int M,
-    u0Functor &&u0,
-    RECORDER recorder = [](const Eigen::MatrixXd &) -> void {}) {
+    u0Functor&& u0, RECORDER recorder = [](const Eigen::MatrixXd&) -> void {}) {
   //  Determine constants of scheme
   const double dt = T / M;       // timestep size
   const double h = (b - a) / N;  // meshwidth

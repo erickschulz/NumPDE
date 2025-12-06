@@ -32,7 +32,7 @@ TEST(OutputImpedanceBVP, computeApproxSolDirichlet) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
 
   // Exact solution and Dirichlet boundary conditions
   Eigen::Vector2d g;

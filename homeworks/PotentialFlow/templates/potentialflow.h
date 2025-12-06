@@ -17,7 +17,7 @@ extern Eigen::SparseMatrix<double> initializeA(unsigned int M);
 
 // Initialization of r.h.s. vector based on Dirichlet data passed in g
 extern Eigen::VectorXd initializeRHSVector(
-    const std::function<double(double, double)> &g, unsigned int M);
+    const std::function<double(double, double)>& g, unsigned int M);
 
 }  // namespace PotentialFlow
 

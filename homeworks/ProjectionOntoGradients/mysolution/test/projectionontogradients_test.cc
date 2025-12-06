@@ -1,7 +1,7 @@
 /**
  * @file
  * @brief NPDE homework ProjectionOntoGradients code
- * @author ?, Philippe Peter
+ * @author Erick Schulz, Philippe Peter
  * @date December 2019
  * @copyright Developed at ETH Zurich
  */
@@ -33,7 +33,7 @@ TEST(ProjectionOntoGradients, ElementMatrixProvider) {
   lf::uscalfe::LinearFELaplaceElementMatrix lfe_elem_mat_provider{};
 
   // loop over cells and compute element matrices
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     Eigen::Matrix3d my_mat{my_elem_mat_provider.Eval(*cell)};
     lf::uscalfe::LinearFELaplaceElementMatrix::ElemMat lfe_mat{
         lfe_elem_mat_provider.Eval(*cell)};

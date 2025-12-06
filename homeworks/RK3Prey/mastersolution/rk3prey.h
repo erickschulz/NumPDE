@@ -14,7 +14,7 @@ namespace RK3Prey {
 class RKIntegrator {
  public:
   // Constructor for the RK method.
-  RKIntegrator(const Eigen::MatrixXd &A, const Eigen::VectorXd &b)
+  RKIntegrator(const Eigen::MatrixXd& A, const Eigen::VectorXd& b)
       : A_(A), b_(b), s_(b.size()) {
     assert(A.cols() == A.rows() && "Matrix must be square.");
     assert(A.cols() == b.size() && "Incompatible matrix/vector size.");
@@ -22,8 +22,8 @@ class RKIntegrator {
 
   // Explicit Runge-Kutta numerical integrator
   template <class Function>
-  std::vector<Eigen::VectorXd> solve(Function &&f, double T,
-                                     const Eigen::VectorXd &y0, int M) const;
+  std::vector<Eigen::VectorXd> solve(Function&& f, double T,
+                                     const Eigen::VectorXd& y0, int M) const;
 
  private:
   // Butcher data
@@ -38,8 +38,8 @@ class RKIntegrator {
  * constructor. Performs N equidistant steps up to time T */
 /* SAM_LISTING_BEGIN_1 */
 template <typename Function>
-std::vector<Eigen::VectorXd> RKIntegrator::solve(Function &&f, double T,
-                                                 const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> RKIntegrator::solve(Function&& f, double T,
+                                                 const Eigen::VectorXd& y0,
                                                  int M) const {
   int dim = y0.size();  // dimension
   double h = T / M;     // step size

@@ -66,11 +66,11 @@ TEST(TaylorHoodNonMonolithic, MatrixTests) {
   // map the object of the same type used inside buildStokesLSE()
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh_LO2{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_LO2{fe_space->LocGlobMap()};
   const lf::assemble::size_type n_LO2 = dofh_LO2.NumDofs();
   auto fe_LO1 =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh_LO1{fe_LO1->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_LO1{fe_LO1->LocGlobMap()};
   const lf::assemble::size_type n_LO1 = dofh_LO1.NumDofs();
   {
     std::cout << "Testing matrix A\n";
@@ -86,8 +86,8 @@ TEST(TaylorHoodNonMonolithic, MatrixTests) {
     // The entries of the result vector correspomnding to d.o.f.s in the
     // interior should vanish
     for (lf::assemble::glb_idx_t dof_idx = 0; dof_idx < n_LO2; ++dof_idx) {
-      const lf::mesh::Entity &ent = dofh_LO2.Entity(dof_idx);
-      const lf::geometry::Geometry &geo = *ent.Geometry();
+      const lf::mesh::Entity& ent = dofh_LO2.Entity(dof_idx);
+      const lf::geometry::Geometry& geo = *ent.Geometry();
       const Eigen::MatrixXd corners{lf::geometry::Corners(geo)};
       const Eigen::VectorXd mp{corners.rowwise().sum() / corners.cols()};
       if ((mp[0] > 1.0 / 3.0) and (mp[0] < 2.0 / 3.0) and
@@ -116,9 +116,9 @@ TEST(TaylorHoodNonMonolithic, MatrixTests) {
     const Eigen::VectorXd res_vec = B_x * solen_x_vec + B_y * solen_y_vec;
     // "Interior" components of result vector should vanish
     for (lf::assemble::glb_idx_t dof_idx = 0; dof_idx < n_LO1; ++dof_idx) {
-      const lf::mesh::Entity &ent = dofh_LO1.Entity(dof_idx);
+      const lf::mesh::Entity& ent = dofh_LO1.Entity(dof_idx);
       EXPECT_TRUE(ent.RefEl() == lf::base::RefEl::kPoint());
-      const lf::geometry::Geometry &geo = *ent.Geometry();
+      const lf::geometry::Geometry& geo = *ent.Geometry();
       const Eigen::MatrixXd corners{lf::geometry::Corners(geo)};
       const Eigen::VectorXd mp{corners.rowwise().sum() / corners.cols()};
       if ((mp[0] > 1.0 / 3.0) and (mp[0] < 2.0 / 3.0) and
@@ -214,9 +214,9 @@ TEST(TaylorHoodNonMonolithic, Uzawa) {
   // For recording progress of the iteration
   std::vector<std::tuple<Eigen::VectorXd, Eigen::VectorXd, Eigen::VectorXd>>
       rec_data;
-  auto rec = [&rec_data](const Eigen::VectorXd &mu_x,
-                         const Eigen::VectorXd &mu_y,
-                         const Eigen::VectorXd &pi) -> void {
+  auto rec = [&rec_data](const Eigen::VectorXd& mu_x,
+                         const Eigen::VectorXd& mu_y,
+                         const Eigen::VectorXd& pi) -> void {
     rec_data.emplace_back(mu_x, mu_y, pi);
   };
   [[maybe_unused]] auto [res_mu_x, res_mu_y, res_pi] =
@@ -225,7 +225,7 @@ TEST(TaylorHoodNonMonolithic, Uzawa) {
   std::cout << "CG Uzawa took " << rec_data.size() << "steps\n";
   int step = 1;
   for (auto vecs : rec_data) {
-    auto &[mu_x, mu_y, pi] = vecs;
+    auto& [mu_x, mu_y, pi] = vecs;
     const Eigen::VectorXd res_x = phi_x - A * mu_x - B_x.transpose() * pi;
     const Eigen::VectorXd res_y = phi_y - A * mu_y - B_y.transpose() * pi;
     const Eigen::VectorXd res_pi = B_x * mu_x + B_y * mu_y;

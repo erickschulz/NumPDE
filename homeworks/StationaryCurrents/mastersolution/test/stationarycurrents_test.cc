@@ -18,7 +18,7 @@ TEST(StationaryCurrents, solveMixedBVP) {
   std::string mesh_path = "meshes/bentwire0.msh";
   // Read mesh and label nodes
   auto [mesh_p, edgeids] = readMeshWithTags(mesh_path);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Distribute tags to nodes
   auto nodeids{tagNodes(mesh_p, edgeids)};
   // Set up global FE space; lowest order Lagrangian finite elements
@@ -45,7 +45,7 @@ TEST(StationaryCurrents, stabFlux) {
   std::string mesh_path = "meshes/bentwire0.msh";
   // Read mesh and label nodes
   auto [mesh_p, edgeids] = readMeshWithTags(mesh_path);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Distribute tags to nodes
   auto nodeids{tagNodes(mesh_p, edgeids)};
   // Set up global FE space; lowest order Lagrangian finite elements

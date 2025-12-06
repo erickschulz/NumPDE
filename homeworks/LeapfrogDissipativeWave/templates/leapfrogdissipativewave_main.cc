@@ -11,7 +11,7 @@
 
 #include "leapfrogdissipativewave.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   std::cout << "Mastersolution problem LeapfrogDissipativeWave" << std::endl;
   namespace po = boost::program_options;
   po::options_description desc("Allowed options");

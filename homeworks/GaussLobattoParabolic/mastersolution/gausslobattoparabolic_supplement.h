@@ -17,12 +17,12 @@
 
 namespace GaussLobattoParabolic {
 template <
-    typename RECORDER = std::function<void(double, const Eigen::VectorXd &)>>
+    typename RECORDER = std::function<void(double, const Eigen::VectorXd&)>>
 Eigen::VectorXd evolveIBVPGaussLobatto_u0(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
     double T, unsigned int M, std::function<double(double)> g,
     std::function<double(Eigen::Vector2d)> u0,
-    RECORDER &&rec = [](double, const Eigen::VectorXd &) {}) {
+    RECORDER&& rec = [](double, const Eigen::VectorXd&) {}) {
   lf::mesh::utils::MeshFunctionGlobal u0_mf{u0};
   Eigen::VectorXd mu = lf::uscalfe::NodalProjection(*fe_space, u0_mf);
 
@@ -30,18 +30,18 @@ Eigen::VectorXd evolveIBVPGaussLobatto_u0(
   Eigen::VectorXd t = Eigen::VectorXd::LinSpaced(M + 1, 0.0, T);
 
   // Build left-hand side sparse block matrix
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
   int N = dofh.NumDofs();
   lf::assemble::COOMatrix<double> lhs(2 * N, 2 * N);
 
   lf::assemble::COOMatrix<double> COO_M = initMbig(fe_space);
-  for (const Eigen::Triplet<double> &triplet : COO_M.triplets()) {
+  for (const Eigen::Triplet<double>& triplet : COO_M.triplets()) {
     lhs.AddToEntry(triplet.row(), triplet.col(), triplet.value());
     lhs.AddToEntry(triplet.row() + N, triplet.col() + N, triplet.value());
   }
 
   lf::assemble::COOMatrix<double> COO_A = initAbig(fe_space);
-  for (const Eigen::Triplet<double> &triplet : COO_A.triplets()) {
+  for (const Eigen::Triplet<double>& triplet : COO_A.triplets()) {
     int row = triplet.row(), col = triplet.col();
     double value = 0.5 * tau * triplet.value();
     lhs.AddToEntry(row, col, value);

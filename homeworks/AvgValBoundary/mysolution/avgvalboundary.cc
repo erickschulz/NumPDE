@@ -29,8 +29,8 @@ namespace AvgValBoundary {
  *        u coefficient vector
  */
 /* SAM_LISTING_BEGIN_1 */
-double compH1seminorm(const lf::assemble::DofHandler &dofh,
-                      const Eigen::VectorXd &u) {
+double compH1seminorm(const lf::assemble::DofHandler& dofh,
+                      const Eigen::VectorXd& u) {
   double result = 0.0;
   //====================
   // Your code goes here
@@ -45,7 +45,7 @@ double compH1seminorm(const lf::assemble::DofHandler &dofh,
  * @param dofh DofHandler of FEspace.
  */
 /* SAM_LISTING_BEGIN_2 */
-Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler &dofh) {
+Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler& dofh) {
   // Obtain Galerkin matrix for alpha = beta = gamma := 1.0
   auto const_one = [](Eigen::Vector2d x) -> double { return 1.0; };
   auto A = compGalerkinMatrix(dofh, const_one, const_one, const_one);

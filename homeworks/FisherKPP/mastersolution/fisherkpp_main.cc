@@ -32,7 +32,7 @@ void humanmigration() {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Dofhandler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
   // Initial Population: located in Eritrea
@@ -309,7 +309,7 @@ void modelproblem() {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Dofhandler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
   // Initial Population density
   Eigen::VectorXd u0(N_dofs);
@@ -362,7 +362,7 @@ void modelproblem() {
 }
 /* SAM_LISTING_END_9 */
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   std::cout << "Usage: " << argv[0] << " [h|m]" << std::endl;
   std::cout << "h: human migration simulation" << std::endl;
   std::cout << "m: model problem simulation" << std::endl;

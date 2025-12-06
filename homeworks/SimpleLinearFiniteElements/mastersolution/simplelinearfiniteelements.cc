@@ -11,7 +11,7 @@
 namespace SimpleLinearFiniteElements {
 
 /* SAM_LISTING_BEGIN_9 */
-double getArea(const TriGeo_t &triangle) {
+double getArea(const TriGeo_t& triangle) {
   return std::abs(
       0.5 *
       ((triangle(0, 1) - triangle(0, 0)) * (triangle(1, 2) - triangle(1, 1)) -
@@ -24,7 +24,7 @@ double getArea(const TriGeo_t &triangle) {
  * @param vertices The vertices of the triangle
  * @returns A matrix with the gradients in its columns
  */
-Eigen::Matrix<double, 2, 3> gradbarycoordinates(const TriGeo_t &vertices) {
+Eigen::Matrix<double, 2, 3> gradbarycoordinates(const TriGeo_t& vertices) {
   Eigen::Matrix3d X;
   // Argument \texttt{vertices} passes the vertex positions of the triangle
   // as the \textbf{columns} of a $2\times 3$-matrix, see
@@ -43,7 +43,7 @@ Eigen::Matrix<double, 2, 3> gradbarycoordinates(const TriGeo_t &vertices) {
  *  @param V 2x3 matrix of vertex coordinates
  */
 /* SAM_LISTING_BEGIN_1 */
-Eigen::Matrix3d ElementMatrix_Mass_LFE(const TriGeo_t &V) {
+Eigen::Matrix3d ElementMatrix_Mass_LFE(const TriGeo_t& V) {
   Eigen::Matrix3d element_matrix;
   element_matrix << 2.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0;
   element_matrix *= getArea(V) / 12.0;
@@ -55,7 +55,7 @@ Eigen::Matrix3d ElementMatrix_Mass_LFE(const TriGeo_t &V) {
  *  @brief Computation of Element Matrix for the Laplacian
  *  @param V The vertices of the triangle
  */
-Eigen::Matrix3d ElementMatrix_Lapl_LFE(const TriGeo_t &V) {
+Eigen::Matrix3d ElementMatrix_Lapl_LFE(const TriGeo_t& V) {
   // Argument \texttt{V} same as \texttt{vertices} in \cref{cpp:gradbarycords}.
   // The function returns the $3\times 3$ element matrix as a fixed size
   // \eigen matix.
@@ -69,7 +69,7 @@ Eigen::Matrix3d ElementMatrix_Lapl_LFE(const TriGeo_t &V) {
  *  @brief Computation of full Element Matrix
  *  @param V The vertices of the triangle
  */
-Eigen::Matrix3d getElementMatrix(const TriGeo_t &V) {
+Eigen::Matrix3d getElementMatrix(const TriGeo_t& V) {
   return ElementMatrix_Lapl_LFE(V) + ElementMatrix_Mass_LFE(V);
 }
 
@@ -79,7 +79,7 @@ Eigen::Matrix3d getElementMatrix(const TriGeo_t &V) {
  * @param FHandle Load function f
  * @returns The local Element Load Vector
  */
-Eigen::Vector3d localLoadLFE(const TriGeo_t &V, const FHandle_t &FHandle) {
+Eigen::Vector3d localLoadLFE(const TriGeo_t& V, const FHandle_t& FHandle) {
   Eigen::Vector3d philoc = Eigen::Vector3d::Zero();
   // Evaluate source function for ertex locations
   for (int i = 0; i < 3; ++i) {
@@ -96,7 +96,7 @@ Eigen::Vector3d localLoadLFE(const TriGeo_t &V, const FHandle_t &FHandle) {
  * @return Galerkin Matrix
  */
 Eigen::SparseMatrix<double> assembleGalMatLFE(
-    const TriaMesh2D &Mesh, const LocalMatrixHandle_t &getElementMatrix) {
+    const TriaMesh2D& Mesh, const LocalMatrixHandle_t& getElementMatrix) {
   // obtain the number of vertices
   int N = Mesh._nodecoords.rows();
   // obtain the number of elements/cells
@@ -131,9 +131,9 @@ Eigen::SparseMatrix<double> assembleGalMatLFE(
  * @param FHandle function handle for f
  * @return assembled load vector
  */
-Eigen::VectorXd assemLoad_LFE(const TriaMesh2D &Mesh,
-                              const LocalVectorHandle_t &getElementVector,
-                              const FHandle_t &FHandle) {
+Eigen::VectorXd assemLoad_LFE(const TriaMesh2D& Mesh,
+                              const LocalVectorHandle_t& getElementVector,
+                              const FHandle_t& FHandle) {
   // obtain the number of triangles
   int M = Mesh._elements.rows();
 
@@ -166,8 +166,8 @@ Eigen::VectorXd assemLoad_LFE(const TriaMesh2D &Mesh,
  */
 /* SAM_LISTING_BEGIN_3 */
 double H1Serror(
-    const TriaMesh2D &mesh, const Eigen::VectorXd &uFEM,
-    const std::function<Eigen::Vector2d(const Eigen::Vector2d &)> exact) {
+    const TriaMesh2D& mesh, const Eigen::VectorXd& uFEM,
+    const std::function<Eigen::Vector2d(const Eigen::Vector2d&)> exact) {
   double H1Serror_squared = 0.0;
 
   // loop over all triangles
@@ -207,16 +207,16 @@ double H1Serror(
  */
 /* SAM_LISTING_BEGIN_4 */
 std::tuple<Eigen::VectorXd, double, double> Solve(
-    const SimpleLinearFiniteElements::TriaMesh2D &mesh) {
+    const SimpleLinearFiniteElements::TriaMesh2D& mesh) {
   const double pi = 3.1415926535897;
 
   // define the source function f
-  auto f = [pi](const Eigen::Vector2d &x) {
+  auto f = [pi](const Eigen::Vector2d& x) {
     return (1.0 + 8.0 * pi * pi) * std::cos(2.0 * pi * x(0)) *
            std::cos(2.0 * pi * x(1));
   };
   // the exact solution of the linear variational problem
-  auto uExact = [pi](const Eigen::Vector2d &x) {
+  auto uExact = [pi](const Eigen::Vector2d& x) {
     return std::cos(2 * pi * x(0)) * std::cos(2 * pi * x(1));
   };
 
@@ -225,7 +225,7 @@ std::tuple<Eigen::VectorXd, double, double> Solve(
   double h1error;
 
   // the gradient of uExact that can be easily analytically computed
-  auto gradUExact = [pi](const Eigen::Vector2d &x) {
+  auto gradUExact = [pi](const Eigen::Vector2d& x) {
     Eigen::Vector2d gradient;
     gradient << -2 * pi * std::sin(2 * pi * x(0)) * std::cos(2 * pi * x(1)),
         -2 * pi * std::cos(2 * pi * x(0)) * std::sin(2 * pi * x(1));

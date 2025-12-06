@@ -27,14 +27,14 @@ namespace LFPPDofHandling {
  * FE space have 0 dofs.
  */
 std::array<std::size_t, 3> countEntityDofs(
-    const lf::assemble::DofHandler &dofhandler);
+    const lf::assemble::DofHandler& dofhandler);
 
 /**
  * @brief Count number of dofs on the boundary
  * @param dofhandler Dofhandler for the FE space
  * @return Number of dofs on the boundary
  */
-std::size_t countBoundaryDofs(const lf::assemble::DofHandler &dofhandler);
+std::size_t countBoundaryDofs(const lf::assemble::DofHandler& dofhandler);
 
 /**
  * @brief Integrate a function over a linear FE space
@@ -43,8 +43,8 @@ std::size_t countBoundaryDofs(const lf::assemble::DofHandler &dofhandler);
  *           indices of the dofs
  * @return Approximated integral
  */
-double integrateLinearFEFunction(const lf::assemble::DofHandler &dofhandler,
-                                 const Eigen::VectorXd &mu);
+double integrateLinearFEFunction(const lf::assemble::DofHandler& dofhandler,
+                                 const Eigen::VectorXd& mu);
 
 /**
  * @brief Integrate a function over a quadratic FE space
@@ -53,8 +53,8 @@ double integrateLinearFEFunction(const lf::assemble::DofHandler &dofhandler,
  *           indices of the dofs
  * @return Approximated integral
  */
-double integrateQuadraticFEFunction(const lf::assemble::DofHandler &dofhandler,
-                                    const Eigen::VectorXd &mu);
+double integrateQuadraticFEFunction(const lf::assemble::DofHandler& dofhandler,
+                                    const Eigen::VectorXd& mu);
 
 /**
  * @brief Convert coefficient vector of linear FE space to quadratic FE space
@@ -64,13 +64,13 @@ double integrateQuadraticFEFunction(const lf::assemble::DofHandler &dofhandler,
  * @return Coefficient vector of the quadratic FE space
  */
 Eigen::VectorXd convertDOFsLinearQuadratic(
-    const lf::assemble::DofHandler &dofh_Linear_FE,
-    const lf::assemble::DofHandler &dofh_Quadratic_FE,
-    const Eigen::VectorXd &mu);
+    const lf::assemble::DofHandler& dofh_Linear_FE,
+    const lf::assemble::DofHandler& dofh_Quadratic_FE,
+    const Eigen::VectorXd& mu);
 Eigen::VectorXd convertDOFsLinearQuadratic_alt(
-    const lf::assemble::DofHandler &dofh_Linear_FE,
-    const lf::assemble::DofHandler &dofh_Quadratic_FE,
-    const Eigen::VectorXd &mu);
+    const lf::assemble::DofHandler& dofh_Linear_FE,
+    const lf::assemble::DofHandler& dofh_Quadratic_FE,
+    const Eigen::VectorXd& mu);
 
 /**
  * @brief Evaluate the function f in the dofs and put them at the index given by
@@ -83,20 +83,20 @@ Eigen::VectorXd convertDOFsLinearQuadratic_alt(
  *       Not suitable for spaces S_p^0 with p > 2!
  */
 template <typename F>
-Eigen::VectorXd buildCoefVector(const F &f,
-                                const lf::assemble::UniformFEDofHandler &dofh) {
+Eigen::VectorXd buildCoefVector(const F& f,
+                                const lf::assemble::UniformFEDofHandler& dofh) {
   Eigen::VectorXd mu(dofh.NumDofs());
 #define computing_mu_version 2
 #if computing_mu_version == 1
   // Version 1: Iterate over nodes and edges, get corresponding dof then
-  for (const auto &node : mesh->Entities(2)) {
+  for (const auto& node : mesh->Entities(2)) {
     // coordinates of nodes
     const Eigen::Vector2d coords = lf::geometry::Corners(*node.Geometry());
     // global index
     const unsigned node_idx = dofh.InteriorGlobalDofIndices(node)[0];
     mu(node_idx) = f(coords);
   }
-  for (const auto &edge : mesh->Entities(1)) {
+  for (const auto& edge : mesh->Entities(1)) {
     // coordinates of nodes
     const Eigen::Matrix2d endpoints = lf::geometry::Corners(*edge.Geometry());
     const Eigen::Vector2d midpoint =

@@ -11,19 +11,19 @@
 
 namespace dmxbc {
 // Debugging function
-void printNodeTags(const lf::mesh::Mesh &mesh,
-                   lf::mesh::utils::CodimMeshDataSet<int> &nodeids) {
+void printNodeTags(const lf::mesh::Mesh& mesh,
+                   lf::mesh::utils::CodimMeshDataSet<int>& nodeids) {
   // Container for counters
   std::map<int, unsigned int> counters;
   // Loop over nodes of the mesh and counter occurrence of ids
-  for (const lf::mesh::Entity *node : mesh.Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh.Entities(2)) {
     if (nodeids.DefinedOn(*node)) {
       counters[nodeids(*node)]++;
     } else {
       std::cout << " Node " << *node << " has no id!" << std::endl;
     }
   }
-  for (auto &cnt : counters) {
+  for (auto& cnt : counters) {
     std::cout << "id = " << cnt.first << ": " << cnt.second << " nodes"
               << std::endl;
   }
@@ -67,7 +67,7 @@ Eigen::Matrix<double, 2, 3> exteriorTriangleNormals(
          Eigen::PermutationMatrix<3>(Eigen::Vector3i(2, 0, 1));
 }  // end exteriorTriangleNormals
 
-Eigen::MatrixXd exteriorCellNormals(const Eigen::MatrixXd &corners) {
+Eigen::MatrixXd exteriorCellNormals(const Eigen::MatrixXd& corners) {
   LF_ASSERT_MSG(corners.rows() == 2,
                 "Columns must contains coordinates of 2D points");
   // Number of vertices
@@ -100,7 +100,7 @@ lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> exteriorEdgeWeightedNormals(
   lf::mesh::utils::CodimMeshDataSet<bool> bd_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     // Make sure the cell is of triangular shape
     const lf::base::RefEl ref_el_type{cell->RefEl()};
     LF_ASSERT_MSG(ref_el_type == lf::base::RefEl::kTria(),
@@ -109,11 +109,11 @@ lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> exteriorEdgeWeightedNormals(
     const Eigen::Matrix<double, 2, 3> normals{
         exteriorTriangleNormals(vertices)};
     // Obtain array of edge pointers (relative co-dimension = 1)
-    std::span<const lf::mesh::Entity *const> sub_ent_range{
+    std::span<const lf::mesh::Entity* const> sub_ent_range{
         cell->SubEntities(1)};
     // loop over the edges and check whether they belong to the boundary
     for (lf::base::sub_idx_t j = 0; j < ref_el_type.NumSubEntities(1); ++j) {
-      const lf::mesh::Entity &edge{*sub_ent_range[j]};
+      const lf::mesh::Entity& edge{*sub_ent_range[j]};
       if (bd_flags(edge)) {
         // Found edge on the boundary. Set normal vector
         extnormals(edge) = normals.col(j);
@@ -124,15 +124,15 @@ lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> exteriorEdgeWeightedNormals(
 }  // end exteriorEdgeWeightedNormals
 
 // A debugging function
-bool validateNormals(const lf::mesh::Mesh &mesh) {
+bool validateNormals(const lf::mesh::Mesh& mesh) {
   // Run through cells and compute the normals
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // NOLINTBEGIN(clang-analyzer-deadcode.DeadStores)
     const lf::base::RefEl ref_el_type{cell->RefEl()};
     // NOLINTEND(clang-analyzer-deadcode.DeadStores)
     LF_ASSERT_MSG(ref_el_type == lf::base::RefEl::kTria(),
                   "implemented for triangles only");
-    const lf::geometry::Geometry &geo{*(cell->Geometry())};
+    const lf::geometry::Geometry& geo{*(cell->Geometry())};
     const auto vertices{lf::geometry::Corners(geo)};
 
     auto etn{exteriorTriangleNormals(vertices)};

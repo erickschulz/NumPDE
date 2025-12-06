@@ -35,7 +35,7 @@ Eigen::SparseMatrix<double> compBmat(int Ml, int Mr, double h);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR, typename NUMFLUX>
-Eigen::VectorXd G(const Eigen::VectorXd &mu, FUNCTOR &&f, NUMFLUX &&F, int Ml,
+Eigen::VectorXd G(const Eigen::VectorXd& mu, FUNCTOR&& f, NUMFLUX&& F, int Ml,
                   int Mr, double h) {
   const int N_half = (Ml + Mr + 1);
   const int N = 2 * N_half;
@@ -62,7 +62,7 @@ Eigen::VectorXd G(const Eigen::VectorXd &mu, FUNCTOR &&f, NUMFLUX &&F, int Ml,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR, typename NUMFLUX>
-Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR &&f, NUMFLUX &&F, double T,
+Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR&& f, NUMFLUX&& F, double T,
                      int Ml, int Mr, double h, unsigned int m) {
   //====================
   // Your code goes here
@@ -83,7 +83,7 @@ Eigen::VectorXd dgcl(Eigen::VectorXd mu0, FUNCTOR &&f, NUMFLUX &&F, double T,
 double Feo(double v, double w);
 
 struct Solution {
-  Solution(const Solution &other) : x_(other.x_), u_(other.u_) {
+  Solution(const Solution& other) : x_(other.x_), u_(other.u_) {
     std::cout << "Called copy contructor" << std::endl;
   }
   Solution(Eigen::VectorXd x, Eigen::VectorXd u)

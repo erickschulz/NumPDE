@@ -31,11 +31,11 @@ extern const double L_default;
  * @param T final time
  */
 /* SAM_LISTING_BEGIN_1 */
-template <typename RECORDER = std::function<void(const Eigen::VectorXd &)>>
+template <typename RECORDER = std::function<void(const Eigen::VectorXd&)>>
 Eigen::VectorXd solve1DWavePML(
-    const Eigen::VectorXd &zeta_0, const Eigen::VectorXd &gamma,
-    const Eigen::VectorXd &sigma, unsigned int M, double T,
-    RECORDER &&rec = [](Eigen::VectorXd & /*zeta*/) -> void {}) {
+    const Eigen::VectorXd& zeta_0, const Eigen::VectorXd& gamma,
+    const Eigen::VectorXd& sigma, unsigned int M, double T,
+    RECORDER&& rec = [](Eigen::VectorXd& /*zeta*/) -> void {}) {
   // Grid resolution parameter N = number of grid nodes - 1
   const unsigned int N = gamma.size() - 1;
   assert(N == sigma.size() - 1);
@@ -118,9 +118,9 @@ Eigen::VectorXd solve1DWavePML(
  * This function returns the discrete energies for the basis expansion
  * coefficient vectors computed during timestepping.
  */
-std::vector<double> trackEnergy(const Eigen::VectorXd &zeta_0,
-                                const Eigen::VectorXd &gamma,
-                                const Eigen::VectorXd &sigma, unsigned int M,
+std::vector<double> trackEnergy(const Eigen::VectorXd& zeta_0,
+                                const Eigen::VectorXd& gamma,
+                                const Eigen::VectorXd& sigma, unsigned int M,
                                 double T);
 
 /** @brief Solving initial value problem and computing errors
@@ -134,8 +134,8 @@ std::vector<double> trackEnergy(const Eigen::VectorXd &zeta_0,
  * @note Uses constant wave speed, quadratic PML profile,
  */
 template <typename FUNCTOR_DATA, typename FUNCTOR_SOLUTION>
-std::pair<double, double> computeErrorWave1D(FUNCTOR_DATA &&f_v0,
-                                             FUNCTOR_SOLUTION &&f_sol,
+std::pair<double, double> computeErrorWave1D(FUNCTOR_DATA&& f_v0,
+                                             FUNCTOR_SOLUTION&& f_sol,
                                              unsigned int N, unsigned int M) {
   // PML coefficient function
   const double s0 = 10.0;
@@ -171,7 +171,7 @@ std::pair<double, double> computeErrorWave1D(FUNCTOR_DATA &&f_v0,
   zeta_0[N] = f_sol(1.0 + L, 0.0);
   // Object for keeping track of approximate solution
   std::vector<Eigen::VectorXd> zetas{};
-  auto rec = [&zetas](const Eigen::VectorXd &zeta) -> void {
+  auto rec = [&zetas](const Eigen::VectorXd& zeta) -> void {
     zetas.push_back(zeta);
   };
   // Carry out discrete evolution with final time T

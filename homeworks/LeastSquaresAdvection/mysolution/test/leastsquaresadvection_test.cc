@@ -65,7 +65,7 @@ TEST(LeastSquaresAdvection, SUBPROBLEM_F) {
   // Ready to build the mesh data structure
   std::shared_ptr<lf::mesh::Mesh> mesh_p = mesh_factory_ptr->Build();
   // Pointer to single cell of the mesh
-  const lf::mesh::Entity *cell_p = mesh_p->EntityByIndex(0, 0);
+  const lf::mesh::Entity* cell_p = mesh_p->EntityByIndex(0, 0);
   LF_ASSERT_MSG(cell_p != nullptr, "Invalid cell!");
   // Mesh function for reaction coefficient
   lf::mesh::utils::MeshFunctionGlobal mf_kappa{

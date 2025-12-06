@@ -33,14 +33,14 @@ int main() {
   double alpha2 = 2.;
   double beta1 = 0.1;
   double beta2 = 0.1;
-  auto f = [&alpha1, &alpha2, &beta1, &beta2](const Eigen::VectorXd &y) {
+  auto f = [&alpha1, &alpha2, &beta1, &beta2](const Eigen::VectorXd& y) {
     auto temp = y;
     temp(0) *= alpha1 - beta1 * y(1);
     temp(1) *= -alpha2 + beta2 * y(0);
     return temp;
   };
 
-  auto Jf = [&alpha1, &alpha2, &beta1, &beta2](const Eigen::VectorXd &y) {
+  auto Jf = [&alpha1, &alpha2, &beta1, &beta2](const Eigen::VectorXd& y) {
     Eigen::Matrix2d temp;
     temp << alpha1 - beta1 * y(1), -beta1 * y(0), beta2 * y(1),
         -alpha2 + beta2 * y(0);

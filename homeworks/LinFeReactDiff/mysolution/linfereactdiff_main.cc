@@ -18,7 +18,7 @@ int main() {
   const lf::base::size_type num_levels = 5;
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       LinFeReactDiff::generateMeshHierarchy(num_levels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // get pointer to finest mesh used as ground truth
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       multi_mesh.getMesh(num_levels - 1);

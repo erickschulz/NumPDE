@@ -65,7 +65,7 @@ TEST(ZienkiewiczZhuEstimator, GradientProjectionVectorProvider) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Scalar DOF-Handler
-  auto &dofh = fe_space_p->LocGlobMap();
+  auto& dofh = fe_space_p->LocGlobMap();
 
   // Solution vector 1:
   auto mu_x = [](Eigen::Vector2d x) -> double { return x[0]; };
@@ -108,7 +108,7 @@ TEST(ZienkiewiczZhuEstimator, computeLumpedProjection) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain reference to scalar dofh
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Produce a dof handler for the vector-valued finite element space
   lf::assemble::UniformFEDofHandler vec_dofh(mesh_p,
                                              {{lf::base::RefEl::kPoint(), 2},
@@ -150,7 +150,7 @@ TEST(ZienkiewiczZhuEstimator, computeL2Deviation) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain reference to scalar dofh
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Produce a dof handler for the vector-valued finite element space
   lf::assemble::UniformFEDofHandler vec_dofh(mesh_p,
                                              {{lf::base::RefEl::kPoint(), 2},

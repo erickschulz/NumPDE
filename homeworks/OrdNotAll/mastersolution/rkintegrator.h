@@ -25,7 +25,7 @@ class RKIntegrator {
    *! \param[in] $\Vb$ Vector containing coefficients of lower
    *! part of Butcher tableau.
    */
-  RKIntegrator(const Eigen::MatrixXd &A, const Eigen::VectorXd &b)
+  RKIntegrator(const Eigen::MatrixXd& A, const Eigen::VectorXd& b)
       : A(A), b(b), s(b.size()) {
     assert(A.cols() == A.rows() && "Matrix must be square.");
     assert(A.cols() == b.size() && "Incompatible matrix/vector size.");
@@ -49,7 +49,7 @@ class RKIntegrator {
    *! including initial and final value.
    */
   template <class Function>
-  std::vector<State> solve(const Function &f, double T, const State &y0,
+  std::vector<State> solve(const Function& f, double T, const State& y0,
                            unsigned int N) const {
     std::vector<State> res;
     // Iniz step size
@@ -65,8 +65,8 @@ class RKIntegrator {
     State ytemp1 = y0;
     State ytemp2 = y0;
     // Pointers to swap previous value
-    State *yold = &ytemp1;
-    State *ynew = &ytemp2;
+    State* yold = &ytemp1;
+    State* ynew = &ytemp2;
 
     // Loop over all fixed steps
     for (unsigned int k = 0; k < N; ++k) {
@@ -92,7 +92,7 @@ class RKIntegrator {
    *! \param[out] $y_1$ next step $y^{n+1} = y^n + \dots$
    */
   template <class Function>
-  void step(const Function &f, double h, const State &y0, State &y1) const {
+  void step(const Function& f, double h, const State& y0, State& y1) const {
     // create vector holding next value
     y1 = y0;
     // Reserve space for increments

@@ -22,13 +22,13 @@ class Propagator {
  public:
   Propagator() = default;
   virtual ~Propagator() = default;
-  virtual Eigen::VectorXcd operator()(const Eigen::VectorXcd &mu) const = 0;
+  virtual Eigen::VectorXcd operator()(const Eigen::VectorXcd& mu) const = 0;
 
  private:
-  Propagator(const Propagator &) = delete;
-  Propagator(Propagator &&) = delete;
-  Propagator &operator=(const Propagator &) = delete;
-  Propagator &operator=(const Propagator &&) = delete;
+  Propagator(const Propagator&) = delete;
+  Propagator(Propagator&&) = delete;
+  Propagator& operator=(const Propagator&) = delete;
+  Propagator& operator=(const Propagator&&) = delete;
 };
 
 /** @brief Class for propagation according to the kinetic
@@ -46,7 +46,7 @@ class KineticPropagator : public Propagator {
    *  @param M complex mass matrix of shape $N \times N$
    *  @param tau size of the timestep to perform
    */
-  KineticPropagator(const SparseMatrixXd &A, const SparseMatrixXcd &M,
+  KineticPropagator(const SparseMatrixXd& A, const SparseMatrixXcd& M,
                     double tau);
   /** @brief Performs a kinetic timestep of length tau
    *  @param mu vector of length $N$ containing nodal values
@@ -54,7 +54,7 @@ class KineticPropagator : public Propagator {
    *  @return vector of length $N$ containg the nodal values
    *  after the timestep
    */
-  Eigen::VectorXcd operator()(const Eigen::VectorXcd &mu) const override;
+  Eigen::VectorXcd operator()(const Eigen::VectorXcd& mu) const override;
 
  private:
   //====================
@@ -80,7 +80,7 @@ class InteractionPropagator : public Propagator {
    *  @return vector of length $N$ containg the nodal values
    *  after the timestep
    */
-  Eigen::VectorXcd operator()(const Eigen::VectorXcd &mu) const override;
+  Eigen::VectorXcd operator()(const Eigen::VectorXcd& mu) const override;
 
  private:
   //====================
@@ -105,7 +105,7 @@ class SplitStepPropagator : public Propagator {
   //  @param M complex mass matrix of shape $N \times N$
   //  @param tau size of the timestep to perform by Strang splitting
   //
-  SplitStepPropagator(const SparseMatrixXd &A, const SparseMatrixXcd &M,
+  SplitStepPropagator(const SparseMatrixXd& A, const SparseMatrixXcd& M,
                       double tau);
   //* @brief Performs the propagation according Strang splitting between the
   //*  kinetic (semi-step) and interaction (full-step) propagator.
@@ -114,7 +114,7 @@ class SplitStepPropagator : public Propagator {
   //*  @return vector of length $N$ containg the nodal values
   //*  after the timestep
   //*
-  Eigen::VectorXcd operator()(const Eigen::VectorXcd &mu) const override;
+  Eigen::VectorXcd operator()(const Eigen::VectorXcd& mu) const override;
 
  private:
   //====================

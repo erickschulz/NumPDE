@@ -26,7 +26,7 @@ double sineGodFlux(double v, double w);
  * @param mu cell averages
  * @return RHS evaluated at mu
  */
-Eigen::VectorXd sineClawRhs(const Eigen::VectorXd &mu);
+Eigen::VectorXd sineClawRhs(const Eigen::VectorXd& mu);
 
 /**
  * @brief Applies the explicit trapezoidal method to an (semi-discretized) ODE.
@@ -40,7 +40,7 @@ Eigen::VectorXd sineClawRhs(const Eigen::VectorXd &mu);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename RHSFUNCTOR>
-Eigen::VectorXd explTrpzTimestepping(RHSFUNCTOR &&g, const Eigen::VectorXd &y0,
+Eigen::VectorXd explTrpzTimestepping(RHSFUNCTOR&& g, const Eigen::VectorXd& y0,
                                      double T, unsigned int M) {
   double tau = T / M;
   Eigen::VectorXd y = y0;
@@ -67,7 +67,7 @@ Eigen::VectorXd explTrpzTimestepping(RHSFUNCTOR &&g, const Eigen::VectorXd &y0,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename RHSFUNCTOR>
-Eigen::VectorXd solveSineConsLaw(RHSFUNCTOR &&g, unsigned int N,
+Eigen::VectorXd solveSineConsLaw(RHSFUNCTOR&& g, unsigned int N,
                                  unsigned int M) {
   const double h = 12.0 / N;
   const double T = 1.0;
@@ -99,6 +99,6 @@ unsigned int findTimesteps();
  * @param c c > 0
  * @return RHS evaluated at mu
  */
-Eigen::VectorXd sineClawReactionRhs(const Eigen::VectorXd &mu, double c);
+Eigen::VectorXd sineClawReactionRhs(const Eigen::VectorXd& mu, double c);
 
 }  // namespace FiniteVolumeSineConsLaw

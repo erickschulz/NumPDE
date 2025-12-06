@@ -81,15 +81,15 @@ lf::mesh::utils::CodimMeshDataSet<int> tagNodes(
 template <typename SIGMAFUNCTOR>
 Eigen::VectorXd solveMixedBVP(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    lf::mesh::utils::CodimMeshDataSet<int> &nodeflags,
-    std::vector<double> &&voltvals, SIGMAFUNCTOR &&sigma) {
+    lf::mesh::utils::CodimMeshDataSet<int>& nodeflags,
+    std::vector<double>&& voltvals, SIGMAFUNCTOR&& sigma) {
   // Mesh functions for coefficients
   lf::mesh::utils::MeshFunctionGlobal mf_sigma{sigma};
   lf::mesh::utils::MeshFunctionConstant<double> mf_gamma{0.0};
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space = number of nodes of the mesh
   const lf::base::size_type N_dofs(dofh.NumDofs());
   LF_ASSERT_MSG(N_dofs == mesh.NumEntities(2),
@@ -127,10 +127,10 @@ Eigen::VectorXd solveMixedBVP(
 template <typename SIGMAFUNCTION>
 double contactFluxMF(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma,
-    const lf::mesh::utils::CodimMeshDataSet<int> &edgeids, int contact_id = 0) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma,
+    const lf::mesh::utils::CodimMeshDataSet<int>& edgeids, int contact_id = 0) {
   // The underlying finite element mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Variable for summing boundary flux
   double s = 0.0;
   // Counter for edges on selected contact
@@ -148,22 +148,22 @@ double contactFluxMF(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFlux(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   // Underlying FE mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Local-to-Global map for local/global shape function indices
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Reference coordinates of "midpoint" of a triangle
   const Eigen::MatrixXd zeta_ref{
       (Eigen::Matrix<double, 2, 1>() << 1.0 / 3.0, 1.0 / 3.0).finished()};
   // Summation variable
   double s = 0.0;
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Not implemented for " << *cell);
     // Obtain geometry information for entity
-    const lf::geometry::Geometry &geo{*cell->Geometry()};
+    const lf::geometry::Geometry& geo{*cell->Geometry()};
     //====================
     // Your code goes here
     //====================

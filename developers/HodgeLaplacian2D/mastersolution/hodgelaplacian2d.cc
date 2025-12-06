@@ -19,6 +19,7 @@
 #include <cstddef>
 #include <iomanip>
 #include <memory>
+#include <numbers>
 #include <span>
 
 namespace HodgeLaplacian2D {

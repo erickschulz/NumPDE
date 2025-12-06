@@ -14,7 +14,7 @@
 using namespace LengthOfBoundary;
 
 /* SAM_LISTING_BEGIN_1 */
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   //====================
   // Your code goes here
   //====================

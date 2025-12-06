@@ -26,8 +26,8 @@ namespace RegularizedNeumannProblem {
 template <typename FUNCT_F, typename FUNCT_H>
 std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE(
     const std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space,
-    const FUNCT_F &f, const FUNCT_H &h) {
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const FUNCT_F& f, const FUNCT_H& h) {
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   const std::size_t N_dofs = dofh.NumDofs();
   // Right-hand-side vector; don't forget to set to zero initially!
@@ -54,7 +54,7 @@ std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE(
   auto bd_edges{lf::mesh::utils::flagEntitiesOnBoundary(dofh.Mesh(), 1)};
   lf::uscalfe::ScalarLoadEdgeVectorProvider my_vec_provider_edge(
       fe_space, h,
-      [&bd_edges](const lf::mesh::Entity &edge) { return bd_edges(edge); });
+      [&bd_edges](const lf::mesh::Entity& edge) { return bd_edges(edge); });
   // co-dimension 1 because we locally assemble on edges !
   lf::assemble::AssembleVectorLocally(1, dofh, my_vec_provider_edge, rhs_vec);
 

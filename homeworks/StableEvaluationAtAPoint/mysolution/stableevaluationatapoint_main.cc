@@ -24,7 +24,7 @@
 #include "stableevaluationatapoint.h"
 #include "systemcall.h"
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   // exact solution
   auto uExact = [](Eigen::Vector2d x) -> double {
     Eigen::Vector2d one(1.0, 0.0);
@@ -65,13 +65,13 @@ int main(int /*argc*/, const char ** /*argv*/) {
     // Initialize fe-space and dofh
     auto fe_space =
         std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-    const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+    const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
     dofs(k) = dofh.NumDofs();
 
     // Printing mesh statistics
     mesh_sizes(k) = StableEvaluationAtAPoint::MeshSize(mesh_p);
-    std::cout << "square" + idx + ".msh: "
-              << "N_dofs = " << dofs(k) << ", h=" << mesh_sizes(k) << std::endl;
+    std::cout << "square" + idx + ".msh: " << "N_dofs = " << dofs(k)
+              << ", h=" << mesh_sizes(k) << std::endl;
 
     // Error anlysis part b) (Potentials)
     errors_potential(k) = StableEvaluationAtAPoint::PointEval(mesh_p);

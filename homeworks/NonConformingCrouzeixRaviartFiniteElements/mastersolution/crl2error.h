@@ -20,20 +20,20 @@ namespace NonConformingCrouzeixRaviartFiniteElements {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTION>
 double computeCRL2Error(std::shared_ptr<CRFeSpace> fe_space,
-                        const Eigen::VectorXd &mu, FUNCTION &&u) {
+                        const Eigen::VectorXd& mu, FUNCTION&& u) {
   double l2_error = 0.;
 
 // TODO: task 2-14.w)
   // Obtain local-to-global map and current mesh object
-  const lf::assemble::DofHandler &dof_handler{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dof_handler{fe_space->LocGlobMap()};
   auto mesh_ptr = fe_space->Mesh();
 
   // Loop over all cells of the mesh (entities of co-dimension 0)
-  for (const lf::mesh::Entity *cell : mesh_ptr->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_ptr->Entities(0)) {
     const lf::assemble::size_type num_nodes = cell->RefEl().NumNodes();
     LF_ASSERT_MSG(num_nodes == 3, "Only meaningful for triangles!");
     // Obtain pointer to shape information for cell
-    const lf::geometry::Geometry *cell_geom{cell->Geometry()};
+    const lf::geometry::Geometry* cell_geom{cell->Geometry()};
     // 2x3- matrix with corner coordinates in its columns
     const Eigen::MatrixXd vertices{lf::geometry::Corners(*cell_geom)};
     // clang-format off

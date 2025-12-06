@@ -19,35 +19,35 @@
 namespace Brachistochrone {
 
 Eigen::VectorXd coeff_sigma(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 Eigen::VectorXd coeff_sigma_dbg(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2_dbg(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 Eigen::SparseMatrix<double> matR(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 Eigen::VectorXd compute_rhs(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots, Eigen::Vector2d a,
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots, Eigen::Vector2d a,
     Eigen::Vector2d b);
 
-double L2norm(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+double L2norm(const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
-double traveltime(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots);
+double traveltime(const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots);
 
 /* SAM_LISTING_BEGIN_1 */
 template <typename RECORDER = std::function<
-              void(const Eigen::Matrix<double, 2, Eigen::Dynamic> &)>>
+              void(const Eigen::Matrix<double, 2, Eigen::Dynamic>&)>>
 Eigen::Matrix<double, 2, Eigen::Dynamic> brachistochrone(
     unsigned int M, Eigen::Vector2d a, Eigen::Vector2d b, double atol,
     double rtol, unsigned int itmax,
-    RECORDER &&rec = [](const Eigen::Matrix<double, 2, Eigen::Dynamic> &)
+    RECORDER&& rec = [](const Eigen::Matrix<double, 2, Eigen::Dynamic>&)
         -> void { return; }) {
   // Initialize knots
   Eigen::Matrix<double, 2, Eigen::Dynamic> knots(2, M + 1);

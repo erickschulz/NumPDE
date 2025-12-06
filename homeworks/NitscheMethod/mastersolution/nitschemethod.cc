@@ -12,7 +12,7 @@ namespace NitscheMethod {
 
 // Do-nothing implementation
 Eigen::Matrix2d NitscheBoundaryMatProvider::Eval(
-    const lf::mesh::Entity &edge) const {
+    const lf::mesh::Entity& edge) const {
   LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                 "Entity must be an edge");
   // No implementation given here
@@ -22,7 +22,7 @@ Eigen::Matrix2d NitscheBoundaryMatProvider::Eval(
 // Implementation of local computation of element matrix for Nitsche's method
 /* SAM_LISTING_BEGIN_5 */
 Eigen::Matrix3d LinearFENitscheElementMatrix::Eval(
-    const lf::mesh::Entity &cell) const {
+    const lf::mesh::Entity& cell) const {
   LF_ASSERT_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Only implemented for triangles");
   // The element matrix returned from this function
@@ -31,7 +31,7 @@ Eigen::Matrix3d LinearFENitscheElementMatrix::Eval(
   // I: Compute element matrix induced by volume part of bilinear form
   // ------------------------------------------------------------------
   // Fetch geometry object for current cell
-  const lf::geometry::Geometry &K_geo{*(cell.Geometry())};
+  const lf::geometry::Geometry& K_geo{*(cell.Geometry())};
   LF_ASSERT_MSG(K_geo.DimGlobal() == 2, "Mesh must be planar");
   // Obtain physical coordinates of barycenter of triangle
   const Eigen::Vector2d center{K_geo.Global(c_hat_).col(0)};
@@ -46,7 +46,7 @@ Eigen::Matrix3d LinearFENitscheElementMatrix::Eval(
   // II: Boundary parts of the bilinear form
   // ----------------------------------------
   // Retrieve pointers to all edges of the triangle
-  std::span<const lf::mesh::Entity *const> edges{cell.SubEntities(1)};
+  std::span<const lf::mesh::Entity* const> edges{cell.SubEntities(1)};
   LF_ASSERT_MSG(edges.size() == 3, "Triangle must have three edges!");
   // Loop over edges and check whether they are located on the bondary
   for (int k = 0; k < 3; ++k) {
@@ -54,7 +54,7 @@ Eigen::Matrix3d LinearFENitscheElementMatrix::Eval(
       // II(i): Contributions of consistency boundary parts of the bilinear form
       // Edge with local index k is an edge on the boundary
       // Fetch the coordinates of its endpoints
-      const lf::geometry::Geometry &ed_geo{*(edges[k]->Geometry())};
+      const lf::geometry::Geometry& ed_geo{*(edges[k]->Geometry())};
       const Eigen::MatrixXd ed_pts{lf::geometry::Corners(ed_geo)};
       // Direction vector of the edge
       const Eigen::Vector2d dir = ed_pts.col(1) - ed_pts.col(0);
@@ -86,7 +86,7 @@ Eigen::SparseMatrix<double> assembleNitscheGalerkinMatrix(
   // (Pointer to) underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{lin_fes_p->Mesh()};
   // Obtain local-to-global index mapper
-  const lf::assemble::DofHandler &dofh{lin_fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{lin_fes_p->LocGlobMap()};
   // Provider object for element matrices for negative Laplacian and linear
   // Lagrangian finite elements
   lf::uscalfe::LinearFELaplaceElementMatrix lapl_elmat_builder{};
@@ -115,7 +115,7 @@ Eigen::SparseMatrix<double> computeNitscheGalerkinMatrix(
   // Pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{lin_fes_p->Mesh()};
   // Obtain local-to-global index mapper "D.o.f. handler"
-  const lf::assemble::DofHandler &dofh{lin_fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{lin_fes_p->LocGlobMap()};
   // Flag all edge (co-dimension-1 entities) on the boundary
   lf::mesh::utils::CodimMeshDataSet<bool> bd_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};

@@ -16,7 +16,7 @@ namespace ImplRK3Prey {
 constexpr double min(double x, double y) { return x < y ? x : y; };
 
 template <typename FuncType, typename JacType>
-void dampnewton(FuncType &&F, JacType &&DF, Eigen::VectorXd &x,
+void dampnewton(FuncType&& F, JacType&& DF, Eigen::VectorXd& x,
                 double rtol = 1e-4, double atol = 1e-6) {
   const int n = x.size();
   const double lmin = 1E-3;     // Minimal damping factor
@@ -38,8 +38,8 @@ void dampnewton(FuncType &&F, JacType &&DF, Eigen::VectorXd &x,
       st = jacfac.solve(F(xn));  // Simplified Newton correction
       stn = st.norm();
     } while (stn > (1 - lambda / 2) * sn);  // {\bf Natural monotonicity test}
-    x = xn;                                 // Now: xn accepted as new iterate
-    lambda = min(2.0 * lambda, 1.0);        // Try to mitigate damping
+    x = xn;                           // Now: xn accepted as new iterate
+    lambda = min(2.0 * lambda, 1.0);  // Try to mitigate damping
   }
   // Termination based on simplified Newton correction
   while ((stn > rtol * x.norm()) && (stn > atol));

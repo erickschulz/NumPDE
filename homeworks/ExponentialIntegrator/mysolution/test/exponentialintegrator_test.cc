@@ -15,8 +15,8 @@
 namespace ExponentialIntegrator::test {
 
 TEST(exponentialEulerStep, scalar) {
-  auto f = [](const Eigen::VectorXd &y) { return y; };
-  auto df = [](const Eigen::VectorXd &y) {
+  auto f = [](const Eigen::VectorXd& y) { return y; };
+  auto df = [](const Eigen::VectorXd& y) {
     return Eigen::MatrixXd::Ones(1, 1);
   };
 
@@ -36,8 +36,8 @@ TEST(exponentialEulerStep, vector) {
   A(0, 1) = 0;
   A(1, 0) = 0;
   A(1, 1) = 2;
-  auto f = [&](const Eigen::VectorXd &y) { return A * y; };
-  auto df = [&](const Eigen::VectorXd &y) { return A; };
+  auto f = [&](const Eigen::VectorXd& y) { return A * y; };
+  auto df = [&](const Eigen::VectorXd& y) { return A; };
 
   Eigen::VectorXd y0(2);
   y0[0] = 2;

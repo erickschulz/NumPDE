@@ -66,10 +66,10 @@ Eigen::VectorXd solveFE(std::shared_ptr<const lf::mesh::Mesh> mesh) {
 
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::mesh::Mesh &mesh_p{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh_p{*(fe_space->Mesh())};
 
   // Initialize dof handler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
@@ -92,7 +92,7 @@ Eigen::VectorXd solveFE(std::shared_ptr<const lf::mesh::Mesh> mesh) {
 
   AssembleVectorLocally(0, dofh, elvec_builder, phi);
   // NOLINTBEGIN(clang-analyzer-deadcode.DeadStores)
-  const lf::fe::ScalarReferenceFiniteElement<double> *rsf_edge_p =
+  const lf::fe::ScalarReferenceFiniteElement<double>* rsf_edge_p =
       fe_space->ShapeFunctionLayout(lf::base::RefEl::kSegment());
   // NOLINTEND(clang-analyzer-deadcode.DeadStores)
   LF_ASSERT_MSG(rsf_edge_p != nullptr, "FE specification for edges missing");
@@ -102,7 +102,7 @@ Eigen::VectorXd solveFE(std::shared_ptr<const lf::mesh::Mesh> mesh) {
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(fe_space->Mesh(), 1)};
   auto ess_bdc_flags_values_findest{lf::fe::InitEssentialConditionFromFunction(
       *fe_space,
-      [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+      [&bd_flags](const lf::mesh::Entity& edge) -> bool {
         return bd_flags(edge);
       },
       mf_zero)};
@@ -127,7 +127,7 @@ double computeEnergy(std::shared_ptr<const lf::mesh::Mesh> mesh,
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
 
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   const lf::base::size_type N_dofs(dofh.NumDofs());
 

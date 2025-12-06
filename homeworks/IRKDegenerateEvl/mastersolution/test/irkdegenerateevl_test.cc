@@ -136,7 +136,7 @@ TEST(IRKDegenerateEvl, SUBPROBLEM_E) {
 }
 
 template <typename MATRIX>
-void testTimestepping(const MATRIX &Ark, unsigned int n_ref = 7,
+void testTimestepping(const MATRIX& Ark, unsigned int n_ref = 7,
                       unsigned int min_steps = 10) {
   // Simple mesh of the unit square
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
@@ -289,7 +289,7 @@ TEST(IRKDegenerateEvl, SUBPROBLEM_H) {
   auto fes = std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   // Define a simple initial condition: u0(x, y) = x + y
-  auto u0 = [](const Eigen::Vector2d &x) -> double { return x[0] + x[1]; };
+  auto u0 = [](const Eigen::Vector2d& x) -> double { return x[0] + x[1]; };
 
   // Define time-stepping parameters
   unsigned int no_ts = 30;  // Number of time steps

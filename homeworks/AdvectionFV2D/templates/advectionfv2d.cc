@@ -24,7 +24,7 @@ namespace AdvectionFV2D {
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const Eigen::Matrix<double, 2, 3> &triangle) {
+    const Eigen::Matrix<double, 2, 3>& triangle) {
   Eigen::Matrix3d X;
 
   // solve for the coefficients of the barycentric coordinate functions
@@ -47,7 +47,7 @@ computeCellNormals(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
 
 /* SAM_LISTING_BEGIN_3 */
 std::shared_ptr<
-    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity *, 4>>>
+    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
 getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
   //====================
   // Your code goes here

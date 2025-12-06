@@ -19,7 +19,7 @@ using namespace Eigen;
 // return value:  Vector with differences of numerical fluxes, which provides
 // the right hand side of \eqref{eq:2pcf}
 template <typename FunctionF>
-VectorXd fluxdiff(const VectorXd &mu, FunctionF &&F) {
+VectorXd fluxdiff(const VectorXd& mu, FunctionF&& F) {
   unsigned n = mu.size();           // length of state vector
   VectorXd fd = VectorXd::Zero(n);  // return vector
 

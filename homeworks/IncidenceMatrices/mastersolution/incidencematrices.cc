@@ -65,7 +65,7 @@ std::shared_ptr<lf::mesh::Mesh> createDemoMesh() {
  */
 /* SAM_LISTING_BEGIN_1 */
 Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
-    const lf::mesh::Mesh &mesh) {
+    const lf::mesh::Mesh& mesh) {
   // Store edge-vertex incidence matrix here
   Eigen::SparseMatrix<int, Eigen::RowMajor> G;
 
@@ -84,7 +84,7 @@ Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
   // introduced as "distribute scheme" in class. We cannot iterative over
   // vertices, because LehrFEM++ does not allow to visit the edges
   // adjacent to a vertex
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     // Get index of this edge
     lf::mesh::Mesh::size_type edgeIdx = mesh.Index(*edge);
     // Get the nodes and their indices.
@@ -109,7 +109,7 @@ Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
  */
 /* SAM_LISTING_BEGIN_2 */
 Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
-    const lf::mesh::Mesh &mesh) {
+    const lf::mesh::Mesh& mesh) {
   // Store cell-edge incidence matrix here
   Eigen::SparseMatrix<int, Eigen::RowMajor> D;
 
@@ -126,7 +126,7 @@ Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
   // To compute D efficiently we iterate over all cells and check the
   // orientations (+1 or -1, same as in the definition of the matrix D)
   // of its edges. For this we may use RelativeOrientations().
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // Get cell index
     lf::mesh::Mesh::size_type cellIdx = mesh.Index(*cell);
     // Get edges and their orientations (these already the entries for D!)
@@ -155,7 +155,7 @@ Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
  * @return true, if the product is zero and false otherwise
  */
 /* SAM_LISTING_BEGIN_3 */
-bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh &mesh) {
+bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh& mesh) {
   bool isZero = false;
 
   Eigen::SparseMatrix<int> G = computeEdgeVertexIncidenceMatrix(mesh),
@@ -172,7 +172,7 @@ bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh &mesh) {
 /* SAM_LISTING_END_3 */
 
 /* SAM_LISTING_BEGIN_4 */
-Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh) {
+Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh& mesh) {
   // Size of Hodge Laplacian matrix for discrete 1-forms is equal to the number
   // of edges of the mesh
   const size_t N = mesh.NumEntities(1);
@@ -182,9 +182,9 @@ Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh) {
   std::vector<Eigen::Triplet<int>> triplets;
   // Pass I: Cell-oriented assembly of $\VD_1^{\top}\VD_1$.
   // Visit all cells and compute contributions of pairs of faces
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // Array of pointers to the edges of the cell, see \lref{ex:subent}
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     const unsigned int n_ed = edges.size();
     LF_ASSERT_MSG(n_ed <= 4, "Illegal number of edges");
     // Inquire about relative orientations, see \lref{rem:ori}
@@ -208,7 +208,7 @@ Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh) {
   std::vector<std::vector<std::pair<size_t, int>>> eds_node(
       mesh.NumEntities(2));
   // Run through the edges and collect their endpoints
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     // Get index of this edge
     lf::mesh::Mesh::size_type edgeIdx = mesh.Index(*edge);
     // Get the nodes and their indices.
@@ -225,9 +225,9 @@ Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh) {
     eds_node[lastNodeIdx].emplace_back(edgeIdx, 1);
   }
   // Run through nodes and pairs ofv adjacent edges
-  for (const std::vector<std::pair<size_t, int>> &edgesinfo : eds_node) {
-    for (const std::pair<size_t, int> &idxori1 : edgesinfo) {
-      for (const std::pair<size_t, int> &idxori2 : edgesinfo) {
+  for (const std::vector<std::pair<size_t, int>>& edgesinfo : eds_node) {
+    for (const std::pair<size_t, int>& idxori1 : edgesinfo) {
+      for (const std::pair<size_t, int>& idxori2 : edgesinfo) {
         triplets.emplace_back(idxori1.first, idxori2.first,
                               idxori1.second * idxori2.second);
       }

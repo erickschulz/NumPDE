@@ -30,7 +30,7 @@ namespace RadauThreeTimestepping {
  * @returns The source vector at time `time`
  */
 /* SAM_LISTING_BEGIN_1 */
-Eigen::VectorXd rhsVectorheatSource(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd rhsVectorheatSource(const lf::assemble::DofHandler& dofh,
                                     double time) {
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
@@ -53,7 +53,7 @@ Eigen::VectorXd rhsVectorheatSource(const lf::assemble::DofHandler &dofh,
  * @returns The solution at the final timestep
  */
 /* SAM_LISTING_BEGIN_6 */
-Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler& dofh,
                                    unsigned int m, double final_time) {
   Eigen::VectorXd discrete_heat_sol(dofh.NumDofs());
   //====================
@@ -65,7 +65,7 @@ Eigen::VectorXd solveHeatEvolution(const lf::assemble::DofHandler &dofh,
 
 /* Implementing member function Eval of class LinFEMassMatrixProvider*/
 Eigen::Matrix<double, 3, 3> LinFEMassMatrixProvider::Eval(
-    const lf::mesh::Entity &tria) {
+    const lf::mesh::Entity& tria) {
   Eigen::Matrix<double, 3, 3> elMat;
   //====================
   // Your code goes here
@@ -75,7 +75,7 @@ Eigen::Matrix<double, 3, 3> LinFEMassMatrixProvider::Eval(
 
 /* Implementing constructor of class Radau3MOLTimestepper */
 /* SAM_LISTING_BEGIN_4 */
-Radau3MOLTimestepper::Radau3MOLTimestepper(const lf::assemble::DofHandler &dofh)
+Radau3MOLTimestepper::Radau3MOLTimestepper(const lf::assemble::DofHandler& dofh)
     : dofh_(dofh) {
   //====================
   // Your code goes here
@@ -90,7 +90,7 @@ Radau3MOLTimestepper::Radau3MOLTimestepper(const lf::assemble::DofHandler &dofh)
 // Butcher table as stored in the Radau3MOLTimestepper class
 /* SAM_LISTING_BEGIN_5 */
 Eigen::VectorXd Radau3MOLTimestepper::discreteEvolutionOperator(
-    double time, double tau, const Eigen::VectorXd &mu) const {
+    double time, double tau, const Eigen::VectorXd& mu) const {
   Eigen::VectorXd discrete_evolution_operator(dofh_.NumDofs());
   //====================
   // Your code goes here

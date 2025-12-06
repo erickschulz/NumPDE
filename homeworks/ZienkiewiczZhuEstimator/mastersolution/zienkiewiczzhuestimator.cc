@@ -25,7 +25,7 @@ namespace ZienkiewiczZhuEstimator {
 /* Implementing member function Eval of class VectorProjectionMatrixProvider*/
 /* SAM_LISTING_BEGIN_1 */
 Eigen::MatrixXd VectorProjectionMatrixProvider::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   Eigen::MatrixXd elMat_vec;  // element matrix to be returned
   // Throw error in case cell is not Tria nor Quad
   LF_VERIFY_MSG(entity.RefEl() == lf::base::RefEl::kTria() ||
@@ -73,7 +73,7 @@ Eigen::MatrixXd VectorProjectionMatrixProvider::Eval(
     ref_basis_vec.push_back(b2_ref);
     ref_basis_vec.push_back(b3_ref);
 
-    const lf::geometry::Geometry &geo{*(entity.Geometry())};
+    const lf::geometry::Geometry& geo{*(entity.Geometry())};
     const Eigen::VectorXd gram_dets{geo.IntegrationElement(zeta_ref)};
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
@@ -103,10 +103,10 @@ Eigen::MatrixXd VectorProjectionMatrixProvider::Eval(
 /* Implementing member function Eval of class GradientProjectionVectorProvider*/
 /* SAM_LISTING_BEGIN_2 */
 Eigen::VectorXd GradientProjectionVectorProvider::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   Eigen::VectorXd elVec(6);  // for returning the element vector
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{_fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{_fe_space_p->LocGlobMap()};
   // Obtain global indices of the vertices of the triangle entity
   auto dof_idx_vec = dofh.GlobalDofIndices(entity);
   LF_ASSERT_MSG(dofh.NumLocalDofs(entity) == 3,
@@ -136,7 +136,7 @@ Eigen::VectorXd GradientProjectionVectorProvider::Eval(
 /* SAM_LISTING_END_2 */
 
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   LF_VERIFY_MSG(entity.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << entity.RefEl());
 
@@ -152,8 +152,8 @@ Eigen::Matrix<double, 2, 3> gradbarycoordinates(
 
 /* SAM_LISTING_BEGIN_3 */
 Eigen::VectorXd computeLumpedProjection(
-    const lf::assemble::DofHandler &scal_dofh, const Eigen::VectorXd &mu,
-    const lf::assemble::DofHandler &vec_dofh) {
+    const lf::assemble::DofHandler& scal_dofh, const Eigen::VectorXd& mu,
+    const lf::assemble::DofHandler& vec_dofh) {
   // Obtain shared_ptr to mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = scal_dofh.Mesh();
   // Dimension of vector-valued finite element space
@@ -167,7 +167,7 @@ Eigen::VectorXd computeLumpedProjection(
 
   // Loop over the triangular cells of the mesh in the spirit of
   // cell oriented assembly
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     LF_VERIFY_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Unsupported cell type " << cell->RefEl());
     // Obtain global scalar-FE indices of the vertices
@@ -182,7 +182,7 @@ Eigen::VectorXd computeLumpedProjection(
         elgrad_Mat.col(1) * mu(scal_dof_idx_vec[1]) +
         elgrad_Mat.col(2) * mu(scal_dof_idx_vec[2]);
     // Local contribution to the area of the cell patch surrounding a node
-    for (const lf::mesh::Entity *node : cell->SubEntities(2)) {
+    for (const lf::mesh::Entity* node : cell->SubEntities(2)) {
       LF_VERIFY_MSG(node->RefEl() == lf::base::RefEl::kPoint(),
                     "Expected kPoint type!" << node->RefEl());
       auto vec_dofh_idx = vec_dofh.GlobalDofIndices(*node);
@@ -193,7 +193,7 @@ Eigen::VectorXd computeLumpedProjection(
   }
 
   // Scaling of components of vector of dofs
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     LF_VERIFY_MSG(node->RefEl() == lf::base::RefEl::kPoint(),
                   "Expected kPoint type!" << node->RefEl());
     const double area_scal_fac = 1.0 / nodal_sum_of_areas(*node);
@@ -207,15 +207,15 @@ Eigen::VectorXd computeLumpedProjection(
 /* SAM_LISTING_END_3 */
 
 /* SAM_LISTING_BEGIN_4 */
-double computeL2Deviation(const lf::assemble::DofHandler &scal_dofh,
-                          const Eigen::VectorXd &eta,
-                          const lf::assemble::DofHandler &vec_dofh,
-                          const Eigen::VectorXd &gamma) {
+double computeL2Deviation(const lf::assemble::DofHandler& scal_dofh,
+                          const Eigen::VectorXd& eta,
+                          const lf::assemble::DofHandler& vec_dofh,
+                          const Eigen::VectorXd& gamma) {
   double deviation_norm_value = 0.0;  // For retrurning the result
   // Obtain shared_ptr to mesh
   auto mesh_p = scal_dofh.Mesh();
   // Cell-oriented computation of deviation norm (squared)
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     LF_VERIFY_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Unsupported cell type " << cell->RefEl());
     // Obtain area of the triangular cell
@@ -233,7 +233,7 @@ double computeL2Deviation(const lf::assemble::DofHandler &scal_dofh,
 
     // Obtaining the values of the passed vector at each node
     std::vector<Eigen::Vector2d> r_vec_values;
-    for (const lf::mesh::Entity *node : cell->SubEntities(2)) {
+    for (const lf::mesh::Entity* node : cell->SubEntities(2)) {
       LF_VERIFY_MSG(node->RefEl() == lf::base::RefEl::kPoint(),
                     "Expected kPoint type!" << node->RefEl());
       auto vec_dofh_idx = vec_dofh.GlobalDofIndices(*node);
@@ -261,14 +261,14 @@ double computeL2Deviation(const lf::assemble::DofHandler &scal_dofh,
 /* SAM_LISTING_END_4 */
 
 Eigen::VectorXd solveBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p) {
   Eigen::VectorXd discrete_solution;
 
   // TOOLS AND DATA
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -312,7 +312,7 @@ Eigen::VectorXd solveBVP(
   // Creating a predicate that will guarantee that the computations are carried
   // only on the exterior boundary edges of the mesh using the boundary flags
   auto edges_predicate_Dirichlet =
-      [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+      [&bd_flags](const lf::mesh::Entity& edge) -> bool {
     return bd_flags(edge);
   };
   // Determine the fixed dofs on the boundary and their values
@@ -344,8 +344,8 @@ Eigen::VectorXd solveBVP(
 };  // solveBVP
 
 Eigen::VectorXd solveGradVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
-    const Eigen::VectorXd &mu, const lf::assemble::DofHandler &vec_dofh) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
+    const Eigen::VectorXd& mu, const lf::assemble::DofHandler& vec_dofh) {
   Eigen::VectorXd approx_grad;
 
   // TOOLS AND DATA
@@ -378,12 +378,12 @@ Eigen::VectorXd solveGradVP(
   return approx_grad;
 };  // solveGradVP
 
-double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh> &mesh_p) {
+double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p) {
   double mesh_size = 0.0;
 
   // Find maximal edge length
   double edge_length;
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     // Compute the length of the edge
     auto endpoints = lf::geometry::Corners(*(edge->Geometry()));
     edge_length = (endpoints.col(0) - endpoints.col(1)).norm();

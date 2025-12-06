@@ -27,16 +27,16 @@ namespace BoundaryWave {
 
 // Library functions
 lf::assemble::COOMatrix<double> buildM(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p);
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p);
 
 lf::assemble::COOMatrix<double> buildA(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p);
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p);
 
 /* SAM_LISTING_BEGIN_7 */
 template <typename FUNCTOR_U, typename FUNCTOR_V>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> interpolateInitialData(
     std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space_p,
-    FUNCTOR_U &&u0, FUNCTOR_V &&v0) {
+    FUNCTOR_U&& u0, FUNCTOR_V&& v0) {
   Eigen::VectorXd dof_vector_u0, dof_vector_v0;
 
   // Generate Lehrfem++ mesh functions out of the functors
@@ -53,8 +53,8 @@ std::pair<Eigen::VectorXd, Eigen::VectorXd> interpolateInitialData(
 /* SAM_LISTING_BEGIN_8 */
 template <typename FUNCTOR_U, typename FUNCTOR_V>
 Eigen::VectorXd solveBoundaryWave(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
-    FUNCTOR_U &&u0, FUNCTOR_V &&v0, double T, unsigned int N) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
+    FUNCTOR_U&& u0, FUNCTOR_V&& v0, double T, unsigned int N) {
   Eigen::VectorXd bdyWaveSol;
 
   double step_size = T / N;

@@ -30,20 +30,20 @@ Eigen::MatrixXd ButcherMatrix() {
 /* SAM_LISTING_END_0 */
 
 /* SAM_LISTING_BEGIN_1 */
-std::vector<Eigen::VectorXd> SolveGradientFlow(const Eigen::VectorXd &d,
+std::vector<Eigen::VectorXd> SolveGradientFlow(const Eigen::VectorXd& d,
                                                double lambda,
-                                               const Eigen::VectorXd &y0,
+                                               const Eigen::VectorXd& y0,
                                                double T, unsigned int M) {
   // initialize solution vector
   std::vector<Eigen::VectorXd> sol(M + 1, Eigen::VectorXd::Zero(y0.size()));
 
   // Define the right hand side of the ODE y' = f(y), and the Jacobian of f.
-  auto f = [d, lambda](const Eigen::VectorXd &y) {
+  auto f = [d, lambda](const Eigen::VectorXd& y) {
     Eigen::VectorXd val =
         -2. * std::cos(y.squaredNorm()) * y - 2. * lambda * d.dot(y) * d;
     return val;
   };
-  auto df = [d, lambda](const Eigen::VectorXd &y) {
+  auto df = [d, lambda](const Eigen::VectorXd& y) {
     int dim = y.size();
     Eigen::MatrixXd term1 = 4. * std::sin(y.squaredNorm()) * y * y.transpose();
     Eigen::MatrixXd term2 =

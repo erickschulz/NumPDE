@@ -10,7 +10,7 @@
 
 #include "neumanndatarecovery.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   std::cout << "Nothing to do here.\n"
             << "Please run the tests to test your implementation." << std::endl;
   return 0;

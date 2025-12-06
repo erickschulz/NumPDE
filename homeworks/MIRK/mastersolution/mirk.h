@@ -17,7 +17,7 @@ namespace MIRK {
 /** Perform 2 steps of the Newton method applied to F and its Jacobian DF */
 /* SAM_LISTING_BEGIN_0 */
 template <class Func, class Jac>
-Eigen::VectorXd Newton2Steps(Func &&F, Jac &&DF, Eigen::VectorXd z) {
+Eigen::VectorXd Newton2Steps(Func&& F, Jac&& DF, Eigen::VectorXd z) {
   // First Newton step
   z = z - DF(z).lu().solve(F(z));
   // Second Newton step
@@ -30,7 +30,7 @@ Eigen::VectorXd Newton2Steps(Func &&F, Jac &&DF, Eigen::VectorXd z) {
  * y' = f(y) */
 /* SAM_LISTING_BEGIN_1 */
 template <class Func, class Jac>
-double MIRKStep(Func &&f, Jac &&df, double y0, double h) {
+double MIRKStep(Func&& f, Jac&& df, double y0, double h) {
   // Coefficients of MIRK
   const double v1 = 1.0;
   const double v2 = 344.0 / 2025.0;
@@ -68,7 +68,7 @@ double MIRKStep(Func &&f, Jac &&df, double y0, double h) {
  * return the approximation of y(T)*/
 /* SAM_LISTING_BEGIN_2 */
 template <class Func, class Jac>
-double MIRKSolve(Func &&f, Jac &&df, double y0, double T, unsigned int M) {
+double MIRKSolve(Func&& f, Jac&& df, double y0, double T, unsigned int M) {
   // Step size
   const double h = T / M;
   // Will contain next step

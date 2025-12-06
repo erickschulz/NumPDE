@@ -41,18 +41,18 @@ namespace ElectrostaticForce {
 Eigen::Vector2d computeExactForce();
 
 Eigen::VectorXd solvePoissonBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p);
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p);
 
-double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh> &mesh_p);
+double getMeshSize(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p);
 
-Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity &entity);
+Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& entity);
 
 Eigen::Vector2d computeForceBoundaryFunctional(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::VectorXd approx_sol);
 
 Eigen::Vector2d computeForceDomainFunctional(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::VectorXd approx_sol);
 
 }  // namespace ElectrostaticForce

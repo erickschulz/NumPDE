@@ -129,14 +129,14 @@ generateMOLMatrices(unsigned int M, double rho, double sigma, double mu,
 
 /* SAM_LISTING_BEGIN_3 */
 std::vector<double> track_GKHeatEnergy(double T, unsigned int L, unsigned int M,
-                                       const Eigen::VectorXd &mu0,
-                                       const Eigen::VectorXd &zeta0, double rho,
+                                       const Eigen::VectorXd& mu0,
+                                       const Eigen::VectorXd& zeta0, double rho,
                                        double sigma, double mu, double kappa) {
   std::vector<double> energies;
   // ************************
   // Extend to a meaningful implementation
   auto rec = [/* Your captured local variables here */](
-                 const Eigen::VectorXd &nu) -> void { /* Your code here*/ };
+                 const Eigen::VectorXd& nu) -> void { /* Your code here*/ };
 // ************************
   (void)timestepping_GKHeat(T, L, M, mu0, zeta0, rho, sigma, mu, kappa, rec);
   return energies;

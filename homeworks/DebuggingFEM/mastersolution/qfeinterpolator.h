@@ -26,7 +26,7 @@ using size_type = lf::base::size_type;
  * @returns The global coordinate of the i-th interpolation node in the given
  * cell
  */
-Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity &cell);
+Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity& cell);
 
 /**
  * @brief interpolate function over a second order lagrangian finite element
@@ -37,8 +37,8 @@ Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity &cell);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
-Eigen::VectorXd interpolateOntoQuadFE(const lf::assemble::DofHandler &dofh,
-                                      FUNCTOR &&f) {
+Eigen::VectorXd interpolateOntoQuadFE(const lf::assemble::DofHandler& dofh,
+                                      FUNCTOR&& f) {
   // Obtain a pointer to the mesh object
   auto mesh = dofh.Mesh();
   const size_type N_dofs(dofh.NumDofs());
@@ -48,11 +48,11 @@ Eigen::VectorXd interpolateOntoQuadFE(const lf::assemble::DofHandler &dofh,
   Eigen::Matrix<double, 2, 6> refnodes(2, 6);
   refnodes << 0.0, 1.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5;
   // Loop over the cells of the mesh (codim-0 entities)
-  for (const lf::mesh::Entity *cell : mesh->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh->Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Implemented for triangles only");
     // Fetch pointer to asscoiated geometry object
-    const lf::geometry::Geometry *geom = cell->Geometry();
+    const lf::geometry::Geometry* geom = cell->Geometry();
     // Obtain actual coordinates of interpolation nodes
     Eigen::MatrixXd nodes{geom->Global(refnodes)};
     // get local to global index map for the current cell

@@ -19,7 +19,7 @@
 
 using namespace CoupledSecondOrderBVP;
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   // Load mesh into a Lehrfem++ object
   auto mesh_factory = std::make_unique<lf::mesh::hybrid2d::MeshFactory>(2);
   const lf::io::GmshReader reader(std::move(mesh_factory), "meshes/hex1.msh");
@@ -29,7 +29,7 @@ int main(int /*argc*/, const char ** /*argv*/) {
   // We discretization by means of piecewise QUADRATIC lagrangian FE
   auto fe_space = std::make_shared<FeSpaceLagrangeO2<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 

@@ -52,7 +52,7 @@ TEST(plaplacian, fixedPointSolvePLaplacian) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   std::cout << "\t Sequence of nested meshes used in test routine\n";
   multi_mesh.PrintInfo(std::cout);
   std::size_t L = multi_mesh.NumLevels();  // Number of levels
@@ -161,7 +161,7 @@ TEST(plaplacian, fixedPointSolvePLaplacian2) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   std::cout << "\t Sequence of nested meshes used in test routine\n";
   multi_mesh.PrintInfo(std::cout);
   std::size_t L = multi_mesh.NumLevels();  // Number of levels
@@ -250,7 +250,7 @@ TEST(plaplacian, newtonSolvePLaplacian) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   std::cout << "\t Sequence of nested meshes used in test routine\n";
   multi_mesh.PrintInfo(std::cout);
   std::size_t L = multi_mesh.NumLevels();  // Number of levels
@@ -359,7 +359,7 @@ TEST(plaplacian, newtonSolvePLaplacian2) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   std::cout << "\t Sequence of nested meshes used in test routine\n";
   multi_mesh.PrintInfo(std::cout);
   std::size_t L = multi_mesh.NumLevels();  // Number of levels

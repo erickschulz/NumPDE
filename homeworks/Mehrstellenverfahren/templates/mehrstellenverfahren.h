@@ -29,7 +29,7 @@ Eigen::SparseMatrix<double> compMehrstellenA(unsigned int M);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
-Eigen::VectorXd compMehrstellenf(FUNCTOR &&f, unsigned int M) {
+Eigen::VectorXd compMehrstellenf(FUNCTOR&& f, unsigned int M) {
   Eigen::VectorXd phi = Eigen::VectorXd::Zero(M * M);
   //====================
   // Your code goes here
@@ -47,7 +47,7 @@ Eigen::VectorXd compMehrstellenf(FUNCTOR &&f, unsigned int M) {
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
-Eigen::VectorXd solveMehrstellen(FUNCTOR &&f, unsigned int M) {
+Eigen::VectorXd solveMehrstellen(FUNCTOR&& f, unsigned int M) {
   Eigen::VectorXd mu = Eigen::VectorXd::Zero(M * M);
   //====================
   // Your code goes here

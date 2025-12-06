@@ -47,8 +47,8 @@ TEST(Solve, test) {
   auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(8, 1.0 / 3.0);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
   lf::mesh::utils::MeshFunctionGlobal mf_alpha{identityMatrixFunctor};
@@ -124,7 +124,7 @@ TEST(MyLinearLoadVector, testTriangles) {
   lf::uscalfe::LinearFELocalLoadVector<double, decltype(mf_f)>
       elvec_builder_exact(mf_f);
 
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     if (cell->RefEl() == lf::base::RefEl::kTria()) {
       auto elem_vec = elvec_builder.Eval(*cell);
       auto elem_vec_exact = elvec_builder_exact.Eval(*cell);
@@ -144,7 +144,7 @@ TEST(MyLinearLoadVector, testQuads) {
   lf::uscalfe::LinearFELocalLoadVector<double, decltype(mf_f)>
       elvec_builder_exact(mf_f);
 
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     if (cell->RefEl() == lf::base::RefEl::kQuad()) {
       auto elem_vec = elvec_builder.Eval(*cell);
       auto elem_vec_exact = elvec_builder_exact.Eval(*cell);
@@ -162,7 +162,7 @@ TEST(MyLinearFEElementMatrix, testTriangles) {
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(0, 1.0 / 3.0);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
 
   lf::mesh::utils::MeshFunctionGlobal mf_alpha{identityMatrixFunctor};
   lf::mesh::utils::MeshFunctionGlobal mf_gamma{identityScalarFunctor};
@@ -172,7 +172,7 @@ TEST(MyLinearFEElementMatrix, testTriangles) {
       double, decltype(mf_alpha), decltype(mf_gamma)>
       elmat_builder_exact(fe_space, mf_alpha, mf_gamma);
 
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     if (cell->RefEl() == lf::base::RefEl::kTria()) {
       auto elem_mat = elmat_builder.Eval(*cell);
       auto elem_mat_exact = elmat_builder_exact.Eval(*cell);
@@ -188,7 +188,7 @@ TEST(MyLinearFEElementMatrix, testQuads) {
   auto mesh_p = Generate2DTestMesh();
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
 
   lf::mesh::utils::MeshFunctionGlobal mf_alpha{identityMatrixFunctor};
   lf::mesh::utils::MeshFunctionGlobal mf_gamma{identityScalarFunctor};
@@ -198,7 +198,7 @@ TEST(MyLinearFEElementMatrix, testQuads) {
       double, decltype(mf_alpha), decltype(mf_gamma)>
       elmat_builder_exact(fe_space, mf_alpha, mf_gamma);
 
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     if (cell->RefEl() == lf::base::RefEl::kQuad()) {
       auto elem_mat = elmat_builder.Eval(*cell);
       auto elem_mat_exact = elmat_builder_exact.Eval(*cell);

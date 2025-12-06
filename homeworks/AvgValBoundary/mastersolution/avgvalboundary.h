@@ -44,8 +44,8 @@ namespace AvgValBoundary {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNC_ALPHA, typename FUNC_GAMMA, typename FUNC_BETA>
 Eigen::SparseMatrix<double> compGalerkinMatrix(
-    const lf::assemble::DofHandler &dofh, FUNC_ALPHA &&alpha,
-    FUNC_GAMMA &&gamma, FUNC_BETA &&beta) {
+    const lf::assemble::DofHandler& dofh, FUNC_ALPHA&& alpha,
+    FUNC_GAMMA&& gamma, FUNC_BETA&& beta) {
   // obtain mesh and set up fe_space (p.w. linear Lagrangian FEM)
   auto mesh = dofh.Mesh();
   auto fe_space =
@@ -75,8 +75,8 @@ Eigen::SparseMatrix<double> compGalerkinMatrix(
 }
 /* SAM_LISTING_END_1 */
 
-double compH1seminorm(const lf::assemble::DofHandler &dofh,
-                      const Eigen::VectorXd &u);
+double compH1seminorm(const lf::assemble::DofHandler& dofh,
+                      const Eigen::VectorXd& u);
 
 /**
  * @brief computes boundary functional as in exercise c)
@@ -85,8 +85,8 @@ double compH1seminorm(const lf::assemble::DofHandler &dofh,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTION>
-double compBoundaryFunctional(const lf::assemble::DofHandler &dofh,
-                              const Eigen::VectorXd &u, FUNCTION &&w) {
+double compBoundaryFunctional(const lf::assemble::DofHandler& dofh,
+                              const Eigen::VectorXd& u, FUNCTION&& w) {
   double result = 0.0;
   // constant zero function
   auto const_zero = [](Eigen::Vector2d x) -> double { return 0.0; };
@@ -103,7 +103,7 @@ double compBoundaryFunctional(const lf::assemble::DofHandler &dofh,
 }
 /* SAM_LISTING_END_2 */
 
-Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler &dofh);
+Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler& dofh);
 
 std::vector<std::pair<unsigned int, double>> approxBoundaryFunctionalValues(
     unsigned int L);
