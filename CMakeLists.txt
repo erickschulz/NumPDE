@@ -40,6 +40,11 @@ if(COMPILER_SUPPORTS_WCONVERSION)
   target_compile_options(warning_flags INTERFACE -Wconversion)
 endif()
 
+# Suppress duplicate library warnings on Apple linker
+if(APPLE)
+  add_link_options(-Wl,-no_warn_duplicate_libraries)
+endif()
+
 # Add switches
 ###############################################################################
 option(HOMEWORKS "usage: cmake -DHOMEWORKS=ON/OFF .." ON)

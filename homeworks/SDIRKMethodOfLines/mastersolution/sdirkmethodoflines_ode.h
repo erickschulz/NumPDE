@@ -11,6 +11,8 @@
 
 namespace SDIRKMethodOfLines {
 
+std::vector<double> sdirk2SteppingLinScalODE(unsigned int m);
+
 void sdirk2ScalarODECvTest();
 
 }  // namespace SDIRKMethodOfLines
