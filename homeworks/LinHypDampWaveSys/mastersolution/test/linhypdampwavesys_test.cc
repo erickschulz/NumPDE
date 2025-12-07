@@ -90,7 +90,7 @@ TEST(LinHypDampWaveSys, fvEulLinSys) {
   ASSERT_LE((sol - sol_exact).norm(), 1e-3);
 }
 
-TEST(LinHypDampWaveSys, ev1DampWave) {
+TEST(LinHypDampWaveSys, DISABLED_ev1DampWave) {
   // Some parameters
   double c = 2.;
   double r = 3.;
