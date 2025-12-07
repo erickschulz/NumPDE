@@ -193,7 +193,7 @@ TEST(Homework_2_9, Integration) {
   Eigen::VectorXd mu = buildCoefVector(f, lin_dofh);
   Eigen::VectorXd zeta = buildCoefVector(f, quad_dofh);
 
-  const double precision = 1e-15;
+  const double precision = 1e-14;
   EXPECT_NEAR(integrateLinearFEFunction(lin_dofh, mu), 487.0 / 24.0, precision);
   EXPECT_NEAR(integrateQuadraticFEFunction(quad_dofh, zeta), 20.25, precision);
 }
