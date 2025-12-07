@@ -73,6 +73,8 @@ file(WRITE ${CMAKE_BINARY_DIR}/lf_all_dummy.cc "// Dummy file for LF_ALL library
 
 # Create object library that wraps all LehrFEM++ modules
 # This compiles once and avoids duplicate library warnings for each target
+# Note: We only link the high-level modules and let lower-level dependencies
+# come in transitively to avoid duplicate library warnings
 add_library(LF_ALL OBJECT ${CMAKE_BINARY_DIR}/lf_all_dummy.cc)
 target_link_libraries(LF_ALL PUBLIC
   LF::lf.assemble
@@ -82,7 +84,6 @@ target_link_libraries(LF_ALL PUBLIC
   LF::lf.geometry
   LF::lf.geometry.test_utils
   LF::lf.io
-  LF::lf.mesh
   LF::lf.mesh.hybrid2d
   LF::lf.mesh.utils
   LF::lf.mesh.test_utils

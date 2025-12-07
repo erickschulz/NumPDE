@@ -16,11 +16,10 @@ function(build_problem TARGET DIR OUTPUT_NAME)
   # Add LF_ALL object files if LF_ALL is in libraries
   if("LF_ALL" IN_LIST LIBRARIES)
     target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:LF_ALL>)
-    # Get the actual LehrFEM++ libraries from LF_ALL and link them
-    get_target_property(LF_LIBS LF_ALL LINK_LIBRARIES)
-    # Filter out LF_ALL from LIBRARIES and add LF libs instead
+    # Filter out LF_ALL from LIBRARIES - we only need to link LF_ALL itself
     list(REMOVE_ITEM LIBRARIES LF_ALL)
-    target_link_libraries(${TARGET} PUBLIC ${LIBRARIES} ${LF_LIBS})
+    # Link LF_ALL and other libraries - LF_ALL brings in all LF deps transitively
+    target_link_libraries(${TARGET} PUBLIC LF_ALL ${LIBRARIES})
   else()
     # Link libraries to executable (not duplicated since object library uses PRIVATE)
     target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
@@ -44,7 +43,13 @@ function(build_test TARGET TARGET_TO_TEST DIR OUTPUT_NAME)
   target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:${TARGET_TO_TEST}.obj>)
   # Link test libraries and main problem libraries (from parent dependencies.cmake)
   get_target_property(MAIN_LIBS ${TARGET_TO_TEST}.obj LINK_LIBRARIES)
-  target_link_libraries(${TARGET} PUBLIC ${MAIN_LIBS} ${LIBRARIES})
+  # Only link test-specific libraries, main libs already come from object files
+  # Filter out libraries that are already in MAIN_LIBS to avoid duplication
+  set(TEST_ONLY_LIBS ${LIBRARIES})
+  foreach(lib ${MAIN_LIBS})
+    list(REMOVE_ITEM TEST_ONLY_LIBS ${lib})
+  endforeach()
+  target_link_libraries(${TARGET} PUBLIC ${MAIN_LIBS} ${TEST_ONLY_LIBS})
 
   # gtest_discover_tests(${TARGET}) Not necessary given that the CI pipeline runs the tests
 endfunction(build_test)
