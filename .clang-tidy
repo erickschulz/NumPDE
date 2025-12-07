@@ -83,7 +83,7 @@ Checks: '
 # due to them causing unavoidable warnings (esp. with Eigen)
 
 WarningsAsErrors: '*' # treat all warnings as errors
-HeaderFilterRegex: '(include|developers)/.*\.h$' # tells clang-tidy which header files should have unsupressed warnings (ony ours)
+HeaderFilterRegex: '(include|developers|homeworks|lecturecodes)/.*' # tells clang-tidy which header files should have unsupressed warnings (ony ours)
 FormatStyle: file # format from .clang-format file
 UseColor: true
 ExtraArgs: ['-DEIGEN_INTERNAL_DEBUGGING'] # was there before, unsure what it does

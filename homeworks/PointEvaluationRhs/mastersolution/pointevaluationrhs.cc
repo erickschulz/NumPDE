@@ -180,6 +180,12 @@ Eigen::Vector2d GlobalInverseQuad(Eigen::Matrix<double, 2, 4> vert,
               Eigen::Vector2d(0.0, 1.0);
       break;
     }
+    case 0:
+    default: {
+      // vt_zero_idx = 0 requires no transformation.
+      // The default case is included to satisfy clang-tidy.
+      break;
+    }
   }
     /* SAM_LISTING_END_3 */
   return x_hat;

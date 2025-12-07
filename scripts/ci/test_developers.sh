@@ -14,7 +14,7 @@ task() {
 
         if [[ -f "$cmd_test" ]]; then
           echo "Executing $cmd_test";
-          eval $cmd_test
+          eval "$cmd_test --gtest_color=yes"
         else
           echo "*** WARNING: No unit tests found in $d ***";
         fi

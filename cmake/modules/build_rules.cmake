@@ -55,8 +55,9 @@ function(build_test TARGET TARGET_TO_TEST DIR OUTPUT_NAME)
   target_compile_definitions(${TARGET} PRIVATE CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/test")
   target_compile_definitions(${TARGET} PRIVATE CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
   # Add object files from main problem (compiled once, reused here)
-  target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:${TARGET_TO_TEST}.obj>)
+  # target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:${TARGET_TO_TEST}.obj>) # Removed this line
   # Link test libraries and main problem libraries (from parent dependencies.cmake)
+  target_link_libraries(${TARGET} PRIVATE ${TARGET_TO_TEST}.obj) # Link against main problem's object library
   get_target_property(MAIN_LIBS ${TARGET_TO_TEST}.obj LINK_LIBRARIES)
   # Only link test-specific libraries, main libs already come from object files
   # Filter out libraries that are already in MAIN_LIBS to avoid duplication
