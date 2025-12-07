@@ -4,6 +4,7 @@
 
 set(SOURCES
   ${DIR}/parametricfiniteelements.h
+  ${DIR}/parametricfiniteelements.cc
   ${DIR}/parametricfiniteelements_main.cc
 )
 

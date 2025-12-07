@@ -27,22 +27,6 @@ class ElementMatrixProvider {
   bool isActive(const lf::mesh::Entity& /*entity*/) const { return true; }
 };
 /* SAM_LISTING_END_1 */
-
-/* SAM_LISTING_BEGIN_2 */
-Eigen::Matrix3d ElementMatrixProvider::Eval(const lf::mesh::Entity& entity) {
-  LF_ASSERT_MSG(lf::base::RefEl::kTria() == entity.RefEl(),
-                "Function only defined for triangular cells");
-
-  const lf::geometry::Geometry* geo_ptr = entity.Geometry();
-  Eigen::Matrix3d loc_mat;
-
-  //====================
-  // Your code goes here
-  //====================
-  return loc_mat;
-}
-/* SAM_LISTING_END_2 */
-
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR>
 class GradProjRhsProvider {

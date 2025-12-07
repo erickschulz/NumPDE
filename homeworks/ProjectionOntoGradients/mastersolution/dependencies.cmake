@@ -4,6 +4,7 @@
 
 set(SOURCES
   ${DIR}/projectionontogradients.h
+  ${DIR}/projectionontogradients.cc
   ${DIR}/projectionontogradients_main.cc
 )
 
