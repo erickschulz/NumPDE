@@ -11,7 +11,7 @@
 #include <lf/mesh/test_utils/test_meshes.h>
 #include <lf/mesh/utils/mesh_function_global.h>
 
-#include <iomanip> // Added for std::setw
+#include <iomanip>  // Added for std::setw
 #include <numbers>
 
 namespace StokesStabP1FEM {
