@@ -45,7 +45,7 @@ readMeshWithTags(std::string filename) {
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{reader.mesh()};
   const lf::mesh::Mesh& mesh{*mesh_p};
   // Output information on the mesh
-  lf::mesh::utils::PrintInfo(std::cout, mesh);
+  // lf::mesh::utils::PrintInfo(std::cout, mesh);
   // A set of integers associated with edges of the mesh (codim = 1 entities)
   lf::mesh::utils::CodimMeshDataSet<int> edgeids{mesh_p, 1, -1};
   // Counter for nodes on a particular part of the boundary

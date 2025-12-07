@@ -30,6 +30,24 @@ make -j8
 ```
 This will significantly speed up the build process.
 
+### Build Configurations
+
+For optimal performance, always specify the build type during the `cmake` configuration step.
+
+*   **Release Build (Optimized & Fast):**
+    ```bash
+    # Inside your build directory
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    ```
+    This is recommended for running computationally intensive problems and matches the CI pipeline's configuration.
+
+*   **Debug Build (For Development & Debugging):**
+    ```bash
+    # Inside your build directory
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    ```
+    This builds with debug symbols and no optimizations, making it suitable for use with a debugger.
+
 To build a specific problem, say `TestQuadratureRules`, proceed as follows:
 ```
 cd homeworks/TestQuadratureRules/
