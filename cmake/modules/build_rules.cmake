@@ -13,17 +13,8 @@ function(build_problem TARGET DIR OUTPUT_NAME)
   # Create executable using the object library's compiled files
   add_executable(${TARGET} $<TARGET_OBJECTS:${TARGET}.obj>)
   set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
-  # Add LF_ALL object files if LF_ALL is in libraries
-  if("LF_ALL" IN_LIST LIBRARIES)
-    target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:LF_ALL>)
-    # Filter out LF_ALL from LIBRARIES - we only need to link LF_ALL itself
-    list(REMOVE_ITEM LIBRARIES LF_ALL)
-    # Link LF_ALL and other libraries - LF_ALL brings in all LF deps transitively
-    target_link_libraries(${TARGET} PUBLIC LF_ALL ${LIBRARIES})
-  else()
-    # Link libraries to executable (not duplicated since object library uses PRIVATE)
-    target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
-  endif()
+  # Link libraries to executable (not duplicated since object library uses PRIVATE)
+  target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
 
   # Keep .static as alias to .obj for backwards compatibility
   add_library(${TARGET}.static ALIAS ${TARGET}.obj)

@@ -68,28 +68,23 @@ find_package(Eigen3 CONFIG REQUIRED)
 hunter_add_package(lehrfempp)
 find_package(lehrfempp CONFIG REQUIRED)
 
-# Create a dummy source file for the LF_ALL library
-file(WRITE ${CMAKE_BINARY_DIR}/lf_all_dummy.cc "// Dummy file for LF_ALL library\n")
-
-# Create object library that wraps all LehrFEM++ modules
-# This compiles once and avoids duplicate library warnings for each target
-# Note: We only link the high-level modules and let lower-level dependencies
-# come in transitively to avoid duplicate library warnings
-add_library(LF_ALL OBJECT ${CMAKE_BINARY_DIR}/lf_all_dummy.cc)
-target_link_libraries(LF_ALL PUBLIC
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.fe
-  LF::lf.fe.test_utils
-  LF::lf.geometry
-  LF::lf.geometry.test_utils
+# Create INTERFACE library that wraps all LehrFEM++ modules
+# Only link top-level modules and let lower-level dependencies come in transitively
+# Dependency hierarchy: uscalfe → fe → assemble → mesh → geometry → base
+#
+# Note: Some duplicates are unavoidable when multiple independent modules share dependencies:
+# - Both lf.refinement and lf.mesh.test_utils depend on lf.mesh.utils → mesh.utils appears 2x
+# - All mesh modules (hybrid2d, test_utils, refinement) depend on lf.mesh → mesh appears 2x
+# The linker automatically deduplicates these - warnings are informational only
+add_library(LF_ALL INTERFACE)
+target_link_libraries(LF_ALL INTERFACE
+  LF::lf.uscalfe
   LF::lf.io
   LF::lf.mesh.hybrid2d
-  LF::lf.mesh.utils
-  LF::lf.mesh.test_utils
-  LF::lf.quad
+  LF::lf.fe.test_utils
+  LF::lf.geometry.test_utils
   LF::lf.refinement
-  LF::lf.uscalfe
+  LF::lf.mesh.test_utils
 )
 
 # Get Google Test
