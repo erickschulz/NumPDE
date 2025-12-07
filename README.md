@@ -26,10 +26,17 @@ cmake ..
 ```
 This will install LehrFEM++ and its dependencies into a folder `~/.hunter/`.
 
-**Note**: The first compilation can take a significant amount of time. It is highly recommended to use parallel compilation with the `-j` flag. For example, to use 8 parallel jobs:
-```
-make -j8
-```
+**Note**: The first compilation can take a significant amount of time. It is highly recommended to use parallel compilation with the `-j` flag. To use all available cores, you can use the following commands:
+
+*   **On macOS:**
+    ```bash
+    make -j $(sysctl -n hw.ncpu)
+    ```
+*   **On Linux:**
+    ```bash
+    make -j $(nproc)
+    ```
+
 This will significantly speed up the build process.
 
 ### Build Configurations
