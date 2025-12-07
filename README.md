@@ -22,7 +22,15 @@ mkdir build
 cd build/
 cmake ..
 ```
-This will install LehrFEM++ and its dependencies into a folder `~/.hunter/`. To build a specific problem, say `TestQuadratureRules`, proceed as follows:
+This will install LehrFEM++ and its dependencies into a folder `~/.hunter/`.
+
+**Note**: The first compilation can take a significant amount of time. It is highly recommended to use parallel compilation with the `-j` flag. For example, to use 8 parallel jobs:
+```
+make -j8
+```
+This will significantly speed up the build process.
+
+To build a specific problem, say `TestQuadratureRules`, proceed as follows:
 ```
 cd homeworks/TestQuadratureRules/
 make
@@ -111,6 +119,26 @@ ProblemName/
 └── README.md
 ```
 You can create a template using `scripts/python/new_problem.py <Problemname> <problemname>`. Feel free to delete any folders you don't need.
+
+### Build System and Dependencies
+The build system automatically discovers source files (`.cc` and `.h`) in the problem directory and provides default libraries (`Eigen3::Eigen` and `LF_ALL` for main sources, `GTest::gtest_main` for tests). In most cases, you don't need to specify dependencies manually.
+
+However, if your problem requires:
+- Additional libraries (e.g., `Boost::program_options` in `LeapfrogDissipativeWave`)
+- Source files from subdirectories (e.g., `meshes/mesh.cc` in `ElementMatrixComputation`)
+- Exclusion of certain files from compilation (e.g., `GaussLobattoParabolic`)
+
+you can create a `dependencies.cmake` file in your `mastersolution/` directory with:
+```cmake
+set(SOURCES
+  ${DIR}/problemname_main.cc
+  ${DIR}/problemname.cc
+  meshes/mesh.cc
+)
+set(LIBRARIES Eigen3::Eigen LF_ALL Boost::program_options)
+```
+Similarly, for tests, create `mastersolution/test/dependencies.cmake` if needed.
+
 ### Solution Tags
 
 In the files of `./developers/mastersolution/` we put the following tags

@@ -1,7 +1,19 @@
 # Build rule for problems
 function(build_problem TARGET DIR OUTPUT_NAME)
-  # Defines SOURCES and LIBRARIES
-  include(${DIR}/dependencies.cmake)
+  # Load custom dependencies if they exist
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/dependencies.cmake)
+    include(${DIR}/dependencies.cmake)
+  endif()
+
+  # Auto-discover sources if not specified
+  if(NOT SOURCES)
+    file(GLOB SOURCES "${DIR}/*.cc" "${DIR}/*.h")
+  endif()
+
+  # Use default libraries if not specified
+  if(NOT LIBRARIES)
+    set(LIBRARIES Eigen3::Eigen LF_ALL)
+  endif()
 
   # Create OBJECT library - compiles sources once, used by both executable and tests
   add_library(${TARGET}.obj OBJECT ${SOURCES})
@@ -22,9 +34,21 @@ endfunction(build_problem)
 
 # Build rule for tests
 function(build_test TARGET TARGET_TO_TEST DIR OUTPUT_NAME)
-  # Defines SOURCES and LIBRARIES
-  include(${DIR}/test/dependencies.cmake)
+  # Load custom test dependencies if they exist
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/test/dependencies.cmake)
+    include(${DIR}/test/dependencies.cmake)
+  endif()
   include(GoogleTest)
+
+  # Auto-discover test sources if not specified
+  if(NOT SOURCES)
+    file(GLOB SOURCES "${DIR}/test/*.cc")
+  endif()
+
+  # Use default test libraries if not specified
+  if(NOT LIBRARIES)
+    set(LIBRARIES GTest::gtest_main)
+  endif()
 
   add_executable(${TARGET} ${SOURCES})
   set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
