@@ -8,12 +8,4 @@ set(SOURCES
   ${DIR}/lfppdofhandling.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.geometry
-  LF::lf.mesh
-  LF::lf.mesh.utils
-  LF::lf.mesh.test_utils
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

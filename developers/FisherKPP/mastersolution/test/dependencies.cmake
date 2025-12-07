@@ -12,16 +12,5 @@ set(SOURCES
 
 # Libraries to be used. If the code does not rely on LehrFEM++
 # all the libraries LF:* can be removed 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.geometry
-  LF::lf.io
-  LF::lf.mesh.hybrid2d
-  LF::lf.mesh.utils
-  LF::lf.mesh.test_utils
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)
 

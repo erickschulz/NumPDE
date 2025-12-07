@@ -6,9 +6,4 @@ set(SOURCES
   ${DIR}/test/gausslobattoparabolic_test.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.mesh.test_utils
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)

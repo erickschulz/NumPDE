@@ -6,10 +6,4 @@ set(SOURCES
   ${DIR}/test/nonlinschroedingerequation_test.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.assemble
-  LF::lf.mesh.test_utils
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)

@@ -8,13 +8,4 @@ set(SOURCES
   ${DIR}/upwindfinitevolume.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.geometry
-  LF::lf.io
-  LF::lf.mesh
-  LF::lf.mesh.hybrid2d
-  LF::lf.refinement
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

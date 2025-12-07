@@ -8,10 +8,4 @@ set(SOURCES
   ${DIR}/boundarylength.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.geometry
-  LF::lf.io
-  LF::lf.mesh.utils
-  LF::lf.mesh.hybrid2d
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

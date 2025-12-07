@@ -15,14 +15,4 @@ set(SOURCES
   ${DIR}/qfeprovidertester.h
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.mesh
-  LF::lf.mesh.utils
-  LF::lf.mesh.test_utils
-  LF::lf.mesh.hybrid2d
-  LF::lf.refinement
-  LF::lf.assemble
-  LF::lf.io
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

@@ -8,8 +8,4 @@ set(SOURCES
   ${DIR}/testquadraturerules.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.base
-  LF::lf.quad
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

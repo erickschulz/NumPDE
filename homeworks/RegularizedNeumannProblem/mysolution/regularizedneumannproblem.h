@@ -90,15 +90,7 @@ class VecHelper {
 };
 /* SAM_LISTING_END_6 */
 
-/* SAM_LISTING_BEGIN_5 */
-Eigen::VectorXd assembleVector_c(const lf::assemble::DofHandler& dofh) {
-  Eigen::VectorXd c(dofh.NumDofs());
-  //====================
-  // Your code goes here
-  //====================
-  return c;
-}
-/* SAM_LISTING_END_5 */
+Eigen::VectorXd assembleVector_c(const lf::assemble::DofHandler& dofh);
 
 template <typename FUNCT_F, typename FUNCT_H>
 std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_augment(

@@ -13,14 +13,4 @@ set(SOURCES
   ${DIR}/iohelper.h
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.base
-  LF::lf.io
-  LF::lf.quad
-  LF::lf.mesh.hybrid2d
-  LF::lf.mesh.test_utils
-  LF::lf.mesh.utils
-  LF::lf.refinement
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

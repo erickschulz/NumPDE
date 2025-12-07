@@ -5,6 +5,16 @@
 
 #include "nonconformingcrouzeixraviartfiniteelements.h"
 
+#include <lf/io/io.h>
+
+#include <cmath>
+#include <string>
+
+#include "crdirichletbvp.h"
+#include "crfespace.h"
+#include "crl2error.h"
+#include "crl2errordirichletbvp.h"
+
 namespace NonConformingCrouzeixRaviartFiniteElements {
 
 // Crouzeix-Raviart finite element space defined on triangular meshes only
@@ -134,5 +144,17 @@ CRReferenceFiniteElement::NodalValuesToDofs(
   return coeffs;
 }
 /* SAM_LISTING_END_7 */
+
+/* SAM_LISTING_BEGIN_1 */
+double L2errorCRDiscretizationDirichletBVP(const std::string& filename) {
+  double l2_error;
+
+// TODO: task 2-14.x)
+  //====================
+  // Your code goes here
+  //====================
+  return l2_error;
+}
+/* SAM_LISTING_END_1 */
 
 }  // namespace NonConformingCrouzeixRaviartFiniteElements

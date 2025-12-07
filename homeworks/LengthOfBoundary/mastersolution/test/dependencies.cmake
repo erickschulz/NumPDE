@@ -6,7 +6,4 @@ set(SOURCES
   ${DIR}/test/boundarylength_test.cc
 )
 
-set(LIBRARIES
-  GTest::gtest_main
-  LF::lf.mesh.test_utils
-)
+set(LIBRARIES GTest::gtest_main LF_ALL)

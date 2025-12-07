@@ -10,11 +10,4 @@ set(SOURCES
   ${DIR}/test/upwindfinitevolume_test.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.assemble
-  LF::lf.io
-  LF::lf.mesh
-  LF::lf.mesh.hybrid2d
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)

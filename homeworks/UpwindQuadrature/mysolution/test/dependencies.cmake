@@ -6,10 +6,4 @@ set(SOURCES
   ${DIR}/test/upwindquadrature_test.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.geometry
-  LF::lf.mesh.hybrid2d
-  LF::lf.mesh
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)

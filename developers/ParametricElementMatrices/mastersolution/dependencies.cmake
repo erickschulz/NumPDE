@@ -16,13 +16,4 @@ set(SOURCES
   ${DIR}/impedanceboundaryedgematrixprovider.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.assemble
-  LF::lf.geometry
-  LF::lf.io
-  LF::lf.mesh
-  LF::lf.mesh.test_utils
-  LF::lf.quad
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

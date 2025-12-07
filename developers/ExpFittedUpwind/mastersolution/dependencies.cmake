@@ -4,13 +4,4 @@ set(SOURCES
   ${DIR}/expfittedupwind.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.io
-  LF::lf.mesh.hybrid2d
-  LF::lf.mesh.utils
-  LF::lf.uscalfe
-  LF::lf.refinement
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

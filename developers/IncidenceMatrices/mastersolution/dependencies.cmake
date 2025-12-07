@@ -12,10 +12,4 @@ set(SOURCES
   ${DIR}/incidencematrices.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.base
-  LF::lf.geometry
-  LF::lf.mesh
-  LF::lf.mesh.hybrid2d
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

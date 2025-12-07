@@ -8,13 +8,4 @@ set(SOURCES
   ${DIR}/unstablebvp.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  LF::lf.assemble
-  LF::lf.base
-  LF::lf.geometry
-  LF::lf.mesh.hybrid2d
-  LF::lf.mesh.utils
-  LF::lf.refinement
-  LF::lf.uscalfe
-)
+set(LIBRARIES Eigen3::Eigen LF_ALL)

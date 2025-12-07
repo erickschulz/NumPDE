@@ -10,9 +10,4 @@ set(SOURCES
   ${DIR}/test/debuggingfem_test.cc
 )
 
-set(LIBRARIES
-  Eigen3::Eigen
-  GTest::gtest_main
-  LF::lf.assemble
-  LF::lf.mesh.test_utils
-)
+set(LIBRARIES Eigen3::Eigen GTest::gtest_main LF_ALL)

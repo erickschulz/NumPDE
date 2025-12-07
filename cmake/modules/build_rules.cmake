@@ -13,8 +13,18 @@ function(build_problem TARGET DIR OUTPUT_NAME)
   # Create executable using the object library's compiled files
   add_executable(${TARGET} $<TARGET_OBJECTS:${TARGET}.obj>)
   set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
-  # Link libraries to executable (not duplicated since object library uses PRIVATE)
-  target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
+  # Add LF_ALL object files if LF_ALL is in libraries
+  if("LF_ALL" IN_LIST LIBRARIES)
+    target_sources(${TARGET} PRIVATE $<TARGET_OBJECTS:LF_ALL>)
+    # Get the actual LehrFEM++ libraries from LF_ALL and link them
+    get_target_property(LF_LIBS LF_ALL LINK_LIBRARIES)
+    # Filter out LF_ALL from LIBRARIES and add LF libs instead
+    list(REMOVE_ITEM LIBRARIES LF_ALL)
+    target_link_libraries(${TARGET} PUBLIC ${LIBRARIES} ${LF_LIBS})
+  else()
+    # Link libraries to executable (not duplicated since object library uses PRIVATE)
+    target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
+  endif()
 
   # Keep .static as alias to .obj for backwards compatibility
   add_library(${TARGET}.static ALIAS ${TARGET}.obj)
