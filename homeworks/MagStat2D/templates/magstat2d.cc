@@ -8,10 +8,10 @@
 
 #include "magstat2d.h"
 
-#include <iomanip> // Required for std::setw, std::left
 #include <lf/mesh/test_utils/test_meshes.h>
 #include <lf/mesh/utils/mesh_function_constant.h>
 
+#include <iomanip>  // Required for std::setw, std::left
 #include <numbers>
 
 namespace MagStat2D {

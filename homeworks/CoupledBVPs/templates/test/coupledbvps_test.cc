@@ -16,7 +16,6 @@
 namespace CoupledBVPs::test {
 TEST(CoupledBVPs, BVPsolver) {
   // Define the file that contains the mesh
-  std::filesystem::path here = __FILE__;
   std::string mesh_file = "meshes/hexagon.msh";
 
   // Read and process the mesh file
@@ -81,7 +80,6 @@ TEST(CoupledBVPs, BVPsolver) {
 
 TEST(CoupledBVPs, solveModulatedHeatFlow2) {
   // Define the file that contains the mesh
-  std::filesystem::path here = __FILE__;
   std::string mesh_file = "meshes/hexagon.msh";
 
   // Read and process the mesh file

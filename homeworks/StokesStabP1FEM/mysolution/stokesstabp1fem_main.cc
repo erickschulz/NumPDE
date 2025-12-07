@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     refsteps = atoi(argv[1]);
   }
   if (refsteps > 0) {
-    StokesStabP1FEM::testCvgP1StabFEM(6);
+    StokesStabP1FEM::testCvgP1StabFEM(4);
   }
   return 0;
 }
