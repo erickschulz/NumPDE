@@ -7,7 +7,6 @@
 # DIR will be provided by the calling file.
 
 set(SOURCES
-  ${DIR}/gausslobattoparabolic_main.cc
   ${DIR}/gausslobattoparabolic.h
   ${DIR}/gausslobattoparabolic.cc
 )

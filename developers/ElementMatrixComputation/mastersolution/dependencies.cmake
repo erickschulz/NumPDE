@@ -7,7 +7,6 @@
 # DIR will be provided by the calling file.
 
 set(SOURCES
-  ${DIR}/elementmatrixcomputation_main.cc
   ${DIR}/mylinearfeelementmatrix.h
   ${DIR}/mylinearfeelementmatrix.cc
   ${DIR}/mylinearloadvector.h

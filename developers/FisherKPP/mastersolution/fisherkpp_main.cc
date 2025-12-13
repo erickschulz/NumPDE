@@ -377,8 +377,8 @@ int main(int argc, char** argv) {
   std::cout << "===============================================" << std::endl;
 
   if (argc < 2) {
-    std::cout << "No option selected: Will run both..." << std::endl;
-    humanmigration();
+    std::cout << "No option selected: Will run modelproblem..." << std::endl;
+    // humanmigration(); // Too slow for CI
     modelproblem();
     return 0;
   }

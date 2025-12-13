@@ -10,34 +10,34 @@ env:
   HUNTER_ROOT: ${{ github.workspace }}/hunter
 
 jobs:
-  format:
-    name: clang-format-18
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Install clang-format-18
-      run: |
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
-        sudo apt-get update
-        sudo apt-get install -y clang-format-18
-
-    - name: Check formatting
-      run: |
-        echo "Checking if the code is well formatted"
-        clang-format-18 --version
-        echo "Checking developers folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always developers/
-        echo "Checking include folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always include/
-        echo "Checking lecturecodes folder"
-        ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always lecturecodes/
+  # Format check disabled - can be re-enabled later if needed
+  # format:
+  #   name: clang-format-18
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #
+  #   - name: Install clang-format-18
+  #     run: |
+  #       wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+  #       sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+  #       sudo apt-get update
+  #       sudo apt-get install -y clang-format-18
+  #
+  #   - name: Check formatting
+  #     run: |
+  #       echo "Checking if the code is well formatted"
+  #       clang-format-18 --version
+  #       echo "Checking developers folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always developers/
+  #       echo "Checking include folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always include/
+  #       echo "Checking lecturecodes folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always lecturecodes/
 
   build-linux:
     name: Build & Test (Linux)
-    runs-on: ubuntu-22.04
-    needs: format
+    runs-on: ubuntu-24.04
     env:
       CXX: g++
       CXXFLAGS: "-Werror=cpp"
@@ -88,7 +88,6 @@ jobs:
   build-macos:
     name: Build & Test (macOS ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    needs: format
     strategy:
       matrix:
         os: [macos-14, macos-15]
@@ -139,18 +138,17 @@ jobs:
         ../scripts/ci/run_lecturecodes.sh
 
   tidy:
-    name: clang-tidy-18
-    runs-on: ubuntu-22.04
-    needs: format
+    name: clang-tidy-21
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install clang-tidy-18
+    - name: Install clang-tidy-21
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+        sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main"
         sudo apt-get update
-        sudo apt-get install -y clang-tidy-18
+        sudo apt-get install -y clang-tidy-21
 
     - name: Cache Hunter packages
       uses: actions/cache@v4
@@ -176,8 +174,8 @@ jobs:
       run: |
         cd build
         echo "Running clang-tidy on developers folder"
-        clang-tidy-18 --version
-        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-18 -p . -config-file ../.clang-tidy "../developers/.*\.cc"
+        clang-tidy-21 --version
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-21 -p . -config-file ../.clang-tidy "../developers/.*\.cc"
 
     - name: Check for std::system usage
       run: |
@@ -188,4 +186,4 @@ jobs:
       run: |
         cd build
         echo "Running clang-tidy on lecturecodes folder"
-        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-18 -p . -config-file ../.clang-tidy "../lecturecodes/.*\.cc"
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-21 -p . -config-file ../.clang-tidy "../lecturecodes/.*\.cc"

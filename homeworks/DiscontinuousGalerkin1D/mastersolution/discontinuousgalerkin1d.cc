@@ -51,7 +51,7 @@ Solution solveTrafficFlow() {
   double h = 0.05;
   double tau = h / 3;
   double T = 1.0;
-  unsigned int m = (unsigned int)(T / tau);
+  unsigned int m = static_cast<unsigned int>(std::round(T / tau));
 
   // Spatial mesh
   Eigen::VectorXd x = Eigen::VectorXd::LinSpaced(N_half, -2.0, 2.0);

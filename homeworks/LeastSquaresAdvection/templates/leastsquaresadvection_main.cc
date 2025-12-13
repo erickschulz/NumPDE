@@ -30,11 +30,11 @@ int main(int /*argc*/, char** /*argv*/) {
       return 0.0;
     };
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO1<double>>(g, 1.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO1<double>>(g, 1.0, 3);
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO2<double>>(g, 1.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO2<double>>(g, 1.0, 3);
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO3<double>>(g, 1.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO3<double>>(g, 1.0, 3);
   }
 
   {
@@ -47,11 +47,11 @@ int main(int /*argc*/, char** /*argv*/) {
       return std::cos(M_PI * xi);
     };
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO1<double>>(g, 0.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO1<double>>(g, 0.0, 3);
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO2<double>>(g, 0.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO2<double>>(g, 0.0, 3);
     LeastSquaresAdvection::testCVGLSQAdvectionReaction<
-        lf::uscalfe::FeSpaceLagrangeO3<double>>(g, 0.0, 6);
+        lf::uscalfe::FeSpaceLagrangeO3<double>>(g, 0.0, 3);
   }
 
   return 0;

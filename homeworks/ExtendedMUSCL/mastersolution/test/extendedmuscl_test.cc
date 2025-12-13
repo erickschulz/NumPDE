@@ -106,7 +106,7 @@ TEST(ExtendedMUSCL, sspEvolop) {
   auto f = [A](Eigen::Vector3d y) { return A * y; };
   const Eigen::Vector3d y0 = {0.333, -0.75, 0.9};
   double T = PI;
-  double n = 200;
+  int n = 200;
   double tau = T / n;
 
   // my solution
