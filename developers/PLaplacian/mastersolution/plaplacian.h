@@ -45,14 +45,14 @@ class FunctionMFWrapper {
 
   explicit FunctionMFWrapper(MESHFUNCTION mf, FUNCTION F)
       : mf_(std::move(mf)), F_(std::move(F)) {}
-  FunctionMFWrapper(const FunctionMFWrapper &) = default;
-  FunctionMFWrapper(FunctionMFWrapper &&) noexcept = default;
-  FunctionMFWrapper &operator=(const FunctionMFWrapper &) = delete;
-  FunctionMFWrapper &operator=(FunctionMFWrapper &&) = delete;
+  FunctionMFWrapper(const FunctionMFWrapper&) = default;
+  FunctionMFWrapper(FunctionMFWrapper&&) noexcept = default;
+  FunctionMFWrapper& operator=(const FunctionMFWrapper&) = delete;
+  FunctionMFWrapper& operator=(FunctionMFWrapper&&) = delete;
   ~FunctionMFWrapper() = default;
 
-  std::vector<F_result_t> operator()(const lf::mesh::Entity &e,
-                                     const Eigen::MatrixXd &local) const {
+  std::vector<F_result_t> operator()(const lf::mesh::Entity& e,
+                                     const Eigen::MatrixXd& local) const {
     LF_ASSERT_MSG(e.RefEl().Dimension() == local.rows(),
                   "mismatch between entity dimension and local.rows()");
     const std::vector<mf_result_t> mf_result = mf_(e, local);
@@ -85,13 +85,13 @@ class FunctionMFWrapper {
 template <typename F_FUNCTOR>
 void fixedPointNextIt(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    F_FUNCTOR f, double p, Eigen::VectorXd &mu_vec) {
+    F_FUNCTOR f, double p, Eigen::VectorXd& mu_vec) {
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
   // We will need a vanishing MeshFunction
@@ -149,7 +149,7 @@ void fixedPointNextIt(
   lf::assemble::FixFlaggedSolutionComponents<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t gdof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(gdof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(gdof_idx)};
 
         const Eigen::Vector2d node_pos{
             lf::geometry::Corners(*node.Geometry()).col(0)};
@@ -187,15 +187,15 @@ void fixedPointNextIt(
 template <typename F_FUNCTOR>
 Eigen::VectorXd newtonUpdate(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    F_FUNCTOR f, double p, const Eigen::VectorXd &mu_vec) {
+    F_FUNCTOR f, double p, const Eigen::VectorXd& mu_vec) {
   // Initialize the return value
   Eigen::VectorXd upd(mu_vec.size());
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
   // We will need a vanishing MeshFunction
@@ -259,7 +259,7 @@ Eigen::VectorXd newtonUpdate(
   lf::assemble::FixFlaggedSolutionComponents<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t gdof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(gdof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(gdof_idx)};
 
         const Eigen::Vector2d node_pos{
             lf::geometry::Corners(*node.Geometry()).col(0)};
@@ -295,18 +295,18 @@ Eigen::VectorXd newtonUpdate(
  * @return tent function basis expansion of computed solution
  */
 template <typename FUNCTOR_F, typename RECORDER = std::function<
-                                  void(const Eigen::VectorXd &, double)>>
+                                  void(const Eigen::VectorXd&, double)>>
 Eigen::VectorXd fixedPointSolvePLaplacian(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
     FUNCTOR_F f, double p, double rtol = 1.0E-5, double atol = 1.0E-8,
     unsigned int itmax = 1000,
-    RECORDER &&rec = [](const Eigen::VectorXd &, double) -> void {}) {
+    RECORDER&& rec = [](const Eigen::VectorXd&, double) -> void {}) {
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
 
@@ -315,7 +315,7 @@ Eigen::VectorXd fixedPointSolvePLaplacian(
   // Initial guess needs to have non-zero gradient for the first
   // linear system in the fixed-point iteration to be well-posed.
   for (int i = 0; i < N_dofs; ++i) {
-    const lf::mesh::Entity &node{dofh.Entity(i)};
+    const lf::mesh::Entity& node{dofh.Entity(i)};
 
     const Eigen::Vector2d node_pos{
         lf::geometry::Corners(*node.Geometry()).col(0)};
@@ -354,18 +354,18 @@ Eigen::VectorXd fixedPointSolvePLaplacian(
  */
 
 template <typename FUNCTOR_F, typename RECORDER = std::function<
-                                  void(const Eigen::VectorXd &, double)>>
+                                  void(const Eigen::VectorXd&, double)>>
 Eigen::VectorXd newtonSolvePLaplacian(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
     FUNCTOR_F f, double p, double rtol = 1.0E-5, double atol = 1.0E-10,
     unsigned int itmax = 100,
-    RECORDER &&rec = [](const Eigen::VectorXd &, double) -> void {}) {
+    RECORDER&& rec = [](const Eigen::VectorXd&, double) -> void {}) {
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
 
@@ -374,7 +374,7 @@ Eigen::VectorXd newtonSolvePLaplacian(
   // Initial guess needs to have non-zero gradient for the first
   // linear system in the Newton iteration to be well-posed.
   for (int i = 0; i < N_dofs; ++i) {
-    const lf::mesh::Entity &node{dofh.Entity(i)};
+    const lf::mesh::Entity& node{dofh.Entity(i)};
 
     const Eigen::Vector2d node_pos{
         lf::geometry::Corners(*node.Geometry()).col(0)};

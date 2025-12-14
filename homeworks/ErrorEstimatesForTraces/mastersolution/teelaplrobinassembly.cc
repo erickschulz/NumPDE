@@ -13,7 +13,7 @@
 namespace ErrorEstimatesForTraces {
 
 Eigen::VectorXd solveBVP(
-    std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space) {
+    std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space) {
   // I : Creating coefficients as Lehrfem++ mesh functions
   // Coefficients used in the class template
   // ReactionDiffusionElementMatrixProvider<SCALAR,DIFF_COEFF,REACTION_COEFF>
@@ -32,7 +32,7 @@ Eigen::VectorXd solveBVP(
   // pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // II: Instantiating finite element matrix for the Robin bilinear form
   // Dimension of finite element space
@@ -61,7 +61,7 @@ Eigen::VectorXd solveBVP(
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
   // Creating a predicate that will guarantee that the computations are carried
   // only on the edges of the mesh using the boundary flags
-  auto edges_predicate = [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+  auto edges_predicate = [&bd_flags](const lf::mesh::Entity& edge) -> bool {
     return bd_flags(edge);
   };
   lf::uscalfe::MassEdgeMatrixProvider<double, decltype(eta),
@@ -95,14 +95,14 @@ Eigen::VectorXd solveBVP(
 
 /* SAM_LISTING_BEGIN_9 */
 double bdFunctionalEval(
-    std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space,
-    Eigen::VectorXd &coeff_vec) {
+    std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space,
+    Eigen::VectorXd& coeff_vec) {
   double bd_functional_val = 0;
 
   // Reference to mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{fe_space->Mesh()};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // Obtain an array of boolean flags for the edges of the mesh: 'true'
   // indicates that the edge lies on the boundary. This predicate will guarantee
@@ -111,7 +111,7 @@ double bdFunctionalEval(
 
   // Computing the integral of function_vec on the flagged edges
   double edge_length;
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     if (bd_flags(*edge)) {
       // Obtain endpoints of the edge
       auto endpoints = lf::geometry::Corners(*(edge->Geometry()));

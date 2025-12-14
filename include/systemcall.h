@@ -15,7 +15,7 @@
 
 // Global function call to enable std::system calls with exception
 namespace systemcall {
-void execute(const std::string &command) {
+void execute(const std::string& command) {
   int sys_out = std::system(command.c_str());
   if (sys_out != 0) {
     std::cerr << "Error during system call: " + command +

@@ -28,8 +28,8 @@ template <typename FUNCT_F, typename FUNCT_H>
 std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_dropDof(
     const std::shared_ptr<const lf::uscalfe::UniformScalarFESpace<double>>
         fe_space,
-    const FUNCT_F &f, FUNCT_H &h) {
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const FUNCT_F& f, FUNCT_H& h) {
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   const std::size_t N_dofs = dofh.NumDofs();
   // Right-hand-side vector; don't forget to set to zero initially!
@@ -59,7 +59,7 @@ std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_dropDof(
   auto bd_edges{lf::mesh::utils::flagEntitiesOnBoundary(dofh.Mesh(), 1)};
   lf::uscalfe::ScalarLoadEdgeVectorProvider my_vec_provider_edge(
       fe_space, h,
-      [&bd_edges](const lf::mesh::Entity &edge) { return bd_edges(edge); });
+      [&bd_edges](const lf::mesh::Entity& edge) { return bd_edges(edge); });
   // co-dimension 1 because we locally assemble on edges!
   lf::assemble::AssembleVectorLocally(1, dofh, my_vec_provider_edge, rhs_vec);
 
@@ -92,14 +92,14 @@ std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_dropDof(
 class VecHelper {
  public:
   explicit VecHelper() {}
-  bool isActive(const lf::mesh::Entity &entity) const { return true; }
-  Eigen::Vector3d Eval(const lf::mesh::Entity &entity) {
+  bool isActive(const lf::mesh::Entity& entity) const { return true; }
+  Eigen::Vector3d Eval(const lf::mesh::Entity& entity) {
     LF_ASSERT_MSG(lf::base::RefEl::kTria() == entity.RefEl(),
                   "Function only defined for triangular cells");
     Eigen::Vector3d result;
 #if SOLUTION
     // Obtain shape information for the cell
-    const lf::geometry::Geometry *geo_ptr = entity.Geometry();
+    const lf::geometry::Geometry* geo_ptr = entity.Geometry();
     // Fetch area
     const double area = lf::geometry::Volume(*geo_ptr);
     // Initialize element vector |K|/3*[1,1,1]^T
@@ -114,30 +114,13 @@ class VecHelper {
 };
 /* SAM_LISTING_END_6 */
 
-/* SAM_LISTING_BEGIN_5 */
-Eigen::VectorXd assembleVector_c(const lf::assemble::DofHandler &dofh) {
-  Eigen::VectorXd c(dofh.NumDofs());
-#if SOLUTION
-  // Do not forget to initialize vector before assembly!
-  c.setZero();
-  // ELEMENT_VECTOR_BUILDER object
-  VecHelper my_vec_provider_c{};
-  // Cell (= codim-0 entities)-oriented assembly into c
-  lf::assemble::AssembleVectorLocally(0, dofh, my_vec_provider_c, c);
-#else
-  //====================
-  // Your code goes here
-  //====================
-#endif
-  return c;
-}
-/* SAM_LISTING_END_5 */
+Eigen::VectorXd assembleVector_c(const lf::assemble::DofHandler& dofh);
 
 template <typename FUNCT_F, typename FUNCT_H>
 std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_augment(
     const std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space,
-    const FUNCT_F &f, const FUNCT_H &h) {
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const FUNCT_F& f, const FUNCT_H& h) {
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   const std::size_t N_dofs = dofh.NumDofs() + 1;
   Eigen::VectorXd rhs_vec(N_dofs);
@@ -165,7 +148,7 @@ std::pair<Eigen::SparseMatrix<double>, Eigen::VectorXd> getGalerkinLSE_augment(
   auto bd_edges{lf::mesh::utils::flagEntitiesOnBoundary(dofh.Mesh(), 1)};
   lf::uscalfe::ScalarLoadEdgeVectorProvider my_vec_provider_edge(
       fe_space, h,
-      [&bd_edges](const lf::mesh::Entity &edge) { return bd_edges(edge); });
+      [&bd_edges](const lf::mesh::Entity& edge) { return bd_edges(edge); });
   // co-dimension 1 because we locally assemble on edges
   lf::assemble::AssembleVectorLocally(1, dofh, my_vec_provider_edge, rhs_vec);
 

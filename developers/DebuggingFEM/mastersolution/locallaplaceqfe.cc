@@ -18,7 +18,7 @@
 namespace DebuggingFEM {
 
 Eigen::Matrix<double, 6, 6> LocalLaplaceQFE1::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   // Query (topological) type of cell/reference element
   const lf::base::RefEl ref_el{cell.RefEl()};
   // Verify that the cell is a triangle
@@ -27,7 +27,7 @@ Eigen::Matrix<double, 6, 6> LocalLaplaceQFE1::Eval(
   // The final element matrix has size 6x6
   Eigen::Matrix<double, 6, 6> result{};
   // Obtain the vertex coordinates of the triangle
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   LF_ASSERT_MSG(geo_ptr != nullptr, "Invalid geometry!");
   // Matrix storing corner coordinates in its columns
   Eigen::Matrix<double, 2, 3> vertices{geo_ptr->Global(ref_el.NodeCoords())};
@@ -72,7 +72,7 @@ Eigen::Matrix<double, 6, 6> LocalLaplaceQFE1::Eval(
 }
 
 Eigen::Matrix<double, 6, 6> LocalLaplaceQFE2::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   // Query (topological) type of cell/reference element
   const lf::base::RefEl ref_el{cell.RefEl()};
   // Verify that the cell is a triangle
@@ -81,7 +81,7 @@ Eigen::Matrix<double, 6, 6> LocalLaplaceQFE2::Eval(
   // The final element matrix has size 6x6
   Eigen::Matrix<double, 6, 6> result{};
   // Obtain the vertex coordinates of the triangle
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   LF_ASSERT_MSG(geo_ptr != nullptr, "Invalid geometry!");
   // Matrix storing corner coordinates in its columns
   Eigen::Matrix<double, 2, 3> vertices{geo_ptr->Global(ref_el.NodeCoords())};
@@ -109,7 +109,7 @@ Eigen::Matrix<double, 6, 6> LocalLaplaceQFE2::Eval(
 
 // implementation
 Eigen::Matrix<double, 6, 6> LocalLaplaceQFE3::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   // Obtain the element matrix for piecewise linear Lagrangian FEM by using
   // a built-in class of LehrFEM++
   auto linear_lapl_element_matrix = lf::uscalfe::LinearFELaplaceElementMatrix();

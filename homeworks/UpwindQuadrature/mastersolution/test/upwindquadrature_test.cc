@@ -33,7 +33,7 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_1) {
 
   // initialize masses and velocity field
   auto masses = UpwindQuadrature::initializeMasses(mesh_p);
-  const auto v = [](const Eigen::Vector2d & /*x*/) {
+  const auto v = [](const Eigen::Vector2d& /*x*/) {
     return (Eigen::Vector2d() << 1, 2).finished();
   };
 
@@ -42,8 +42,8 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_1) {
   ConvectionDiffusion::ConvectionElementMatrixProvider reference(v);
   UpwindConvectionElementMatrixProvider upwind(v, masses);
 
-  const lf::mesh::Entity &element_0 = *(mesh_p->EntityByIndex(0, 0));
-  const lf::mesh::Entity &element_1 = *(mesh_p->EntityByIndex(0, 1));
+  const lf::mesh::Entity& element_0 = *(mesh_p->EntityByIndex(0, 0));
+  const lf::mesh::Entity& element_1 = *(mesh_p->EntityByIndex(0, 1));
 
   // element 0 is at nonoe of the corners the upwind triangle.
   EXPECT_NEAR(upwind.Eval(element_0).norm(), 0.0, 1E-15);
@@ -71,7 +71,7 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_2) {
 
   // initialize masses and velocity field
   auto masses = UpwindQuadrature::initializeMasses(mesh_p);
-  const auto v = [](const Eigen::Vector2d & /*x*/) {
+  const auto v = [](const Eigen::Vector2d& /*x*/) {
     return (Eigen::Vector2d() << -2, -1).finished();
   };
 
@@ -80,7 +80,7 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_2) {
   ConvectionDiffusion::ConvectionElementMatrixProvider reference(v);
   UpwindConvectionElementMatrixProvider upwind(v, masses);
 
-  const lf::mesh::Entity &element_1 = *(mesh_p->EntityByIndex(0, 1));
+  const lf::mesh::Entity& element_1 = *(mesh_p->EntityByIndex(0, 1));
 
   // element 1 is the upwind triangle at corner 0.
   Eigen::MatrixXd reference_eval = reference.Eval(element_1);
@@ -105,7 +105,7 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_3) {
 
   // initialize masses and velocity field
   auto masses = UpwindQuadrature::initializeMasses(mesh_p);
-  const auto v = [](const Eigen::Vector2d & /*x*/) {
+  const auto v = [](const Eigen::Vector2d& /*x*/) {
     return (Eigen::Vector2d() << 0, -1).finished();
   };
 
@@ -114,7 +114,7 @@ TEST(UpwindQuadrature, upwind_convection_element_matrix_provider_3) {
   ConvectionDiffusion::ConvectionElementMatrixProvider reference(v);
   UpwindConvectionElementMatrixProvider upwind(v, masses);
 
-  const lf::mesh::Entity &element_1 = *(mesh_p->EntityByIndex(0, 1));
+  const lf::mesh::Entity& element_1 = *(mesh_p->EntityByIndex(0, 1));
 
   // at corner 1 of element 1, -v(a^1) points along the edge
   //--> contribution split between triangle sharing that edge.

@@ -56,7 +56,7 @@ double limiterMC(double mu_left, double mu_center, double mu_right);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR, typename State>
-State sspEvolop(FUNCTOR &&f, State y, double tau) {
+State sspEvolop(FUNCTOR&& f, State y, double tau) {
   State y_tau;
 #if SOLUTION
   State k = y + tau * f(y);
@@ -83,7 +83,7 @@ State sspEvolop(FUNCTOR &&f, State y, double tau) {
  */
 /* SAM_LISTING_BEGIN_4 */
 template <typename U0_FUNCTOR>
-Eigen::VectorXd solveClaw(U0_FUNCTOR &&u0, double T, unsigned int n) {
+Eigen::VectorXd solveClaw(U0_FUNCTOR&& u0, double T, unsigned int n) {
   // Set up spacial mesh and inital data.
   double a = 0.0;
   double b = 1.0;
@@ -105,7 +105,7 @@ Eigen::VectorXd solveClaw(U0_FUNCTOR &&u0, double T, unsigned int n) {
   double h_inv = 1.0 / h;
   // Define right-hand-side for the SSP ODE solver
   auto semi_discrete_rhs =
-      [h_inv](const Eigen::VectorXd &mu) -> Eigen::VectorXd {
+      [h_inv](const Eigen::VectorXd& mu) -> Eigen::VectorXd {
     return -h_inv * slopelimfluxdiffper(mu, &logGodunovFlux, &limiterMC);
   };
   // Timestepping: Solve the semi-discrete ODE
@@ -126,7 +126,7 @@ Eigen::VectorXd solveClaw(U0_FUNCTOR &&u0, double T, unsigned int n) {
  * arguments are the same as for soveClaw(), which is called by this function.
  */
 template <typename U0_FUNCTOR>
-void storeMUSCLSolution(const std::string &filename, U0_FUNCTOR &&u0, double T,
+void storeMUSCLSolution(const std::string& filename, U0_FUNCTOR&& u0, double T,
                         unsigned int n) {
   const Eigen::IOFormat CSVFormat(Eigen::FullPrecision, Eigen::DontAlignCols,
                                   ", ", "\n");
@@ -144,7 +144,7 @@ void storeMUSCLSolution(const std::string &filename, U0_FUNCTOR &&u0, double T,
  */
 /* SAM_LISTING_BEGIN_5 */
 template <typename VECSOURCE, typename VECDEST>
-void interpolate(const VECSOURCE &s, VECDEST &d) {
+void interpolate(const VECSOURCE& s, VECDEST& d) {
   // Determine number of cells
   const std::size_t n = s.size();
   const std::size_t N = d.size();
@@ -183,7 +183,7 @@ void interpolate(const VECSOURCE &s, VECDEST &d) {
  */
 /* SAM_LISTING_BEGIN_6 */
 template <typename U0_FUNCTOR>
-void studyCvgMUSCLSolution(U0_FUNCTOR &&u0, double T) {
+void studyCvgMUSCLSolution(U0_FUNCTOR&& u0, double T) {
   // For temporarily storing the number of cells and the associated error norms
   std::vector<std::tuple<std::size_t, double, double>> result{};
   constexpr int n_ref = 8192;
@@ -213,7 +213,7 @@ void studyCvgMUSCLSolution(U0_FUNCTOR &&u0, double T) {
   //====================
 #endif
   std::cout << "n \t linf error \t l1 error" << std::endl;
-  for (auto &data : result) {
+  for (auto& data : result) {
     std::cout << std::get<0>(data) << " \t " << std::get<1>(data) << " \t "
               << std::get<2>(data) << std::endl;
   }

@@ -26,7 +26,7 @@ using size_type = lf::base::size_type;
  * @returns The global coordinate of the i-th interpolation node in the given
  * cell
  */
-Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity &cell);
+Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity& cell);
 
 /**
  * @brief interpolate function over a second order lagrangian finite element
@@ -37,8 +37,8 @@ Eigen::Vector2d globalCoordinate(int idx, const lf::mesh::Entity &cell);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
-Eigen::VectorXd interpolateOntoQuadFE(const lf::assemble::DofHandler &dofh,
-                                      FUNCTOR &&f) {
+Eigen::VectorXd interpolateOntoQuadFE(const lf::assemble::DofHandler& dofh,
+                                      FUNCTOR&& f) {
   // Obtain a pointer to the mesh object
   auto mesh = dofh.Mesh();
   const size_type N_dofs(dofh.NumDofs());

@@ -21,7 +21,7 @@ Eigen::Matrix<double, 2, Eigen::Dynamic> crookedEgg();
 /* SAM_LISTING_BEGIN_0 */
 template <typename GradientFunctor>
 Eigen::Matrix<double, 2, Eigen::Dynamic> computeIsolinePoints(
-    GradientFunctor &&gradF, Eigen::Vector2d y0, double T) {
+    GradientFunctor&& gradF, Eigen::Vector2d y0, double T) {
   Eigen::Matrix<double, 2, Eigen::Dynamic> states;
 
   // Right-hand-side vector field of isoline ODE
@@ -52,7 +52,7 @@ Eigen::Matrix<double, 2, Eigen::Dynamic> computeIsolinePoints(
 /* SAM_LISTING_BEGIN_1 */
 template <typename FFunctor>
 Eigen::Matrix<double, 2, Eigen::Dynamic> computeIsolinePointsDQ(
-    FFunctor &&F, Eigen::Vector2d y0, double T) {
+    FFunctor&& F, Eigen::Vector2d y0, double T) {
   // Get gradient of F by symmetric difference quotients with
   // a span given by the root of the machine precision in order
   // to curb cancellation as much as possible.

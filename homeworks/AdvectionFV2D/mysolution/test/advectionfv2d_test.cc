@@ -70,26 +70,26 @@ TEST(AdvectionFV2D, computeCellNormals) {
 TEST(AdvectionFV2D, getAdjacentCellPointers) {
   auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(0, 1. / 3.);
 
-  std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>
+  std::shared_ptr<
+      lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
       ac = AdvectionFV2D::getAdjacentCellPointers(mesh_p);
 
   auto el = mesh_p->Entities(0);
 
-  std::array<const lf::mesh::Entity *, 4> elem0{
+  std::array<const lf::mesh::Entity*, 4> elem0{
       {el[7], nullptr, el[5], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem1{
+  std::array<const lf::mesh::Entity*, 4> elem1{
       {nullptr, el[2], el[5], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem2{{el[3], el[8], el[1], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem3{
+  std::array<const lf::mesh::Entity*, 4> elem2{{el[3], el[8], el[1], nullptr}};
+  std::array<const lf::mesh::Entity*, 4> elem3{
       {nullptr, el[4], el[2], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem4{
+  std::array<const lf::mesh::Entity*, 4> elem4{
       {nullptr, el[6], el[3], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem5{{el[1], el[8], el[0], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem6{{el[4], nullptr, el[7], el[8]}};
-  std::array<const lf::mesh::Entity *, 4> elem7{
+  std::array<const lf::mesh::Entity*, 4> elem5{{el[1], el[8], el[0], nullptr}};
+  std::array<const lf::mesh::Entity*, 4> elem6{{el[4], nullptr, el[7], el[8]}};
+  std::array<const lf::mesh::Entity*, 4> elem7{
       {el[6], nullptr, el[0], nullptr}};
-  std::array<const lf::mesh::Entity *, 4> elem8{{el[5], el[2], el[6], nullptr}};
+  std::array<const lf::mesh::Entity*, 4> elem8{{el[5], el[2], el[6], nullptr}};
 
   ASSERT_NE(ac, nullptr);
   ASSERT_EQ(elem0, (*ac)(*el[0]));
@@ -128,8 +128,8 @@ TEST(AdvectionFV2D, initializeMOLODEMatrix) {
       Eigen::Matrix<double, 2, Eigen::Dynamic>>>
       normal_vectors = AdvectionFV2D::computeCellNormals(mesh_p);
 
-  std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>
+  std::shared_ptr<
+      lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
       adjacentCells = AdvectionFV2D::getAdjacentCellPointers(mesh_p);
 
   auto beta = [](Eigen::Vector2d x) -> Eigen::Vector2d {
@@ -193,8 +193,8 @@ TEST(AdvectionFV2D, simulateAdvection) {
       Eigen::Matrix<double, 2, Eigen::Dynamic>>>
       normal_vectors = AdvectionFV2D::computeCellNormals(cur_dofh.Mesh());
 
-  std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>
+  std::shared_ptr<
+      lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
       adjacentCells = AdvectionFV2D::getAdjacentCellPointers(cur_dofh.Mesh());
 
   Eigen::VectorXd result = AdvectionFV2D::simulateAdvection(

@@ -11,7 +11,7 @@ namespace SystemODE {
 // Single step of RK4 for the ODE y' = f(y)
 /* SAM_LISTING_BEGIN_1 */
 template <typename Function>
-Eigen::VectorXd rk4step(Function &&f, double h, Eigen::VectorXd &y0) {
+Eigen::VectorXd rk4step(Function&& f, double h, Eigen::VectorXd& y0) {
   Eigen::VectorXd eval(y0.size());
   Eigen::VectorXd k1 = f(y0);
   Eigen::VectorXd k2 = f(y0 + h / 2 * k1);

@@ -30,13 +30,13 @@ TEST(HEST, trfLinToQuad) {
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(3);
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO2<double>> quad_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_ptr);
-  const lf::uscalfe::FeSpaceLagrangeO2<double> &quad_space{*quad_space_p};
+  const lf::uscalfe::FeSpaceLagrangeO2<double>& quad_space{*quad_space_p};
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> lfe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_ptr);
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &lfe_space{*lfe_space_p};
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& lfe_space{*lfe_space_p};
   // Get references to DofHandlers
-  const lf::assemble::DofHandler &dh_quad{quad_space.LocGlobMap()};
-  const lf::assemble::DofHandler &dh_lfe{lfe_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_quad{quad_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_lfe{lfe_space.LocGlobMap()};
   // Set up coefficient vector
   const lf::base::size_type N_dofs(dh_lfe.NumDofs());
   Eigen::VectorXd mu{Eigen::VectorXd::LinSpaced(N_dofs, 0.0, 1.0)};
@@ -57,16 +57,16 @@ TEST(HEST, compHierSurplusSolution) {
   // Obtain test mesh
   std::shared_ptr<lf::mesh::Mesh> mesh_ptr =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1.0 / 3.0);
-  const lf::mesh::Mesh &mesh{*mesh_ptr};
+  const lf::mesh::Mesh& mesh{*mesh_ptr};
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO2<double>> quad_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_ptr);
-  const lf::uscalfe::FeSpaceLagrangeO2<double> &quad_space{*quad_space_p};
+  const lf::uscalfe::FeSpaceLagrangeO2<double>& quad_space{*quad_space_p};
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> lfe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_ptr);
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &lfe_space{*lfe_space_p};
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& lfe_space{*lfe_space_p};
   // Get references to DofHandlers
-  const lf::assemble::DofHandler &dh_quad{quad_space.LocGlobMap()};
-  const lf::assemble::DofHandler &dh_lfe{lfe_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_quad{quad_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_lfe{lfe_space.LocGlobMap()};
   // Set up coefficient vector
   const lf::base::size_type N_dofs(dh_lfe.NumDofs());
   Eigen::VectorXd mu{Eigen::VectorXd::LinSpaced(N_dofs, 0.0, 1.0)};

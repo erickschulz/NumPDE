@@ -11,7 +11,7 @@
 namespace SymplecticTimesteppingWaves {
 
 /* SAM_LISTING_BEGIN_1 */
-void sympTimestep(double tau, Eigen::Vector2d &pq_j) {
+void sympTimestep(double tau, Eigen::Vector2d& pq_j) {
 #if SOLUTION
   // Coefficients of the method
   Eigen::VectorXd a(3);

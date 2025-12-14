@@ -55,7 +55,7 @@ TEST(FiniteVolumeSineConsLaw, sineClawRhs) {
 
 TEST(FiniteVolumeSineConsLaw, explTrpzTimestepping) {
   constexpr double LOG2 = 0.693147180559945309417;
-  auto g = [](const Eigen::Vector2d &y) { return Eigen::Vector2d(y(1), y(0)); };
+  auto g = [](const Eigen::Vector2d& y) { return Eigen::Vector2d(y(1), y(0)); };
   Eigen::Vector2d y0 = {1.0, -1.0};
   unsigned int M = 100;
 
@@ -101,7 +101,7 @@ TEST(FiniteVolumeSineConsLaw, sineClawReactionRhs) {
 
   // to test
   double c = 1.0;
-  auto bind_c = [c](const Eigen::VectorXd &mu) {
+  auto bind_c = [c](const Eigen::VectorXd& mu) {
     return sineClawReactionRhs(mu, c);
   };
   Eigen::VectorXd ufinal = solveSineConsLaw(bind_c, N, M);

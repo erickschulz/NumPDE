@@ -20,8 +20,8 @@ namespace LinearFE1D {
 // the Eigen triplet data structure (COO sparse matrix format).
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR1>
-std::vector<Eigen::Triplet<double>> computeA(const Eigen::VectorXd &mesh,
-                                             FUNCTOR1 &&alpha) {
+std::vector<Eigen::Triplet<double>> computeA(const Eigen::VectorXd& mesh,
+                                             FUNCTOR1&& alpha) {
   // Nodes are indexed as 0=x_0 < x_1 < ... < x_N = 1
   unsigned N = mesh.size() - 1;
   // Initializing the vector of triplets whose size corresponds to the
@@ -73,8 +73,8 @@ std::vector<Eigen::Triplet<double>> computeA(const Eigen::VectorXd &mesh,
 // function gamma using the trapezoidal integration rule.
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR1>
-std::vector<Eigen::Triplet<double>> computeM(const Eigen::VectorXd &mesh,
-                                             FUNCTOR1 &&gamma) {
+std::vector<Eigen::Triplet<double>> computeM(const Eigen::VectorXd& mesh,
+                                             FUNCTOR1&& gamma) {
   // Nodes are indexed as $0=x_0 < x_1 < ... < x_N = 1$
   unsigned N = mesh.size() - 1;
 
@@ -119,7 +119,7 @@ std::vector<Eigen::Triplet<double>> computeM(const Eigen::VectorXd &mesh,
 // the composite trapezoidal integration rule
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR1>
-Eigen::VectorXd computeRHS(const Eigen::VectorXd &mesh, FUNCTOR1 &&f) {
+Eigen::VectorXd computeRHS(const Eigen::VectorXd& mesh, FUNCTOR1&& f) {
   // Nodes are indexed as $0=x_0 < x_1 < ... < x_N = 1$
   unsigned N = mesh.size() - 1;
   // Initializing right hand side vector
@@ -152,8 +152,8 @@ Eigen::VectorXd computeRHS(const Eigen::VectorXd &mesh, FUNCTOR1 &&f) {
 // SOLVE THE LINEAR SYSTEM OF PROBLEM (A)
 /* SAM_LISTING_BEGIN_A */
 template <typename FUNCTOR1, typename FUNCTOR2>
-Eigen::VectorXd solveA(const Eigen::VectorXd &mesh, FUNCTOR1 &&gamma,
-                       FUNCTOR2 &&f) {
+Eigen::VectorXd solveA(const Eigen::VectorXd& mesh, FUNCTOR1&& gamma,
+                       FUNCTOR2&& f) {
   // Nodes are indexed as $0=x_0 < x_1 < ... < x_N = 1$
   // Note: What is called N here, is M in the project description!
   unsigned N = mesh.size() - 1;
@@ -226,8 +226,8 @@ Eigen::VectorXd solveA(const Eigen::VectorXd &mesh, FUNCTOR1 &&gamma,
 // SOLVE THE LINEAR SYSTEM OF PROBLEM (B)
 /* SAM_LISTING_BEGIN_B */
 template <typename FUNCTOR1, typename FUNCTOR2>
-Eigen::VectorXd solveB(const Eigen::VectorXd &mesh, FUNCTOR1 &&alpha,
-                       FUNCTOR2 &&f, double u0, double u1) {
+Eigen::VectorXd solveB(const Eigen::VectorXd& mesh, FUNCTOR1&& alpha,
+                       FUNCTOR2&& f, double u0, double u1) {
   // Nodes are indexed as $0=x_0 < x_1 < ... < x_N = 1$
   unsigned N = mesh.size() - 1;
   // Initializations
@@ -296,8 +296,8 @@ Eigen::VectorXd solveB(const Eigen::VectorXd &mesh, FUNCTOR1 &&alpha,
 // Build an sol!ve the LSE corresponding to (C)
 /* SAM_LISTING_BEGIN_C */
 template <typename FUNCTOR1, typename FUNCTOR2>
-Eigen::VectorXd solveC(const Eigen::VectorXd &mesh, FUNCTOR1 &&alpha,
-                       FUNCTOR2 &&gamma) {
+Eigen::VectorXd solveC(const Eigen::VectorXd& mesh, FUNCTOR1&& alpha,
+                       FUNCTOR2&& gamma) {
   // Nodes are indexed as 0=x_0 < x_1 < ... < x_N = 1
   unsigned N = mesh.size() - 1;
   // Initializations (notice initialization with zeros here)

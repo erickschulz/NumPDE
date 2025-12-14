@@ -24,21 +24,21 @@ namespace FisherKPP {
  */
 template <typename DIFF_COEFF>
 std::pair<Eigen::SparseMatrix<double>, Eigen::SparseMatrix<double>>
-assembleGalerkinMatrices(const lf::assemble::DofHandler &dofh, DIFF_COEFF &&c);
+assembleGalerkinMatrices(const lf::assemble::DofHandler& dofh, DIFF_COEFF&& c);
 
 class StrangSplit {
  public:
   // Disabled constructors
   StrangSplit() = delete;
-  StrangSplit(const StrangSplit &) = delete;
-  StrangSplit(StrangSplit &&) = delete;
-  StrangSplit &operator=(const StrangSplit &) = delete;
-  StrangSplit &operator=(const StrangSplit &&) = delete;
+  StrangSplit(const StrangSplit&) = delete;
+  StrangSplit(StrangSplit&&) = delete;
+  StrangSplit& operator=(const StrangSplit&) = delete;
+  StrangSplit& operator=(const StrangSplit&&) = delete;
   // Main constructor
   template <typename DIFF_COEFF>
   explicit StrangSplit(
       const std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space,
-      double T, unsigned int m, double lambda, DIFF_COEFF &&c);
+      double T, unsigned int m, double lambda, DIFF_COEFF&& c);
 
   // Destructor
   virtual ~StrangSplit() = default;
@@ -48,7 +48,7 @@ class StrangSplit {
    */
   /* SAM_LISTING_BEGIN_1 */
   Eigen::VectorXd diffusionEvolutionOperator(double tau,
-                                             const Eigen::VectorXd &mu) {
+                                             const Eigen::VectorXd& mu) {
     Eigen::VectorXd evol_op;
 
     //====================
@@ -62,10 +62,10 @@ class StrangSplit {
    * Computes the Evolution for m_ timesteps
    */
   /* SAM_LISTING_BEGIN_2 */
-  Eigen::VectorXd Evolution(const Eigen::VectorXd &cap,
-                            const Eigen::VectorXd &mu) {
+  Eigen::VectorXd Evolution(const Eigen::VectorXd& cap,
+                            const Eigen::VectorXd& mu) {
     // Obtain dofhandler
-    const lf::assemble::DofHandler &dofh{fe_space_->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space_->LocGlobMap()};
     const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
     Eigen::VectorXd sol(N_dofs);

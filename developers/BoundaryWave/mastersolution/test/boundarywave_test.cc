@@ -65,8 +65,8 @@ TEST(BoundaryWave, InterpolateInitialData) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  auto u0 = [](const Eigen::Vector2d &x) -> double { return x[0]; };
-  auto v0 = [](const Eigen::Vector2d &x) -> double { return x[1]; };
+  auto u0 = [](const Eigen::Vector2d& x) -> double { return x[0]; };
+  auto v0 = [](const Eigen::Vector2d& x) -> double { return x[1]; };
 
   std::pair<Eigen::VectorXd, Eigen::VectorXd> initialData =
       interpolateInitialData(fe_space_p, std::move(u0), std::move(v0));
@@ -90,8 +90,8 @@ TEST(BoundaryWave, solveBoundaryWave) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  auto u0 = [](const Eigen::Vector2d &x) -> double { return x[0]; };
-  auto v0 = [](const Eigen::Vector2d &x) -> double { return x[1]; };
+  auto u0 = [](const Eigen::Vector2d& x) -> double { return x[0]; };
+  auto v0 = [](const Eigen::Vector2d& x) -> double { return x[1]; };
 
   Eigen::VectorXd discrete_solution =
       solveBoundaryWave(fe_space_p, u0, v0, 1.0, 100);

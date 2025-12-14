@@ -14,7 +14,7 @@
 
 using namespace SDIRKMethodOfLines;
 
-int main(int /*argc*/, char ** /*argv*/) {
+int main(int /*argc*/, char** /*argv*/) {
   /* SDIRK-2 ODE convergence */
   sdirk2ScalarODECvTest();
 
@@ -46,7 +46,7 @@ int main(int /*argc*/, char ** /*argv*/) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 

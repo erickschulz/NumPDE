@@ -10,6 +10,7 @@ add_subdirectory(1DWaveAbsorbingBC)
 add_subdirectory(AdvectionFV2D) # under construction
 add_subdirectory(AvgValBoundary)
 add_subdirectory(BoundaryWave)
+add_subdirectory(Brachistochrone)
 add_subdirectory(BurgersEquation)
 add_subdirectory(CLEmpiricFlux)
 add_subdirectory(ConsLawWithSource)

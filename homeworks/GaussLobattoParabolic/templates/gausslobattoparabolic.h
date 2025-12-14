@@ -40,12 +40,12 @@ class RHSProvider {
  public:
   // Disabled constructors
   RHSProvider() = delete;
-  RHSProvider(const RHSProvider &) = delete;
-  RHSProvider(RHSProvider &&) = delete;
-  RHSProvider &operator=(const RHSProvider &) = delete;
-  RHSProvider &operator=(const RHSProvider &&) = delete;
+  RHSProvider(const RHSProvider&) = delete;
+  RHSProvider(RHSProvider&&) = delete;
+  RHSProvider& operator=(const RHSProvider&) = delete;
+  RHSProvider& operator=(const RHSProvider&&) = delete;
   // Main constructor; precomputations to be done here
-  RHSProvider(const lf::assemble::DofHandler &dofh,
+  RHSProvider(const lf::assemble::DofHandler& dofh,
               std::function<double(double)> g);
   // Destructor
   virtual ~RHSProvider() = default;
@@ -78,11 +78,11 @@ class RHSProvider {
 template <typename GFUNCTION>
 Eigen::VectorXd evolveIBVPGaussLobatto(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    double T, unsigned int M, GFUNCTION &&g) {
+    double T, unsigned int M, GFUNCTION&& g) {
   // timestep size
   const double tau = T / M;
 
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
   const int N = dofh.NumDofs();
 
   // Coefficient vector, initial value = 0

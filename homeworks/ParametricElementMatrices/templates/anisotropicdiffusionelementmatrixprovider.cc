@@ -19,7 +19,7 @@ namespace ParametricElementMatrices {
  * where K is a cell.
  * @param cell current cell */
 Eigen::MatrixXd AnisotropicDiffusionElementMatrixProvider::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   Eigen::MatrixXd element_matrix;  // local matrix to return
 
   // Cell data

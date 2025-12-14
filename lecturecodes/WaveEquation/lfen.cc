@@ -51,9 +51,9 @@ Eigen::SparseMatrix<double> buildLaplacian2D(int n) {
  *         timestepping
  *
  */
-std::pair<double, double> geten(const Eigen::SparseMatrix<double> &A,
-                                double tau, const Eigen::VectorXd &u0,
-                                const Eigen::VectorXd &u1) {
+std::pair<double, double> geten(const Eigen::SparseMatrix<double>& A,
+                                double tau, const Eigen::VectorXd& u0,
+                                const Eigen::VectorXd& u1) {
   auto meanv = 0.5 * (u0 + u1);  // Approximation for velocity
   auto dtemp = (u1 - u0) / tau;  // Approximate temporal derivative
   return {meanv.dot(A * meanv), dtemp.squaredNorm()};
@@ -66,7 +66,7 @@ std::pair<double, double> geten(const Eigen::SparseMatrix<double> &A,
    @param n number of grid points in one direction
    @param m number of leapfrog timesteps
  */
-std::vector<std::array<double, 4>> leapfrog(const Eigen::VectorXd &u0,
+std::vector<std::array<double, 4>> leapfrog(const Eigen::VectorXd& u0,
                                             unsigned int n, unsigned int m) {
   std::vector<std::array<double, 4>> energies;
   const int N = n * n;  // Size of matrices/state vectors
@@ -100,7 +100,7 @@ std::vector<std::array<double, 4>> leapfrog(const Eigen::VectorXd &u0,
   return energies;
 }
 
-void tabulate_energies(int n, int m, const char *filename) {
+void tabulate_energies(int n, int m, const char* filename) {
   auto u0_f = [](double x, double y) -> double {
     const double r =
         std::sqrt(((x - 0.5) * (x - 0.5)) + ((y - 0.5) * (y - 0.5)));
@@ -113,7 +113,7 @@ void tabulate_energies(int n, int m, const char *filename) {
             << "kin. en" << std::setw(15) << " tot. en." << std::endl;
   std::cout
       << "-----------------------------------------------------------------\n";
-  for (const auto &data : energies) {
+  for (const auto& data : energies) {
     std::printf("%1.3f %15f %15f %15f \n", data[0], data[1], data[2], data[3]);
   }
   if (filename) {
@@ -125,7 +125,7 @@ void tabulate_energies(int n, int m, const char *filename) {
     }
     // Set precision if needed
     out << std::fixed << std::setprecision(16);
-    for (const auto &row : energies) {
+    for (const auto& row : energies) {
       out << row[0] << ',' << row[1] << ',' << row[2] << ',' << row[3] << '\n';
     }
     out.close();

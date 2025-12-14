@@ -110,7 +110,7 @@ TEST(ExpFittedEMP, Psi_const) {
   lf::uscalfe::LinearFELaplaceElementMatrix standard_provider;
 
   // Expect that for Psi=const the ExpFitted Element matrix is A_k
-  for (auto *cell : mesh_p->Entities(0)) {
+  for (auto* cell : mesh_p->Entities(0)) {
     Eigen::Matrix3d E_k = upwind_provider.Eval(*cell);
     Eigen::Matrix3d A_k = standard_provider.Eval(*cell).block<3, 3>(0, 0);
 
@@ -132,7 +132,7 @@ TEST(ExpFittedEMP, Bilinear_form_1) {
   auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   Eigen::Vector2d q = Eigen::Vector2d::Ones(2);
   auto Psi = [&q](Eigen::Vector2d x) { return q.dot(x); };
@@ -162,7 +162,7 @@ TEST(ExpFittedEMP, Bilinear_form_2) {
   double area = 9.0;
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   Eigen::Vector2d q = Eigen::Vector2d::Ones(2);
   auto Psi = [&q](Eigen::Vector2d x) { return q.dot(x); };
@@ -200,12 +200,12 @@ TEST(ExpFittedEMP, SolveDriftEquation) {
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   Eigen::Vector2d q = Eigen::Vector2d::Ones(2);
-  auto Psi = [&q](const Eigen::Vector2d &x) { return q.dot(x); };
+  auto Psi = [&q](const Eigen::Vector2d& x) { return q.dot(x); };
   auto mf_Psi = lf::mesh::utils::MeshFunctionGlobal(Psi);
   Eigen::VectorXd mu = lf::fe::NodalProjection(*fe_space, mf_Psi);
 
-  auto exp_psi = [&Psi](const Eigen::VectorXd &x) { return std::exp(Psi(x)); };
-  auto f_zero = [](const Eigen::VectorXd & /*x*/) { return 0.; };
+  auto exp_psi = [&Psi](const Eigen::VectorXd& x) { return std::exp(Psi(x)); };
+  auto f_zero = [](const Eigen::VectorXd& /*x*/) { return 0.; };
 
   Eigen::VectorXd res =
       solveDriftDiffusionDirBVP(fe_space, mu, f_zero, exp_psi);
@@ -229,14 +229,14 @@ TEST(ExpFittedEMP, TestPhiZero) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  auto Psi = [](const Eigen::Vector2d & /*x*/) { return 0.; };
+  auto Psi = [](const Eigen::Vector2d& /*x*/) { return 0.; };
   auto mf_Psi = lf::mesh::utils::MeshFunctionGlobal(Psi);
   Eigen::VectorXd mu = lf::fe::NodalProjection(*fe_space, mf_Psi);
 
   const double c = 3.;
-  auto f_const = [c](const Eigen::VectorXd & /*x*/) { return c; };
+  auto f_const = [c](const Eigen::VectorXd& /*x*/) { return c; };
 
-  auto g = [&c](const Eigen::Vector2d &x) { return -c * x.dot(x) * .25; };
+  auto g = [&c](const Eigen::Vector2d& x) { return -c * x.dot(x) * .25; };
 
   Eigen::VectorXd res = solveDriftDiffusionDirBVP(fe_space, mu, f_const, g);
 

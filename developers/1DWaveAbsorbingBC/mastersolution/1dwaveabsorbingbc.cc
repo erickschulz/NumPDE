@@ -141,7 +141,7 @@ Eigen::MatrixXd waveLeapfrogABC(double c, double T, unsigned int N,
 
 /* SAM_LISTING_BEGIN_2 */
 std::pair<Eigen::VectorXd, Eigen::VectorXd> computeEnergies(
-    const Eigen::MatrixXd &full_solution, double c, double tau) {
+    const Eigen::MatrixXd& full_solution, double c, double tau) {
   int m = full_solution.rows() - 1;
   int N = full_solution.cols() - 1;
   double h = 1.0 / N;

@@ -23,8 +23,8 @@ namespace OrdNotAll {
  * \param b Butcher vector $b$.
  */
 template <class Function>
-void testCvgRKSSM(const Function &f, double T, double y0,
-                  const Eigen::MatrixXd &A, const Eigen::VectorXd &b);
+void testCvgRKSSM(const Function& f, double T, double y0,
+                  const Eigen::MatrixXd& A, const Eigen::VectorXd& b);
 
 void cmpCvgRKSSM();
 

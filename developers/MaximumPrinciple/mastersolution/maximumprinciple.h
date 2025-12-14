@@ -46,7 +46,7 @@ Eigen::SparseMatrix<double> computeGalerkinMatrix(int M, double c);
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
-Eigen::VectorXd computeLoadVector(int M, FUNCTOR &&f) {
+Eigen::VectorXd computeLoadVector(int M, FUNCTOR&& f) {
   Eigen::VectorXd phi(M * M);
 #if SOLUTION
   double h = 1.0 / (M + 1);

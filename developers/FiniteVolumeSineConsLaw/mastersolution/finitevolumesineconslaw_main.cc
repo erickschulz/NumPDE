@@ -52,7 +52,7 @@ int main() {
 
   // with reaction term: -c * u(x, t), where c = 1.0
   double c = 1.0;
-  auto bind_c = [c](const Eigen::VectorXd &mu) {
+  auto bind_c = [c](const Eigen::VectorXd& mu) {
     return sineClawReactionRhs(mu, c);
   };
   Eigen::VectorXd ufinal_reaction = solveSineConsLaw(bind_c, N, M);

@@ -14,7 +14,7 @@
 
 namespace DebuggingWithGDB {
 /* SAM_LISTING_BEGIN_1 */
-void ReadAndOutputMesh(const char *filename) {
+void ReadAndOutputMesh(const char* filename) {
   if (filename != nullptr) {
     // Build full path to the mesh file
     auto gmshfile_path = filename;
@@ -23,12 +23,12 @@ void ReadAndOutputMesh(const char *filename) {
     lf::io::GmshReader reader(std::move(mesh_factory), gmshfile_path);
     // Obtain pointer to read mesh
     std::shared_ptr<const lf::mesh::Mesh> mesh_p = reader.mesh();
-    const lf::mesh::Mesh &mesh{*mesh_p};
+    const lf::mesh::Mesh& mesh{*mesh_p};
     // Run through all entities of the mesh and print entity information
     for (int codim = 0; codim <= mesh.DimMesh(); ++codim) {
       int cnt = 0;
       Eigen::VectorXd c{Eigen::VectorXd::Zero(mesh.DimWorld())};
-      for (const lf::mesh::Entity *entity : mesh.Entities(codim)) {
+      for (const lf::mesh::Entity* entity : mesh.Entities(codim)) {
         // Number of vertices
         const int no_vertices = (entity->RefEl()).NumNodes();
         // Obtain "convex hull" of an entity

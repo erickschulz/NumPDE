@@ -27,7 +27,7 @@ TEST(AugmentedMatrixTest, augmentMatrix) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
 
-  const lf::assemble::DofHandler *dofh = &fe_space->LocGlobMap();
+  const lf::assemble::DofHandler* dofh = &fe_space->LocGlobMap();
   const int N_dofs = dofh->NumDofs();
 
   // Compute c explicitly and not rely on an implemented function
@@ -60,7 +60,7 @@ TEST(VectorCTest, computeCVector) {
 
   const Eigen::VectorXd c_test = computeCVector(fe_space);
 
-  const lf::assemble::DofHandler *dofh = &fe_space->LocGlobMap();
+  const lf::assemble::DofHandler* dofh = &fe_space->LocGlobMap();
   const int N_dofs = dofh->NumDofs();
 
   const Eigen::SparseMatrix<double> B =

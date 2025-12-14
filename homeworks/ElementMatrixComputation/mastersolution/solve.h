@@ -40,8 +40,8 @@ namespace ElementMatrixComputation {
 /* SAM_LISTING_BEGIN_1 */
 template <lf::assemble::EntityMatrixProvider ELMAT_PROVIDER,
           lf::assemble::EntityMatrixProvider ELVEC_PROVIDER>
-Eigen::VectorXd solve(ELMAT_PROVIDER &elmat_provider,
-                      ELVEC_PROVIDER &elvec_provider) {
+Eigen::VectorXd solve(ELMAT_PROVIDER& elmat_provider,
+                      ELVEC_PROVIDER& elvec_provider) {
   // Use one of LehrFEM++'s default meshes. Try different meshes by changing the
   // function index parameter. See the documentation of that function for
   // details ablut the available meshes
@@ -51,9 +51,9 @@ Eigen::VectorXd solve(ELMAT_PROVIDER &elmat_provider,
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Reference to current mesh, obtained from the FE space
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space`
   const lf::base::size_type N_dofs(dofh.NumDofs());
 

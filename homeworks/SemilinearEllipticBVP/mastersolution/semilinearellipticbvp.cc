@@ -17,7 +17,7 @@ namespace semilinearellipticbvp {
 /* SAM_LISTING_BEGIN_3 */
 void fixedPointNextIt(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    Eigen::VectorXd &mu_vec, Eigen::VectorXd &rhs_vec) {
+    Eigen::VectorXd& mu_vec, Eigen::VectorXd& rhs_vec) {
   // Set up mesh functions for diffusion coefficient and reaction coefficient
   lf::mesh::utils::MeshFunctionGlobal mf_one(
       [](Eigen::Vector2d /*x*/) -> double { return 1.0; });
@@ -26,8 +26,8 @@ void fixedPointNextIt(
     return (std::abs(xi) < 1.0E-16) ? 1.0 : std::sinh(xi) / xi;
   });
 
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const std::size_t N_dofs(dofh.NumDofs());
   // Assemble Galerkin matrix
   lf::assemble::COOMatrix<double> A(N_dofs, N_dofs);
@@ -43,7 +43,7 @@ void fixedPointNextIt(
   lf::assemble::FixFlaggedSolutionComponents<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t gdof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(gdof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(gdof_idx)};
         return (bd_flags(node) ? std::make_pair(true, 0.0)
                                : std::make_pair(false, 0.0));
       },
@@ -84,7 +84,7 @@ void testSolverSemilinearBVP(unsigned int reflevels) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   std::cout << "\t Sequence of nested meshes used in test routine\n";
   multi_mesh.PrintInfo(std::cout);
   std::size_t L = multi_mesh.NumLevels();  // Number of levels
@@ -117,7 +117,7 @@ void testSolverSemilinearBVP(unsigned int reflevels) {
   std::cout << std::left << std::setw(10) << "N" << std::right << std::setw(16)
             << "L2 error" << std::setw(16) << "H1 error" << std::endl;
   std::cout << "---------------------------------------------" << std::endl;
-  for (const auto &err : errs) {
+  for (const auto& err : errs) {
     auto [N, l2err, h1serr] = err;
     std::cout << std::left << std::setw(10) << N << std::left << std::setw(16)
               << l2err << std::setw(16) << h1serr << std::endl;
@@ -127,7 +127,7 @@ void testSolverSemilinearBVP(unsigned int reflevels) {
 /* SAM_LISTING_BEGIN_4 */
 void newtonNextIt(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    Eigen::VectorXd &mu_vec, Eigen::VectorXd &rhs_vec) {
+    Eigen::VectorXd& mu_vec, Eigen::VectorXd& rhs_vec) {
   // We need x->0, x->1, and x->uh(x) as MeshFunctions
   lf::mesh::utils::MeshFunctionConstant mf_one(1.);
   lf::mesh::utils::MeshFunctionConstant mf_zero(0.);
@@ -140,8 +140,8 @@ void newtonNextIt(
       mf_uh_prev, [](double xi) -> double { return -std::sinh(xi); });
 
   // We define some variables for easy access
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const std::size_t N_dofs(dofh.NumDofs());
 
   // Assemble matrix A, representing (grad uh, grad vh) + (cosh(uh\_prev)*uh,
@@ -184,7 +184,7 @@ void newtonNextIt(
   lf::assemble::FixFlaggedSolutionComponents<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t gdof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(gdof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(gdof_idx)};
         return (bd_flags(node) ? std::make_pair(true, 0.0)
                                : std::make_pair(false, 0.0));
       },

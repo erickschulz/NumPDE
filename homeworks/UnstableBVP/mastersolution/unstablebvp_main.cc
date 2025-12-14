@@ -35,7 +35,7 @@ int main() {
     // Get a hierachy of refined meshes
     std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
         UnstableBVP::createMeshHierarchy(reflevels, mesh_type);
-    lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+    lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
 
     // Number of levels
     const int L = multi_mesh.NumLevels();

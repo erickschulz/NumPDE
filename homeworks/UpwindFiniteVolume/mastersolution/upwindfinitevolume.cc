@@ -17,7 +17,7 @@ namespace UpwindFiniteVolume {
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const Eigen::Matrix<double, 2, 3> &triangle) {
+    const Eigen::Matrix<double, 2, 3>& triangle) {
   Eigen::Matrix3d X;
   // Solve for the coefficients of the barycentric coordinate functions
   X.block<3, 1>(0, 0) = Eigen::Vector3d::Ones();
@@ -44,9 +44,9 @@ double computeUpwindFlux(double mui, double muk, double vhat, double dik,
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_3 */
-Eigen::Vector2d computeCircumcenters(const Eigen::Vector2d &a1,
-                                     const Eigen::Vector2d &a2,
-                                     const Eigen::Vector2d &a3) {
+Eigen::Vector2d computeCircumcenters(const Eigen::Vector2d& a1,
+                                     const Eigen::Vector2d& a2,
+                                     const Eigen::Vector2d& a3) {
 
   Eigen::Vector2d mp1 = 0.5 * (a1 + a2);
   Eigen::Vector2d mp2 = 0.5 * (a2 + a3);

@@ -23,7 +23,7 @@ namespace po = boost::program_options;
 // Code for empiric exploration of asymptotic convergence of norms of the
 // discretization error for 1D finite element discretization of a 2-point BVP.
 // Special example with a highly oscillatory solution
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   std::cout << "Run with --help for usage information" << std::endl;
   po::options_description desc("Allowed options");
   // clang-format off

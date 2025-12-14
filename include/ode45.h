@@ -41,7 +41,7 @@
 template <class T,
           typename std::enable_if<!std::numeric_limits<T>::is_specialized,
                                   bool>::type = true>
-inline typename T::Scalar norm_t(const T &t) {
+inline typename T::Scalar norm_t(const T& t) {
   return t.template lpNorm<Eigen::Infinity>();
 }
 
@@ -53,12 +53,12 @@ inline typename T::Scalar norm_t(const T &t) {
 template <class T,
           typename std::enable_if<std::numeric_limits<T>::is_specialized,
                                   bool>::type = false>
-inline T norm_t(const T &t) {
+inline T norm_t(const T& t) {
   return std::abs(t);
 }
 
 class termination_error : public std::exception {
-  virtual const char *what() const throw() {
+  virtual const char* what() const throw() {
     return "Integration terminated prematurely.";
   }
 };
@@ -107,7 +107,7 @@ class termination_error : public std::exception {
 //! internal stages. If not set uses a 6-stage embedded method by Petzold &
 //! Asher
 template <class StateType,
-          class RhsType = std::function<StateType(const StateType &)>>
+          class RhsType = std::function<StateType(const StateType&)>>
 class Ode45 {
  public:
   //! \brief Initialize the class by providing a r.h.s.
@@ -116,8 +116,7 @@ class Ode45 {
   //! Copy of r.h.s (of \f$ y'(t) = rhs((y(t)) \f$) is stored internally.
   //! \param[in] f function for the computation of r.h.s.
   //! (e.g. a lambda function).
-  Ode45(const RhsType &rhs) : f(rhs), t(0.0) { /* EMPTY */
-  }
+  Ode45(const RhsType& rhs) : f(rhs), t(0.0) { /* EMPTY */ }
 
   //! \brief Performs solutions of IVP up to specified final time.
   //! Evolves ODE with initial data \f$y0\f$, up to time \f$T\f$ or
@@ -130,7 +129,7 @@ class Ode45 {
   //! \return vector of pairs \f$ (y(t), t) \f$ at snapshot times.
   template <class NormFunc = decltype(norm_t<StateType>)>
   std::vector<std::pair<StateType, double>> solve(
-      const StateType &y0, double T, const NormFunc &norm = norm_t<StateType>);
+      const StateType& y0, double T, const NormFunc& norm = norm_t<StateType>);
 
   //! \brief Print statistics and options of this class instance.
   void print();
@@ -276,7 +275,7 @@ const unsigned int Ode45<StateType, RhsType>::_s;
 template <class StateType, class RhsType>
 template <class NormFunc>
 std::vector<std::pair<StateType, double>> Ode45<StateType, RhsType>::solve(
-    const StateType &y0, double T, const NormFunc &norm) {
+    const StateType& y0, double T, const NormFunc& norm) {
   const double epsilon = std::numeric_limits<double>::epsilon();
   // Setup step size default values if not provided by user
   t = options.start_time;

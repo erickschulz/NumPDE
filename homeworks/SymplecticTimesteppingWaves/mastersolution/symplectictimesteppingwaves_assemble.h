@@ -32,7 +32,7 @@ namespace SymplecticTimesteppingWaves {
 template <typename FUNC_ALPHA, typename FUNC_GAMMA, typename FUNC_BETA>
 Eigen::SparseMatrix<double> assembleGalerkinMatrix(
     std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space_p,
-    FUNC_ALPHA &&alpha, FUNC_GAMMA &&gamma, FUNC_BETA &&beta) {
+    FUNC_ALPHA&& alpha, FUNC_GAMMA&& gamma, FUNC_BETA&& beta) {
   Eigen::SparseMatrix<double> galMat;
 
   /* Creating coefficient-functions as Lehrfem++ mesh functions */
@@ -48,7 +48,7 @@ Eigen::SparseMatrix<double> assembleGalerkinMatrix(
   // pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Obtain an array of boolean flags for the edges of the mesh, 'true'
   // indicates that the edge lies on the boundary
   // Dimension of finite element space
@@ -57,7 +57,7 @@ Eigen::SparseMatrix<double> assembleGalerkinMatrix(
   // Creating a predicate that will guarantee that the computations for the
   // boundary Mass matrix part of the full Galerkin matrix are carried only on
   // the edges of the mesh using the boundary flags
-  auto edges_predicate = [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+  auto edges_predicate = [&bd_flags](const lf::mesh::Entity& edge) -> bool {
     return bd_flags(edge);
   };
 

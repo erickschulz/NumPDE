@@ -23,9 +23,9 @@ TEST(RadauThreeTimestepping, TrapRuleLinFEElemVecProvider) {
   // Get some triangular test mesh
   auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3);
   // Define some easy functions to test the provider with
-  auto f1 = [](const Eigen::Vector2d &x) { return 0.0; };
-  auto f2 = [](const Eigen::Vector2d &x) { return 1.0; };
-  auto f3 = [](const Eigen::Vector2d &x) { return x[0]; };
+  auto f1 = [](const Eigen::Vector2d& x) { return 0.0; };
+  auto f2 = [](const Eigen::Vector2d& x) { return 1.0; };
+  auto f3 = [](const Eigen::Vector2d& x) { return x[0]; };
   // Check the element vector for each triangle
   RadauThreeTimestepping::TrapRuleLinFEElemVecProvider f1p(f1);
   RadauThreeTimestepping::TrapRuleLinFEElemVecProvider f2p(f2);
@@ -49,7 +49,7 @@ TEST(RadauThreeTimestepping, rhsVectorheatSource) {
   const auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1. / 3);
   // Create a DOF handler
   const lf::uscalfe::FeSpaceLagrangeO1<double> fespace(mesh_p);
-  const auto &dofh = fespace.LocGlobMap();
+  const auto& dofh = fespace.LocGlobMap();
   // Assemble the vectors for t=0 and t=0.5
   const Eigen::VectorXd rhs0 =
       RadauThreeTimestepping::rhsVectorheatSource(dofh, 0.0);
@@ -59,10 +59,10 @@ TEST(RadauThreeTimestepping, rhsVectorheatSource) {
   const auto boundary = lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 2);
 
   // Create a functional for time t=0 and t=0.5
-  auto f0 = [](const Eigen::Vector2d &x) {
+  auto f0 = [](const Eigen::Vector2d& x) {
     return ((x[0] - 0.5) * (x[0] - 0.5) + x[1] * x[1] < 0.25) ? 1.0 : 0.0;
   };
-  auto f1 = [](const Eigen::Vector2d &x) {
+  auto f1 = [](const Eigen::Vector2d& x) {
     return (x[0] * x[0] + (x[1] - 0.5) * (x[1] - 0.5) < 0.25) ? 1.0 : 0.0;
   };
 
@@ -102,7 +102,7 @@ TEST(RadauThreeTimestepping, solveHeatEvolution) {
   const auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1. / 3);
   // Create a DOF handler
   const lf::uscalfe::FeSpaceLagrangeO1<double> fespace(mesh_p);
-  const auto &dofh = fespace.LocGlobMap();
+  const auto& dofh = fespace.LocGlobMap();
 
   // Solve heat evolution with zero initial and boundary conditions
   double final_time = 1.0;
@@ -125,7 +125,7 @@ TEST(RadauThreeTimestepping, dropMatrixRowsColumns) {
   const auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1. / 3);
   // Create a DOF handler
   const lf::uscalfe::FeSpaceLagrangeO1<double> fespace(mesh_p);
-  const auto &dofh = fespace.LocGlobMap();
+  const auto& dofh = fespace.LocGlobMap();
   const lf::base::size_type N_dofs = dofh.NumDofs();
 
   // Obtain an array of boolean flags for the vertices of the mesh: 'true'
@@ -181,7 +181,7 @@ TEST(RadauThreeTimestepping, LinFEMassMatrixProvider) {
   const auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1. / 3);
   // Create a DOF handler
   const lf::uscalfe::FeSpaceLagrangeO1<double> fespace(mesh_p);
-  const auto &dofh = fespace.LocGlobMap();
+  const auto& dofh = fespace.LocGlobMap();
 
   // Compare the element matrices for every cell
   RadauThreeTimestepping::LinFEMassMatrixProvider provider;
@@ -203,7 +203,7 @@ TEST(RadauThreeTimestepping, discreteEvolutionOperator) {
   const auto mesh_p = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1. / 3);
   // Create a DOF handler
   const lf::uscalfe::FeSpaceLagrangeO1<double> fespace(mesh_p);
-  const auto &dofh = fespace.LocGlobMap();
+  const auto& dofh = fespace.LocGlobMap();
 
   // Compute A and M
   lf::uscalfe::LinearFELaplaceElementMatrix A_provider;

@@ -26,7 +26,7 @@
 namespace UnstableBVP {
 
 std::shared_ptr<lf::refinement::MeshHierarchy> createMeshHierarchy(
-    const int reflevels, const std::string &mesh_type) {
+    const int reflevels, const std::string& mesh_type) {
   // Helper object: mesh factory
   std::shared_ptr<lf::mesh::hybrid2d::MeshFactory> mesh_factory_ptr =
       std::make_shared<lf::mesh::hybrid2d::MeshFactory>(2);
@@ -48,7 +48,7 @@ std::shared_ptr<lf::refinement::MeshHierarchy> createMeshHierarchy(
       std::array<double, 2>({0, 0.5 + offset}),
       std::array<double, 2>({1, 0.5 + offset})};
 
-  for (const auto &node : node_coord) {
+  for (const auto& node : node_coord) {
     mesh_factory_ptr->AddPoint(Eigen::Vector2d({node[0], node[1]}));
   }
 
@@ -91,9 +91,9 @@ double solveTemperatureDistribution(
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // **********************************************************************
   // Stage 1: Assemble finite element Galerkin matrix
@@ -129,7 +129,7 @@ double solveTemperatureDistribution(
 
   // Obtain specification for shape functions on edges
   // NOLINTBEGIN(clang-analyzer-deadcode.DeadStores)
-  const lf::fe::ScalarReferenceFiniteElement<double> *rsf_edge_p =
+  const lf::fe::ScalarReferenceFiniteElement<double>* rsf_edge_p =
       fe_space->ShapeFunctionLayout(lf::base::RefEl::kSegment());
   // NOLINTEND(clang-analyzer-deadcode.DeadStores)
   LF_ASSERT_MSG(rsf_edge_p != nullptr, "FE specification for edges missing");
@@ -142,7 +142,7 @@ double solveTemperatureDistribution(
   // edges.
   auto ess_bdc_flags_values{lf::fe::InitEssentialConditionFromFunction(
       *fe_space,
-      [&bd_flags](const lf::mesh::Entity &edge) -> bool {
+      [&bd_flags](const lf::mesh::Entity& edge) -> bool {
         return (bd_flags(edge));
       },
       mf_bc)};

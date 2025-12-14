@@ -20,7 +20,7 @@ namespace TestQuadratureRules {
 double factorial(int i) { return std::tgamma(i + 1); }
 
 /* SAM_LISTING_BEGIN_1 */
-bool testQuadOrderTria(const lf::quad::QuadRule &quad_rule,
+bool testQuadOrderTria(const lf::quad::QuadRule& quad_rule,
                        unsigned int order) {
   bool order_isExact = true;  // return variable
   //====================
@@ -31,7 +31,7 @@ bool testQuadOrderTria(const lf::quad::QuadRule &quad_rule,
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-bool testQuadOrderQuad(const lf::quad::QuadRule &quad_rule,
+bool testQuadOrderQuad(const lf::quad::QuadRule& quad_rule,
                        unsigned int order) {
   bool order_isExact = true;  // return variable
 
@@ -43,7 +43,7 @@ bool testQuadOrderQuad(const lf::quad::QuadRule &quad_rule,
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_3 */
-unsigned int calcQuadOrder(const lf::quad::QuadRule &quad_rule) {
+unsigned int calcQuadOrder(const lf::quad::QuadRule& quad_rule) {
   unsigned int maximal_order = quad_rule.Order();
 
   //====================

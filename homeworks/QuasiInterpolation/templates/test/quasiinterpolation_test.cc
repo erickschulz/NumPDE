@@ -23,15 +23,15 @@ TEST(QuasiInterpolation, findKp) {
   std::shared_ptr<const lf::mesh::Mesh> mesh_p =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(3);
   lf::mesh::utils::CodimMeshDataSet<
-      std::pair<const lf::mesh::Entity *, unsigned int>>
+      std::pair<const lf::mesh::Entity*, unsigned int>>
       KpMeshDataSet = findKp(mesh_p);
 
   unsigned int vertexIndex = 9;       // 8
   unsigned int localVertexIndex = 1;  // 0
   unsigned int triangleIndex = 12;    // 11
 
-  const lf::mesh::Entity *vertex = mesh_p->EntityByIndex(2, vertexIndex);
-  std::pair<const lf::mesh::Entity *, unsigned int> Kp = KpMeshDataSet(*vertex);
+  const lf::mesh::Entity* vertex = mesh_p->EntityByIndex(2, vertexIndex);
+  std::pair<const lf::mesh::Entity*, unsigned int> Kp = KpMeshDataSet(*vertex);
 
   EXPECT_EQ(localVertexIndex, Kp.second);
   EXPECT_NE(Kp.first, nullptr);

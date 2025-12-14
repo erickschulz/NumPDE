@@ -10,6 +10,8 @@
  */
 
 #include <Eigen/Core>
+#include <algorithm>  // For std::min, std::max
+#include <cmath>      // For std::abs, std::floor, std::ceil
 #include <utility>
 
 #include "clempiricflux.h"
@@ -25,7 +27,7 @@ namespace CLEmpiricFlux {
  * @param initsupp interval containing the support of u at initial time
  * @return interval containg the support of u at time t
  */
-Eigen::Vector2d findSupport(const UniformCubicSpline &f,
+Eigen::Vector2d findSupport(const UniformCubicSpline& f,
                             Eigen::Vector2d initsupp, double t);
 
 /**
@@ -41,7 +43,7 @@ Eigen::Vector2d findSupport(const UniformCubicSpline &f,
  */
 /* SAM_LISTING_BEGIN_6 */
 template <typename FUNCTOR>
-Eigen::VectorXd computeInitVec(const UniformCubicSpline &f, FUNCTOR &&u0,
+Eigen::VectorXd computeInitVec(const UniformCubicSpline& f, FUNCTOR&& u0,
                                double h, double T) {
   Eigen::VectorXd mu0;
   const double A = -1.0;  // left bound of support
@@ -71,9 +73,23 @@ Eigen::VectorXd computeInitVec(const UniformCubicSpline &f, FUNCTOR &&u0,
  * @return vector of size N containg the image of mu0 under the RHS of the
  * semi-discretized equation
  */
+/* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR>
-Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
-                                FUNCTOR &&numFlux);
+Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd& mu0, double h,
+                                FUNCTOR&& numFlux) {
+  int m = mu0.size();
+  Eigen::VectorXd mu1(m);
+  mu1(0) = -1.0 / h * (numFlux(mu0(0), mu0(1)) - numFlux(mu0(0), mu0(0)));
+  for (int j = 1; j < m - 1; ++j) {
+    mu1(j) =
+        -1.0 / h * (numFlux(mu0(j), mu0(j + 1)) - numFlux(mu0(j - 1), mu0(j)));
+  }
+  mu1(m - 1) =
+      -1.0 / h *
+      (numFlux(mu0(m - 1), mu0(m - 1)) - numFlux(mu0(m - 2), mu0(m - 1)));
+  return mu1;
+}
+/* SAM_LISTING_END_2 */
 
 /**
  * @brief Implements Ralston's method to solve a homogenous ODE
@@ -85,9 +101,18 @@ Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu0, double h,
  * @param n number of timesteps to perform, n > 0
  * @return vector of size N containg the approximate solution at time n * tau
  */
+/* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR>
-Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
-                                 int n);
+Eigen::VectorXd RalstonODESolver(FUNCTOR&& rhs, Eigen::VectorXd mu0, double tau,
+                                 int n) {
+  for (int i = 0; i < n; ++i) {
+    Eigen::VectorXd k1 = rhs(mu0);
+    Eigen::VectorXd k2 = rhs(mu0 + tau * 2.0 / 3.0 * k1);
+    mu0 = mu0 + 0.25 * tau * (k1 + 3.0 * k2);
+  }
+  return mu0;
+}
+/* SAM_LISTING_END_3 */
 
 /**
  * @brief Implements a finite volume scheme to solve a conservation law with
@@ -99,8 +124,8 @@ Eigen::VectorXd RalstonODESolver(FUNCTOR &&rhs, Eigen::VectorXd mu0, double tau,
  * @param T final time, T > 0.0
  * @return cell averages at final time, i.e.of the solution u(x,T)
  */
-Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline &f,
-                                   const Eigen::VectorXd &mu0, double h,
+Eigen::VectorXd solveCauchyProblem(const UniformCubicSpline& f,
+                                   const Eigen::VectorXd& mu0, double h,
                                    double T);
 
 }  // namespace CLEmpiricFlux

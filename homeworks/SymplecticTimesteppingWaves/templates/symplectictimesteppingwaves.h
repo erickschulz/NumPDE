@@ -15,13 +15,13 @@ namespace SymplecticTimesteppingWaves {
 
 class progress_bar {
   static const auto overhead = sizeof " [100%]";
-  std::ostream &os;
+  std::ostream& os;
   const std::size_t bar_width;
   std::string message;
   const std::string full_bar;
 
  public:
-  progress_bar(std::ostream &os, std::size_t line_width, std::string message_,
+  progress_bar(std::ostream& os, std::size_t line_width, std::string message_,
                const char symbol = '.')
       : os{os},
         bar_width{line_width - overhead},
@@ -37,8 +37,8 @@ class progress_bar {
     write(0.0);
   }
 
-  progress_bar(const progress_bar &) = delete;
-  progress_bar &operator=(const progress_bar &) = delete;
+  progress_bar(const progress_bar&) = delete;
+  progress_bar& operator=(const progress_bar&) = delete;
 
   ~progress_bar() {
     write(1.0);
@@ -64,9 +64,9 @@ class SympTimestepWaveEq {
     //====================
   }
   /* Public member functions */
-  void compTimestep(double tau, Eigen::VectorXd &p, Eigen::VectorXd &q) const;
-  double computeEnergies(const Eigen::VectorXd &p,
-                         const Eigen::VectorXd &q) const;
+  void compTimestep(double tau, Eigen::VectorXd& p, Eigen::VectorXd& q) const;
+  double computeEnergies(const Eigen::VectorXd& p,
+                         const Eigen::VectorXd& q) const;
 
  private:
   //====================
@@ -78,8 +78,8 @@ class SympTimestepWaveEq {
 /* Implementing member functions of class SympTimestepWaveEq */
 /* SAM_LISTING_BEGIN_9 */
 template <typename FUNCTION>
-void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd &p,
-                                                Eigen::VectorXd &q) const {
+void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd& p,
+                                                Eigen::VectorXd& q) const {
   //====================
   // Your code goes here
   //====================
@@ -89,7 +89,7 @@ void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd &p,
 /* SAM_LISTING_BEGIN_0 */
 template <typename FUNCTION>
 double SympTimestepWaveEq<FUNCTION>::computeEnergies(
-    const Eigen::VectorXd &p, const Eigen::VectorXd &q) const {
+    const Eigen::VectorXd& p, const Eigen::VectorXd& q) const {
   double energy;
   //====================
   // Your code goes here
@@ -102,7 +102,7 @@ double SympTimestepWaveEq<FUNCTION>::computeEnergies(
 template <typename FUNCTION>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> solvewave(
     std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fes_p,
-    FUNCTION c, const Eigen::VectorXd &u0_vec, const Eigen::VectorXd &v0_vec,
+    FUNCTION c, const Eigen::VectorXd& u0_vec, const Eigen::VectorXd& v0_vec,
     double T, unsigned int m) {
   std::pair<Eigen::VectorXd, Eigen::VectorXd> solution_pair;
   //====================

@@ -28,7 +28,7 @@ Eigen::VectorXd getXValues(double T, unsigned int M);
  * @param M number of time steps, M > 0
  * @return approximation of u(x, T)
  */
-Eigen::VectorXd solveLaxWendroff(const Eigen::VectorXd &u0, double T,
+Eigen::VectorXd solveLaxWendroff(const Eigen::VectorXd& u0, double T,
                                  unsigned int M);
 
 /**
@@ -38,7 +38,7 @@ Eigen::VectorXd solveLaxWendroff(const Eigen::VectorXd &u0, double T,
  * @param M vector of numbers of timesteps, M(i) > 0.
  * @return vector of same size as M containing the L1-error for each M(i)
  */
-Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi &M);
+Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi& M);
 
 /**
  * @brief Provides a reference solution evaluated at the nodes x, obtained by
@@ -47,7 +47,7 @@ Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi &M);
  * @param equidistant x-values
  * @return vector of same size as x containing the solution evaluated at x.
  */
-Eigen::VectorXd referenceSolution(const Eigen::VectorXd &x);
+Eigen::VectorXd referenceSolution(const Eigen::VectorXd& x);
 
 /**
  * @brief Same as numexpLaxWendroffRP(...), but with the smooth initial data u0
@@ -55,7 +55,7 @@ Eigen::VectorXd referenceSolution(const Eigen::VectorXd &x);
  * @param M vector of numbers of timesteps, M(i) > 0.
  * @return vector of same size as M containing the L1-error for each M(i)
  */
-Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi &M);
+Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi& M);
 
 /**
  * @brief Computes the solution u(x, T) the scalar conservation law with f() =
@@ -66,7 +66,7 @@ Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi &M);
  * @param M number of time steps, M > 0
  * @return approximation of u(x, T)
  */
-Eigen::VectorXd solveGodunov(const Eigen::VectorXd &u0, double T,
+Eigen::VectorXd solveGodunov(const Eigen::VectorXd& u0, double T,
                              unsigned int M);
 
 /**
@@ -75,6 +75,6 @@ Eigen::VectorXd solveGodunov(const Eigen::VectorXd &u0, double T,
  * @param M vector of numbers of timesteps, M(i) > 0.
  * @return vector of same size as M containing the L1-error for each M(i)
  */
-Eigen::VectorXd numexpGodunovSmoothU0(const Eigen::VectorXi &M);
+Eigen::VectorXd numexpGodunovSmoothU0(const Eigen::VectorXi& M);
 
 }  // namespace LaxWendroffScheme

@@ -23,11 +23,11 @@ int main(int /*argc*/, char** /*argv*/) {
   //  StokesPipeFlow::testCvgTaylorHood(4);
   // Compute on "realistic" geometry
   //  std::cout << "Writing vtk-File" << std::endl;
-  StokesPipeFlow::visualizeTHPipeFlow("meshes/pipe.msh", "out.vtk");
+  StokesPipeFlow::visualizeTHPipeFlow("meshes/pipe3.msh", "out.vtk");
   std::vector<std::pair<double, double>> p_diss{};
   double p_diss_vol;
   double p_diss_bd;
-  for (char no : {'1', '2', '3', '4', '5', '6'}) {
+  for (char no : {'1', '2', '3'}) {
     std::string meshfile = std::string("meshes/pipe") + no + ".msh";
     std::cout << "Reading mesh from file " << meshfile << std::endl;
     p_diss_vol = StokesPipeFlow::computeDissipatedPower(meshfile.c_str());

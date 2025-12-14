@@ -102,7 +102,7 @@ void plotExp(unsigned int N, unsigned int M, double T, std::string filename) {
   zeta_0[N] = f_sol(1.0 + L, 0.0);
   // Monitor function storing basis expansion coefficient vectors
   std::vector<Eigen::VectorXd> zetas{};
-  auto rec = [&zetas, N](const Eigen::VectorXd &zeta) -> void {
+  auto rec = [&zetas, N](const Eigen::VectorXd& zeta) -> void {
     zetas.push_back(zeta.segment(0, N + 1));
   };
   (void)solve1DWavePML(zeta_0, gamma, sigma, M, T, rec);
@@ -112,16 +112,16 @@ void plotExp(unsigned int N, unsigned int M, double T, std::string filename) {
             << ", T = " << T << "\n zeta_0 = " << zeta_0.transpose() << "\n"
             << std::endl;
   outfile << "data = [ ";
-  for (const Eigen::VectorXd &zeta : zetas) {
+  for (const Eigen::VectorXd& zeta : zetas) {
     outfile << zeta.transpose() << "; ";
   }
   outfile << "];" << std::endl;
 }
 
 /* SAM_LISTING_BEGIN_2 */
-std::vector<double> trackEnergy(const Eigen::VectorXd &zeta_0,
-                                const Eigen::VectorXd &gamma,
-                                const Eigen::VectorXd &sigma, unsigned int M,
+std::vector<double> trackEnergy(const Eigen::VectorXd& zeta_0,
+                                const Eigen::VectorXd& gamma,
+                                const Eigen::VectorXd& sigma, unsigned int M,
                                 double T) {
   // Grid resolution parameter N = number of grid nodes - 1
   const unsigned int N = gamma.size() - 1;
@@ -141,7 +141,7 @@ std::vector<double> trackEnergy(const Eigen::VectorXd &zeta_0,
   // ****************
 #endif
   // Recorder lambda function
-  auto rec = [&](const Eigen::VectorXd &zeta) -> void {
+  auto rec = [&](const Eigen::VectorXd& zeta) -> void {
 #ifdef SOLUTION
     if (first_step) {
       first_step = false;

@@ -64,7 +64,7 @@ std::vector<Eigen::VectorXd> solve(unsigned N, unsigned M, double T) {
   zeta_0[N] = f_sol(1.0 + L, 0.0);
   // Object for keeping track of approximate solution
   std::vector<Eigen::VectorXd> zetas;
-  auto rec = [&](const Eigen::VectorXd &zeta) -> void {
+  auto rec = [&](const Eigen::VectorXd& zeta) -> void {
     zetas.push_back(zeta);
   };
   // Carry out discrete evolution with final time T

@@ -29,8 +29,8 @@ namespace AvgValBoundary {
  *        u coefficient vector
  */
 /* SAM_LISTING_BEGIN_1 */
-double compH1seminorm(const lf::assemble::DofHandler &dofh,
-                      const Eigen::VectorXd &u) {
+double compH1seminorm(const lf::assemble::DofHandler& dofh,
+                      const Eigen::VectorXd& u) {
   double result = 0.0;
 #if SOLUTION
 
@@ -57,7 +57,7 @@ double compH1seminorm(const lf::assemble::DofHandler &dofh,
  * @param dofh DofHandler of FEspace.
  */
 /* SAM_LISTING_BEGIN_2 */
-Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler &dofh) {
+Eigen::VectorXd solveTestProblem(const lf::assemble::DofHandler& dofh) {
   // Obtain Galerkin matrix for alpha = beta = gamma := 1.0
   auto const_one = [](Eigen::Vector2d x) -> double { return 1.0; };
   auto A = compGalerkinMatrix(dofh, const_one, const_one, const_one);
@@ -113,7 +113,7 @@ std::vector<std::pair<unsigned int, double>> approxBoundaryFunctionalValues(
         std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
     // Obtain local->global index mapping for current finite element space
-    const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
     const lf::base::size_type N_dofs(dofh.NumDofs());
 
     // compute galerkin matrix with alpha = 1.0, gamma = 1.0, beta = 0.0

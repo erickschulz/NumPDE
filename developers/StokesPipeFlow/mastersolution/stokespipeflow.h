@@ -36,20 +36,18 @@ namespace StokesPipeFlow {
 class TaylorHoodElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, 15, 15>;
-  TaylorHoodElementMatrixProvider(const TaylorHoodElementMatrixProvider &) =
+  TaylorHoodElementMatrixProvider(const TaylorHoodElementMatrixProvider&) =
       delete;
-  TaylorHoodElementMatrixProvider(TaylorHoodElementMatrixProvider &&) noexcept =
+  TaylorHoodElementMatrixProvider(TaylorHoodElementMatrixProvider&&) noexcept =
       default;
-  TaylorHoodElementMatrixProvider &operator=(
-      const TaylorHoodElementMatrixProvider &) = delete;
-  TaylorHoodElementMatrixProvider &operator=(
-      TaylorHoodElementMatrixProvider &&) = delete;
+  TaylorHoodElementMatrixProvider& operator=(
+      const TaylorHoodElementMatrixProvider&) = delete;
+  TaylorHoodElementMatrixProvider& operator=(
+      TaylorHoodElementMatrixProvider&&) = delete;
   TaylorHoodElementMatrixProvider() = default;
   virtual ~TaylorHoodElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemMat AK_;
@@ -62,7 +60,7 @@ class TaylorHoodElementMatrixProvider {
  * @param dofh DofHandler object for all FE spacesw
  */
 lf::assemble::COOMatrix<double> buildTaylorHoodGalerkinMatrix(
-    const lf::assemble::DofHandler &dofh);
+    const lf::assemble::DofHandler& dofh);
 
 /**
  * @brief Taylor-Hood FE solultion of pipe flow problem
@@ -73,8 +71,8 @@ lf::assemble::COOMatrix<double> buildTaylorHoodGalerkinMatrix(
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename gFunctor>
-Eigen::VectorXd solvePipeFlow(const lf::assemble::DofHandler &dofh,
-                              gFunctor &&g, bool print = true) {
+Eigen::VectorXd solvePipeFlow(const lf::assemble::DofHandler& dofh,
+                              gFunctor&& g, bool print = true) {
   // Number of d.o.f. in FE spaces
   size_t n = dofh.NumDofs();
   if (print)
@@ -95,7 +93,7 @@ Eigen::VectorXd solvePipeFlow(const lf::assemble::DofHandler &dofh,
   // Flag vector for d.o.f. on the boundary
   std::vector<std::pair<bool, double>> ess_dof_select(n + 1, {false, 0.0});
   // Visit nodes on the boundary
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     if (bd_flags(*node)) {
       // Indices of global shape functions sitting at node
       std::span<const lf::assemble::gdof_idx_t> dof_idx{
@@ -112,7 +110,7 @@ Eigen::VectorXd solvePipeFlow(const lf::assemble::DofHandler &dofh,
     }
   }
   // Visit edges on the boundasry
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     if (bd_flags(*edge)) {
       // Indices of global shape functions associated with the edge
       std::span<const lf::assemble::gdof_idx_t> dof_idx{
@@ -164,8 +162,8 @@ Eigen::VectorXd solvePipeFlow(const lf::assemble::DofHandler &dofh,
  * @param dofh DofHandler object for monolithic Taylor-Hood FEM
  * @param mu_vec basis expansion coefficient vector
  */
-double compDissPowVolume(const lf::assemble::DofHandler &dofh,
-                         const Eigen::VectorXd &mu_vec);
+double compDissPowVolume(const lf::assemble::DofHandler& dofh,
+                         const Eigen::VectorXd& mu_vec);
 
 /**
  * @brief Computes dissipated power by boundary-based formula
@@ -176,8 +174,8 @@ double compDissPowVolume(const lf::assemble::DofHandler &dofh,
  * This implementation is valid only in the special geometric setting of the
  * pipe flow model for the homework project StokesPipeFLow.
  */
-double compDissPowBd(const lf::assemble::DofHandler &dofh,
-                     const Eigen::VectorXd &muvec, bool print = false);
+double compDissPowBd(const lf::assemble::DofHandler& dofh,
+                     const Eigen::VectorXd& muvec, bool print = false);
 
 /**
  * @brief Convergence test for Tyalor-Hood FEM
@@ -199,8 +197,8 @@ enum PowerFlag { NOCMOP, VOLUME, BOUNDARY };
  * @param outfile base name of .vtk output files
  *
  */
-double allPipeFlow(PowerFlag powerflag, bool producevtk, const char *meshfile,
-                   const char *outfile = nullptr);
+double allPipeFlow(PowerFlag powerflag, bool producevtk, const char* meshfile,
+                   const char* outfile = nullptr);
 
 /**
  * @brief Visualization of FEM solution for pipe flow setting
@@ -208,19 +206,19 @@ double allPipeFlow(PowerFlag powerflag, bool producevtk, const char *meshfile,
  * @param meshfile name of the gmsh mesh file to read triangulation from
  * @param outfile base name of .vtk output files
  */
-void visualizeTHPipeFlow(const char *meshfile = "pipe.msh",
-                         const char *outfile = "pipeflow");
+void visualizeTHPipeFlow(const char* meshfile = "pipe.msh",
+                         const char* outfile = "pipeflow");
 
 /**
  * @brief Compute dissipated power based on Taylor-Hood FEM simulation:
  * volume-integration based formuls
  */
-double computeDissipatedPower(const char *meshfile = "pipe.msh");
+double computeDissipatedPower(const char* meshfile = "pipe.msh");
 /**
  * @brief Compute dissipated power based on Taylor-Hood FEM simulation:
  * volume-integration based formuls
  */
-double computeDissipatedPowerBd(const char *meshfile = "pipe.msh");
+double computeDissipatedPowerBd(const char* meshfile = "pipe.msh");
 
 }  // namespace StokesPipeFlow
 

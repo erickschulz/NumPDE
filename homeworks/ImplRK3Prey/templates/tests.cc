@@ -32,14 +32,14 @@ struct TestData {
     beta1 = 0.1;
     beta2 = 0.1;
 
-    f = [this](const VectorXd &y) {
+    f = [this](const VectorXd& y) {
       auto temp = y;
       temp(0) *= alpha1 - beta1 * y(1);
       temp(1) *= -alpha2 + beta2 * y(0);
       return temp;
     };
 
-    Jf = [this](const VectorXd &y) {
+    Jf = [this](const VectorXd& y) {
       MatrixXd temp(2, 2);
       temp << alpha1 - beta1 * y(1), -beta1 * y(0), beta2 * y(1),
           -alpha2 + beta2 * y(0);
@@ -62,8 +62,8 @@ struct TestData {
   double beta1;
   double beta2;
 
-  std::function<MatrixXd(const VectorXd &)> Jf;
-  std::function<VectorXd(const VectorXd &)> f;
+  std::function<MatrixXd(const VectorXd&)> Jf;
+  std::function<VectorXd(const VectorXd&)> f;
 };
 
 TestData data;

@@ -21,7 +21,7 @@
 
 using namespace WaveABC2D;
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   std::cout << "\n" << std::endl;
   std::cout << "PROBLEM - WaveABC2D" << std::endl;
 
@@ -38,14 +38,14 @@ int main(int /*argc*/, const char ** /*argv*/) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
-  auto mu0 = [](const Eigen::Vector2d &x) -> double {
+  auto mu0 = [](const Eigen::Vector2d& x) -> double {
     return std::sin(x.norm());
   };
-  auto nu0 = [](const Eigen::Vector2d &x) -> double { return std::cos(x(1)); };
+  auto nu0 = [](const Eigen::Vector2d& x) -> double { return std::cos(x(1)); };
   auto rho = [](Eigen::Vector2d) -> double { return 1.0; };
 
   WaveABC2DTimestepper<decltype(rho), decltype(mu0), decltype(nu0)> stepper(

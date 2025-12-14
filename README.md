@@ -5,6 +5,8 @@ This repository contains the codes for the homework problems of the recurring co
 
 Moreover, enrolled students can access the [moodle](https://moodle-app2.let.ethz.ch/course/view.php?id=12060) page of the course.
 
+# For Students
+
 ## Requirements
 Currently, only UNIX based operating systems are supported. Moreover, you need to have the following installed on your machine:
 * C++20 compiler (e.g. gcc, clang)
@@ -22,7 +24,40 @@ mkdir build
 cd build/
 cmake ..
 ```
-This will install LehrFEM++ and its dependencies into a folder `~/.hunter/`. To build a specific problem, say `TestQuadratureRules`, proceed as follows:
+This will install LehrFEM++ and its dependencies into a folder `~/.hunter/`.
+
+**Note**: The first compilation can take a significant amount of time. It is highly recommended to use parallel compilation with the `-j` flag. To use all available cores, you can use the following commands:
+
+*   **On macOS:**
+    ```bash
+    make -j $(sysctl -n hw.ncpu)
+    ```
+*   **On Linux:**
+    ```bash
+    make -j $(nproc)
+    ```
+
+This will significantly speed up the build process.
+
+### Build Configurations
+
+For optimal performance, always specify the build type during the `cmake` configuration step.
+
+*   **Release Build (Optimized & Fast):**
+    ```bash
+    # Inside your build directory
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    ```
+    This is recommended for running computationally intensive problems and matches the CI pipeline's configuration.
+
+*   **Debug Build (For Development & Debugging):**
+    ```bash
+    # Inside your build directory
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    ```
+    This builds with debug symbols and no optimizations, making it suitable for use with a debugger.
+
+To build a specific problem, say `TestQuadratureRules`, proceed as follows:
 ```
 cd homeworks/TestQuadratureRules/
 make
@@ -71,26 +106,8 @@ cmake ..
 ```
 The first four lines are due to limited resources on the student computers. Setting the environment variable `HUNTER_ROOT` tells CMake where to look for the preinstalled libraries. This environment variable is local to your terminal, i.e. has to be redefined if you start a new terminal. Apart from this, you can use the folder `~/NPDERepo` in the same way you would for the approach in the previous section. However, you have only very little memory available on the student computers. We therefore recommend to only build one problem at a time.
 
-## FAQ
+# For Developers
 
-### clang: error: unknown argument: '-fcoalesce-templates'
-Mac users, after updating to macOS Catalina 10.15.4, are receiving this error. The workaround is as follows: Navigate  your terminal into the folder `NPDECODES/` and type:
-```
-brew install gcc@8    #install gcc version 8, needs brew to be installed first...
-gcc-8 --version       #check if gcc-8 was installed properly
-g++-8 --version       #check if g++-8 was installed properly
-rm -rf build          #delete the old build folder
-mkdir build           #recreate it
-```
-If this has succeeded, you need to build the codes using the gcc compiler by defining the environment variables `CC` and `CXX`. This is done by navigating a terminal into `NPDECODES/build/` and running:
-```
-export CC=gcc-8
-export CXX=g++-8
-cmake ..
-```
-If the installation is successful, you can than build your codes using `make` as before. Note that the gcc version under OSX usulally just links to clang. However, the procedure above installs the actual gcc compiler.
-
-# Notes for Developers
 ## Creating a new Homework
 New homeworks should be created in the `developers` folder. When the homework is ready to be deployed,
 it can be done by running `scripts/deploy_npde.py`.
@@ -111,6 +128,26 @@ ProblemName/
 └── README.md
 ```
 You can create a template using `scripts/python/new_problem.py <Problemname> <problemname>`. Feel free to delete any folders you don't need.
+
+### Build System and Dependencies
+The build system automatically discovers source files (`.cc` and `.h`) in the problem directory and provides default libraries (`Eigen3::Eigen` and `LF_ALL` for main sources, `GTest::gtest_main` for tests). In most cases, you don't need to specify dependencies manually.
+
+However, if your problem requires:
+- Additional libraries (e.g., `Boost::program_options` in `LeapfrogDissipativeWave`)
+- Source files from subdirectories (e.g., `meshes/mesh.cc` in `ElementMatrixComputation`)
+- Exclusion of certain files from compilation (e.g., `GaussLobattoParabolic`)
+
+you can create a `dependencies.cmake` file in your `mastersolution/` directory with:
+```cmake
+set(SOURCES
+  ${DIR}/problemname_main.cc
+  ${DIR}/problemname.cc
+  meshes/mesh.cc
+)
+set(LIBRARIES Eigen3::Eigen LF_ALL Boost::program_options)
+```
+Similarly, for tests, create `mastersolution/test/dependencies.cmake` if needed.
+
 ### Solution Tags
 
 In the files of `./developers/mastersolution/` we put the following tags
@@ -203,3 +240,22 @@ int n = 1; // NOLINT(<check>)
 int n = 1;
 ```
 **But note** that sometimes `clang-format` will force a single line statement onto two lines, making the single line `NOLINT` not work!
+
+# Archived FAQs
+
+## clang: error: unknown argument: '-fcoalesce-templates'
+Mac users, after updating to macOS Catalina 10.15.4, are receiving this error. The workaround is as follows: Navigate  your terminal into the folder `NPDECODES/` and type:
+```
+brew install gcc@8    #install gcc version 8, needs brew to be installed first...
+gcc-8 --version       #check if gcc-8 was installed properly
+g++-8 --version       #check if g++-8 was installed properly
+rm -rf build          #delete the old build folder
+mkdir build           #recreate it
+```
+If this has succeeded, you need to build the codes using the gcc compiler by defining the environment variables `CC` and `CXX`. This is done by navigating a terminal into `NPDECODES/build/` and running:
+```
+export CC=gcc-8
+export CXX=g++-8
+cmake ..
+```
+If the installation is successful, you can than build your codes using `make` as before. Note that the gcc version under OSX usulally just links to clang. However, the procedure above installs the actual gcc compiler.

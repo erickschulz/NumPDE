@@ -11,7 +11,7 @@
 
 using namespace BoundaryWave;
 
-int main(int /*argc*/, const char ** /*argv*/) {
+int main(int /*argc*/, const char** /*argv*/) {
   std::cout << "*** BoundaryWave ***" << std::endl;
   std::cout << "A mixed elliptic-hyperbolic linear evolution problem "
             << std::endl;
@@ -30,13 +30,13 @@ int main(int /*argc*/, const char ** /*argv*/) {
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
 
   /* GENERATE INITIAL CONDITIONS */
-  auto u0 = [](const Eigen::Vector2d &x) -> double {
+  auto u0 = [](const Eigen::Vector2d& x) -> double {
     return x[0] + x[1] * x[1];
   };
-  auto v0 = [](const Eigen::Vector2d &x) -> double {
+  auto v0 = [](const Eigen::Vector2d& x) -> double {
     return 3.0 * x[0] + x[1];
   };
 

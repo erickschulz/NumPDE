@@ -33,7 +33,7 @@ TEST(FiniteVolumeRobin, EdgeMatrixProvider) {
   // set up finite element space and dofhandler
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  auto &dofh = fe_space->LocGlobMap();
+  auto& dofh = fe_space->LocGlobMap();
 
   // mark boudnary edges
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
@@ -67,7 +67,7 @@ TEST(FiniteVolumeRobin, EdgeVectorProvider) {
   // set up finite element space and dofhandler
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  auto &dofh = fe_space->LocGlobMap();
+  auto& dofh = fe_space->LocGlobMap();
 
   // mark boudnary edges
   auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};

@@ -59,12 +59,12 @@ namespace IRKDegenerateEvl {
  */
 /* SAM_LISTING_BEGIN_3 */
 template <typename MATRIX,
-          typename RECORDER = std::function<void(const Eigen::VectorXd &)>>
+          typename RECORDER = std::function<void(const Eigen::VectorXd&)>>
 Eigen::VectorXd timesteppingIRKMOLODE(
-    const lf::assemble::COOMatrix<double> &M,
-    const lf::assemble::COOMatrix<double> &A, const MATRIX &Ark,
-    const Eigen::VectorXd &mu0, unsigned int no_ts, double T,
-    RECORDER &&rec = [](const Eigen::VectorXd & /*mu_vec*/) -> void {}) {
+    const lf::assemble::COOMatrix<double>& M,
+    const lf::assemble::COOMatrix<double>& A, const MATRIX& Ark,
+    const Eigen::VectorXd& mu0, unsigned int no_ts, double T,
+    RECORDER&& rec = [](const Eigen::VectorXd& /*mu_vec*/) -> void {}) {
   const Eigen::Index s = Ark.cols();
   const Eigen::Index N = A.cols();
   LF_ASSERT_MSG(s == Ark.rows(), "Butcher matrix must be square");
@@ -81,12 +81,12 @@ Eigen::VectorXd timesteppingIRKMOLODE(
   for (int i = 0; i < s; ++i) {
     for (int j = 0; j < s; ++j) {
       if (i == j) {
-        for (const Eigen::Triplet<double> &M_trp : Mtv) {
+        for (const Eigen::Triplet<double>& M_trp : Mtv) {
           ISM.AddToEntry(M_trp.row() + i * N, M_trp.col() + j * N,
                          M_trp.value());
         }
       }
-      for (const Eigen::Triplet<double> &A_trp : Atv) {
+      for (const Eigen::Triplet<double>& A_trp : Atv) {
         ISM.AddToEntry(A_trp.row() + i * N, A_trp.col() + j * N,
                        tau * Ark(i, j) * A_trp.value());
       }
@@ -124,11 +124,11 @@ Eigen::VectorXd timesteppingIRKMOLODE(
   for (int i = 0; i < REPLACE; ++i) {
     for (int j = 0; j < REPLACE; ++j) {
       if (i == j) {
-        for (const Eigen::Triplet<double> &M_trp : Mtv) {
+        for (const Eigen::Triplet<double>& M_trp : Mtv) {
           ISM.AddToEntry(REPLACE, REPLACE, REPLACE);
         }
       }
-      for (const Eigen::Triplet<double> &A_trp : Atv) {
+      for (const Eigen::Triplet<double>& A_trp : Atv) {
         ISM.AddToEntry(REPLACE, REPLACE, REPLACE);
       }
     }
@@ -177,7 +177,7 @@ Eigen::VectorXd timesteppingIRKMOLODE(
 template <typename U0FUNCTOR>
 std::vector<std::pair<double, double>> tabulateSolNorms(
     std::shared_ptr<const lf::uscalfe::UniformScalarFESpace<double>> fes_p,
-    U0FUNCTOR &&u0, unsigned int no_ts, double T, std::ostream &o = std::cout) {
+    U0FUNCTOR&& u0, unsigned int no_ts, double T, std::ostream& o = std::cout) {
   // Build MOL ODE matrices
   lf::assemble::COOMatrix<double> M{IRKDegenerateEvl::buildM(fes_p)};
   lf::assemble::COOMatrix<double> A{IRKDegenerateEvl::buildA(fes_p)};
@@ -194,7 +194,7 @@ std::vector<std::pair<double, double>> tabulateSolNorms(
   std::vector<std::pair<double, double>> it_norms{};
   // "Recorder" lambda function
 #if SOLUTION
-  auto rec = [&A, &M, &it_norms](const Eigen::VectorXd &mu_vec) -> void {
+  auto rec = [&A, &M, &it_norms](const Eigen::VectorXd& mu_vec) -> void {
     it_norms.emplace_back(std::sqrt(mu_vec.dot(M.MatVecMult(1.0, mu_vec))),
                           std::sqrt(mu_vec.dot(A.MatVecMult(1.0, mu_vec))));
   };
@@ -203,7 +203,7 @@ std::vector<std::pair<double, double>> tabulateSolNorms(
    * Your code here
    * The next line is just a dummy implementation
    * ************************************************* */
-  auto rec = [](const Eigen::VectorXd &) -> void {};
+  auto rec = [](const Eigen::VectorXd&) -> void {};
 #endif
   (void)timesteppingIRKMOLODE(M, A, Ark, mu0, no_ts, T, rec);
   // Print table

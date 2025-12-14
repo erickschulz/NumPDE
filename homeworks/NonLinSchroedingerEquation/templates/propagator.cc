@@ -18,15 +18,15 @@ namespace NonLinSchroedingerEquation {
 
 // KineticPropagator
 /* SAM_LISTING_BEGIN_1 */
-KineticPropagator::KineticPropagator(const SparseMatrixXd &A,
-                                     const SparseMatrixXcd &M, double tau) {
+KineticPropagator::KineticPropagator(const SparseMatrixXd& A,
+                                     const SparseMatrixXcd& M, double tau) {
   //====================
   // Your code goes here
   //====================
 }
 
 Eigen::VectorXcd KineticPropagator::operator()(
-    const Eigen::VectorXcd &mu) const {
+    const Eigen::VectorXcd& mu) const {
   //====================
   // Your code goes here
   // Replace mu by its value after a timestep tau
@@ -44,7 +44,7 @@ InteractionPropagator::InteractionPropagator(double tau) {
 }
 
 Eigen::VectorXcd InteractionPropagator::operator()(
-    const Eigen::VectorXcd &mu) const {
+    const Eigen::VectorXcd& mu) const {
   //====================
   // Your code goes here
   // Replace mu by its value after a timestep tau
@@ -57,13 +57,13 @@ Eigen::VectorXcd InteractionPropagator::operator()(
 //====================
 // Your code goes here
 // Change this dummy implementation of the constructor:
-SplitStepPropagator::SplitStepPropagator(const SparseMatrixXd &A,
-                                         const SparseMatrixXcd &M, double tau) {
+SplitStepPropagator::SplitStepPropagator(const SparseMatrixXd& A,
+                                         const SparseMatrixXcd& M, double tau) {
 }
 //====================
 
 Eigen::VectorXcd SplitStepPropagator::operator()(
-    const Eigen::VectorXcd &mu) const {
+    const Eigen::VectorXcd& mu) const {
   Eigen::VectorXcd nu(mu.size());
   //====================
   // Your code goes here

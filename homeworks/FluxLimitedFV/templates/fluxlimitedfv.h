@@ -18,9 +18,9 @@ namespace FluxLimitedFV {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FLUXLIM = std::function<double(double)>>
 Eigen::VectorXd fluxlimAdvection(
-    double beta, const Eigen::VectorXd &mu0, double h, double tau,
+    double beta, const Eigen::VectorXd& mu0, double h, double tau,
     unsigned int nb_timesteps,
-    FLUXLIM &&phi = [](double /*theta*/) { return 1.0; }) {
+    FLUXLIM&& phi = [](double /*theta*/) { return 1.0; }) {
   if (beta < 0) {
     throw std::domain_error("fluxlimAdvection: negative beta!");
   }
@@ -49,8 +49,8 @@ inline double thetaquotient(double u, double v, double w) {
 /* SAM_LISTING_BEGIN_2 */
 template <typename FLUXLIM = std::function<double(double)>>
 Eigen::VectorXd fluxlimBurgers(
-    const Eigen::VectorXd &mu0, double h, double tau, unsigned int nb_timesteps,
-    FLUXLIM &&phi = [](double /*theta*/) { return 1.0; }) {
+    const Eigen::VectorXd& mu0, double h, double tau, unsigned int nb_timesteps,
+    FLUXLIM&& phi = [](double /*theta*/) { return 1.0; }) {
   Eigen::VectorXd mu;  // return vector
   int N = mu0.size();  // Number of sptial dual cells
   double gamma = tau / h;

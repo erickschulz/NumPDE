@@ -24,7 +24,7 @@ namespace AdvectionFV2D {
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const Eigen::Matrix<double, 2, 3> &triangle) {
+    const Eigen::Matrix<double, 2, 3>& triangle) {
   Eigen::Matrix3d X;
 
   // solve for the coefficients of the barycentric coordinate functions
@@ -46,8 +46,8 @@ computeCellNormals(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
       result(mesh_p, 0);
 
   // Compute normal vectors
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
-    const lf::geometry::Geometry *geo_p = cell->Geometry();
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
+    const lf::geometry::Geometry* geo_p = cell->Geometry();
     const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
     if (corners.cols() == 3) {
@@ -102,19 +102,19 @@ computeCellNormals(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
 
 /* SAM_LISTING_BEGIN_3 */
 std::shared_ptr<
-    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity *, 4>>>
+    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
 getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
 #if SOLUTION
   // Initialize auxilary object
-  lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity *, 2>>
+  lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 2>>
       aux_obj(mesh_p, 1, {nullptr, nullptr});
 
   // Iterate over every cell
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     auto cell_edges = cell->SubEntities(1);
 
     // Iterate over every edge of the cell
-    for (const lf::mesh::Entity *edge : cell_edges) {
+    for (const lf::mesh::Entity* edge : cell_edges) {
       // If aux_obj at index 0 was not set, save cell there
       // otherwise save at the second position
       // (The first position has to be set; the second might be set)
@@ -129,14 +129,14 @@ getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
   }
 
   // Initialize datastructure for result
-  lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity *, 4>>
+  lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>
       result(mesh_p, 0, {nullptr, nullptr, nullptr, nullptr});
 
   // Collect the objects of the auxilary object
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     auto cell_edges = cell->SubEntities(1);
     int counter = 0;
-    for (const lf::mesh::Entity *edge : cell_edges) {
+    for (const lf::mesh::Entity* edge : cell_edges) {
       if (aux_obj(*edge)[0] != cell) {
         result(*cell)[counter] = aux_obj(*edge)[0];
       } else {
@@ -147,7 +147,7 @@ getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
   }
 
   return std::make_shared<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>(result);
+      std::array<const lf::mesh::Entity*, 4>>>(result);
 #else
   //====================
   // Your code goes here
@@ -181,23 +181,23 @@ double computeHmin(std::shared_ptr<const lf::mesh::Mesh> mesh_p) {
   std::vector<double> min_h;
 
   // Get Adjectent Cells
-  std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>
+  std::shared_ptr<
+      lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
       adjacentCells = AdvectionFV2D::getAdjacentCellPointers(mesh_p);
 
   // Iterate over all cells
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
-    const lf::geometry::Geometry *geo_p = cell->Geometry();
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
+    const lf::geometry::Geometry* geo_p = cell->Geometry();
     const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
     // Compute the barycenter of the cell
     Eigen::Vector2d cur_midpoint = barycenter(corners);
 
     // Iterate over all adjecent cells
-    for (const lf::mesh::Entity *neighbour_cell : (*adjacentCells)(*cell)) {
+    for (const lf::mesh::Entity* neighbour_cell : (*adjacentCells)(*cell)) {
       // Check that the neighbor exists
       if (neighbour_cell != nullptr) {
-        const lf::geometry::Geometry *geo_p_neighbour =
+        const lf::geometry::Geometry* geo_p_neighbour =
             neighbour_cell->Geometry();
         const Eigen::MatrixXd neighbour_corners =
             lf::geometry::Corners(*geo_p_neighbour);

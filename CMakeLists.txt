@@ -40,6 +40,11 @@ if(COMPILER_SUPPORTS_WCONVERSION)
   target_compile_options(warning_flags INTERFACE -Wconversion)
 endif()
 
+# Suppress duplicate library warnings on Apple linker
+if(APPLE)
+  add_link_options(-Wl,-no_warn_duplicate_libraries)
+endif()
+
 # Add switches
 ###############################################################################
 option(HOMEWORKS "usage: cmake -DHOMEWORKS=ON/OFF .." ON)
@@ -67,6 +72,25 @@ find_package(Eigen3 CONFIG REQUIRED)
 # Get LehrFEMpp
 hunter_add_package(lehrfempp)
 find_package(lehrfempp CONFIG REQUIRED)
+
+# Create INTERFACE library that wraps all LehrFEM++ modules
+# Only link top-level modules and let lower-level dependencies come in transitively
+# Dependency hierarchy: uscalfe → fe → assemble → mesh → geometry → base
+#
+# Note: Some duplicates are unavoidable when multiple independent modules share dependencies:
+# - Both lf.refinement and lf.mesh.test_utils depend on lf.mesh.utils → mesh.utils appears 2x
+# - All mesh modules (hybrid2d, test_utils, refinement) depend on lf.mesh → mesh appears 2x
+# The linker automatically deduplicates these - warnings are informational only
+add_library(LF_ALL INTERFACE)
+target_link_libraries(LF_ALL INTERFACE
+  LF::lf.uscalfe
+  LF::lf.io
+  LF::lf.mesh.hybrid2d
+  LF::lf.fe.test_utils
+  LF::lf.geometry.test_utils
+  LF::lf.refinement
+  LF::lf.mesh.test_utils
+)
 
 # Get Google Test
 hunter_add_package(GTest)

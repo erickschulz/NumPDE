@@ -38,7 +38,7 @@ TEST(CoupledSecondOrderBVP, dropMatrixRowsAndColumns) {
       std::make_shared<CoupledSecondOrderBVP::FeSpaceLagrangeO2<double>>(
           mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -76,7 +76,7 @@ TEST(CoupledSecondOrderBVP, dropMatrixRowsAndColumns) {
   // Vector storing the nnz entries of A0
   std::vector<double> triplet_values(44);
 
-  for (auto &triplet : A0_triplets_vec) {
+  for (auto& triplet : A0_triplets_vec) {
     triplet_values.push_back(triplet.value());
   }
   // Compute norm
@@ -110,7 +110,7 @@ TEST(CoupledSecondOrderBVP, dropMatrixRows) {
       std::make_shared<CoupledSecondOrderBVP::FeSpaceLagrangeO2<double>>(
           mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -148,7 +148,7 @@ TEST(CoupledSecondOrderBVP, dropMatrixRows) {
 
   // Vector storing the nnz entries of A0
   std::vector<double> triplet_values(72);
-  for (auto &triplet : M_triplets_vec) {
+  for (auto& triplet : M_triplets_vec) {
     triplet_values.push_back(triplet.value());
   }
   // Compute norm

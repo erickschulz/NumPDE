@@ -17,7 +17,7 @@
 namespace TaylorHoodNonMonolithic {
 /* SAM_LISTING_BEGIN_1 */
 THBElementMatrixProvider::ElemMat THBElementMatrixProvider::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Element matrix to be filled
@@ -93,11 +93,11 @@ Eigen::Matrix<double, Eigen::Dynamic, 6> monitorUzawaConvergence(
   // Set up finite element space
   auto fes_LO2 =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh_LO2{fes_LO2->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_LO2{fes_LO2->LocGlobMap()};
   [[maybe_unused]] const lf::assemble::size_type n_LO2 = dofh_LO2.NumDofs();
   auto fes_LO1 =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh_LO1{fes_LO1->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_LO1{fes_LO1->LocGlobMap()};
   [[maybe_unused]] const lf::assemble::size_type n_LO1 = dofh_LO1.NumDofs();
 
   // Force functor (rotational force)
@@ -109,9 +109,9 @@ Eigen::Matrix<double, Eigen::Dynamic, 6> monitorUzawaConvergence(
   // For recording progress of the iteration
   std::vector<std::tuple<Eigen::VectorXd, Eigen::VectorXd, Eigen::VectorXd>>
       rec_data;
-  auto rec = [&rec_data](const Eigen::VectorXd &mu_x,
-                         const Eigen::VectorXd &mu_y,
-                         const Eigen::VectorXd &pi) -> void {
+  auto rec = [&rec_data](const Eigen::VectorXd& mu_x,
+                         const Eigen::VectorXd& mu_y,
+                         const Eigen::VectorXd& pi) -> void {
     rec_data.emplace_back(mu_x, mu_y, pi);
   };
   auto [vec_res_mu_x, vec_res_mu_y, vec_res_pi] =
@@ -133,7 +133,7 @@ Eigen::Matrix<double, Eigen::Dynamic, 6> monitorUzawaConvergence(
   const lf::fe::MeshFunctionGradFE gmf_res_mu_y(fes_LO2, vec_res_mu_y);
   int step = 1;
   for (auto vecs : rec_data) {
-    auto &[mu_x, mu_y, pi] = vecs;
+    auto& [mu_x, mu_y, pi] = vecs;
     const Eigen::VectorXd res_x = phi_x - A * mu_x - B_x.transpose() * pi;
     const Eigen::VectorXd res_y = phi_y - A * mu_y - B_y.transpose() * pi;
     const Eigen::VectorXd res_pi = B_x * mu_x + B_y * mu_y;

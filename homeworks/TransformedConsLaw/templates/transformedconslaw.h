@@ -54,7 +54,7 @@ class NonStdCauchyProblemCL {
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename RHOFUNCTOR, typename DRHOFUNCTOR>
-double rhoInverse(double u, double z0, RHOFUNCTOR &&rho, DRHOFUNCTOR &&drho,
+double rhoInverse(double u, double z0, RHOFUNCTOR&& rho, DRHOFUNCTOR&& drho,
                   double atol = 1.0E-10, double rtol = 1.0E-5) {
   //====================
   // Your code goes here
@@ -65,8 +65,8 @@ double rhoInverse(double u, double z0, RHOFUNCTOR &&rho, DRHOFUNCTOR &&drho,
 
 /* SAM_LISTING_BEGIN_2 */
 template <class CAUCHYPROBLEM>
-Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu,
-                                const Eigen::VectorXd &zeta,
+Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd& mu,
+                                const Eigen::VectorXd& zeta,
                                 CAUCHYPROBLEM prb) {
   int N = mu.size();
   Eigen::VectorXd rhs(N);
@@ -82,10 +82,10 @@ Eigen::VectorXd semiDiscreteRhs(const Eigen::VectorXd &mu,
 
 /* SAM_LISTING_BEGIN_3 */
 template <class CAUCHYPROBLEM, typename RECORDER = std::function<
-                                   void(double, const Eigen::VectorXd &)>>
+                                   void(double, const Eigen::VectorXd&)>>
 Eigen::VectorXd solveCauchyPrb(
     unsigned int M, unsigned int N, CAUCHYPROBLEM prb,
-    RECORDER &&rec = [](double /*time*/, const Eigen::VectorXd &
+    RECORDER&& rec = [](double /*time*/, const Eigen::VectorXd&
                         /*zstate*/) -> void {}) {
   // Get inital data for zeta
   std::pair<double, double> limits = prb.domain();

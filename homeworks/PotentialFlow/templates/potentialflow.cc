@@ -62,7 +62,7 @@ Eigen::SparseMatrix<double> initializeA(unsigned int M) {
 
 /* SAM_LISTING_BEGIN_2 */
 Eigen::VectorXd initializeRHSVector(
-    const std::function<double(double, double)> &g, unsigned int M) {
+    const std::function<double(double, double)>& g, unsigned int M) {
   // Mesh width
   const double h = 1.0 / (M + 1);
   // Off-center entry of stencil

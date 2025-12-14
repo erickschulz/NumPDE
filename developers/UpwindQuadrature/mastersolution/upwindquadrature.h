@@ -55,10 +55,10 @@ class UpwindConvectionElementMatrixProvider {
    * matrix should be computed.
    * @return a 3x3 matrix containing the element matrix.
    */
-  Eigen::Matrix3d Eval(const lf::mesh::Entity &entity);
+  Eigen::Matrix3d Eval(const lf::mesh::Entity& entity);
 
   /** @brief Default implementation: all cells are active */
-  bool isActive(const lf::mesh::Entity & /*entity*/) const { return true; }
+  bool isActive(const lf::mesh::Entity& /*entity*/) const { return true; }
 
  private:
   FUNCTOR v_;  // velocity field
@@ -69,11 +69,11 @@ class UpwindConvectionElementMatrixProvider {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR>
 Eigen::Matrix3d UpwindConvectionElementMatrixProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &entity) {
+    const lf::mesh::Entity& entity) {
   LF_ASSERT_MSG(lf::base::RefEl::kTria() == entity.RefEl(),
                 "Function only defined for triangular cells");
 
-  const lf::geometry::Geometry *geo_ptr = entity.Geometry();
+  const lf::geometry::Geometry* geo_ptr = entity.Geometry();
   const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_ptr);
   const double area = lf::geometry::Volume(*geo_ptr);
   Eigen::Matrix3d loc_mat;
@@ -89,7 +89,7 @@ Eigen::Matrix3d UpwindConvectionElementMatrixProvider<FUNCTOR>::Eval(
 
   // masses of the corners.
   std::vector<double> local_masses;
-  for (const lf::mesh::Entity *sub_ent : entity.SubEntities(2)) {
+  for (const lf::mesh::Entity* sub_ent : entity.SubEntities(2)) {
     local_masses.push_back(masses_(*sub_ent));
   }
 

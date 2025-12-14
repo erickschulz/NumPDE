@@ -27,7 +27,7 @@ constexpr double Square(double x) { return x * x; }
  * @return mu^(k) (i.e. mu at timestep k)
  */
 /* SAM_LISTING_BEGIN_0 */
-Eigen::VectorXd LaxWendroffRhs(const Eigen::VectorXd &mu, double gamma) {
+Eigen::VectorXd LaxWendroffRhs(const Eigen::VectorXd& mu, double gamma) {
   int N = mu.size();
   Eigen::VectorXd result(N);
 
@@ -38,7 +38,7 @@ Eigen::VectorXd LaxWendroffRhs(const Eigen::VectorXd &mu, double gamma) {
   return result;
 }
 
-Eigen::VectorXd solveLaxWendroff(const Eigen::VectorXd &u0, double T,
+Eigen::VectorXd solveLaxWendroff(const Eigen::VectorXd& u0, double T,
                                  unsigned int M) {
   double gamma = 1.0 / Constant::e;
   Eigen::VectorXd mu = u0;
@@ -59,7 +59,7 @@ Eigen::VectorXd getXValues(double T, unsigned int M) {
   unsigned int N = j_max - j_min + 1;
   return Eigen::VectorXd::LinSpaced(N, j_min * h, j_max * h);
 }
-Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi &M) {
+Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi& M) {
   const double T = 1.0;
   const int M_size = M.size();
   Eigen::VectorXd error(M_size);
@@ -83,7 +83,7 @@ Eigen::VectorXd numexpLaxWendroffRP(const Eigen::VectorXi &M) {
  * @param y vector of same length as u, representing the nodes of u
  * @return best linear interpolation of u at spacial position x
  */
-double eval(const Eigen::VectorXd &u, const Eigen::VectorXd &y, double x) {
+double eval(const Eigen::VectorXd& u, const Eigen::VectorXd& y, double x) {
   int N = y.size();
   double a = y(0);
   double b = y(N - 1);
@@ -105,7 +105,7 @@ double smoothU0(double x) {
              ? 0.0
              : ((1.0 < x) ? 1.0 : Square(std::sin(0.5 * Constant::pi * x)));
 }
-Eigen::VectorXd referenceSolution(const Eigen::VectorXd &x) {
+Eigen::VectorXd referenceSolution(const Eigen::VectorXd& x) {
   double T = 1.0;
   // Reference solution on a very fine mesh
   unsigned int M = 3200;
@@ -125,7 +125,7 @@ Eigen::VectorXd referenceSolution(const Eigen::VectorXd &x) {
 /* SAM_LISTING_END_9 */
 
 /* SAM_LISTING_BEGIN_1 */
-Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi &M) {
+Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi& M) {
   const double T = 1.0;
   const int M_size = M.size();
   Eigen::VectorXd error(M_size);
@@ -138,7 +138,7 @@ Eigen::VectorXd numexpLaxWendroffSmoothU0(const Eigen::VectorXi &M) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_7 */
-Eigen::VectorXd solveGodunov(const Eigen::VectorXd &u0, double T,
+Eigen::VectorXd solveGodunov(const Eigen::VectorXd& u0, double T,
                              unsigned int M) {
   double tau = T / M;
   double h = Constant::e * tau;
@@ -154,7 +154,7 @@ Eigen::VectorXd solveGodunov(const Eigen::VectorXd &u0, double T,
 /* SAM_LISTING_END_7 */
 
 /* SAM_LISTING_BEGIN_8 */
-Eigen::VectorXd numexpGodunovSmoothU0(const Eigen::VectorXi &M) {
+Eigen::VectorXd numexpGodunovSmoothU0(const Eigen::VectorXi& M) {
   const double T = 1.0;
   const int M_size = M.size();
   Eigen::VectorXd error(M_size);

@@ -34,7 +34,7 @@ int main() {
   // Output solution and error
   std::cout << "Adaptive integration, " << states.size() - 1 << " timesteps"
             << std::endl;
-  for (auto &ty : states) {
+  for (auto& ty : states) {
     std::cout << "t = " << ty.first << ": y = " << ty.second
               << ", error = " << norm(ty.second - y(ty.first)) << std::endl;
   }

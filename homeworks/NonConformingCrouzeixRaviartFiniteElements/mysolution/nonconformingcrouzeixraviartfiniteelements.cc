@@ -5,6 +5,16 @@
 
 #include "nonconformingcrouzeixraviartfiniteelements.h"
 
+#include <lf/io/io.h>
+
+#include <cmath>
+#include <string>
+
+#include "crdirichletbvp.h"
+#include "crfespace.h"
+#include "crl2error.h"
+#include "crl2errordirichletbvp.h"
+
 namespace NonConformingCrouzeixRaviartFiniteElements {
 
 // Crouzeix-Raviart finite element space defined on triangular meshes only
@@ -71,7 +81,7 @@ lf::assemble::size_type CRReferenceFiniteElement::NumRefShapeFunctions(
 /* SAM_LISTING_BEGIN_4 */
 Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>
 CRReferenceFiniteElement::EvalReferenceShapeFunctions(
-    const Eigen::MatrixXd &refcoords) const {
+    const Eigen::MatrixXd& refcoords) const {
   // Data
   const auto num_points =
       static_cast<lf::assemble::size_type>(refcoords.cols());
@@ -89,7 +99,7 @@ CRReferenceFiniteElement::EvalReferenceShapeFunctions(
 /* SAM_LISTING_BEGIN_5 */
 Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>
 CRReferenceFiniteElement::GradientsReferenceShapeFunctions(
-    const Eigen::MatrixXd &refcoords) const {
+    const Eigen::MatrixXd& refcoords) const {
   // Data
   const auto num_points =
       static_cast<lf::assemble::size_type>(refcoords.cols());
@@ -122,7 +132,7 @@ lf::assemble::size_type CRReferenceFiniteElement::NumEvaluationNodes() const {
 /* SAM_LISTING_BEGIN_7 */
 Eigen::Matrix<double, 1, Eigen::Dynamic>
 CRReferenceFiniteElement::NodalValuesToDofs(
-    const Eigen::Matrix<double, 1, Eigen::Dynamic> &nodvals) const {
+    const Eigen::Matrix<double, 1, Eigen::Dynamic>& nodvals) const {
   LF_VERIFY_MSG(nodvals.cols() == NumEvaluationNodes(),
                 "nodvals = " << nodvals << " <-> " << NumEvaluationNodes());
 
@@ -134,5 +144,17 @@ CRReferenceFiniteElement::NodalValuesToDofs(
   return coeffs;
 }
 /* SAM_LISTING_END_7 */
+
+/* SAM_LISTING_BEGIN_1 */
+double L2errorCRDiscretizationDirichletBVP(const std::string& filename) {
+  double l2_error;
+
+// TODO: task 2-14.x)
+  //====================
+  // Your code goes here
+  //====================
+  return l2_error;
+}
+/* SAM_LISTING_END_1 */
 
 }  // namespace NonConformingCrouzeixRaviartFiniteElements

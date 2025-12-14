@@ -27,9 +27,9 @@ TEST(sufem, matsum) {
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   // The underlying finite element mesh
-  const lf::mesh::Mesh &mesh{*fe_space->Mesh()};
+  const lf::mesh::Mesh& mesh{*fe_space->Mesh()};
   // The local-to-global index map for the finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs = dofh.NumDofs();
   // Object taking care of local computations. No selection of a subset
   // of cells is specified.
@@ -62,9 +62,9 @@ TEST(sufem, eval) {
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   // The underlying finite element mesh
-  const lf::mesh::Mesh &mesh{*fe_space->Mesh()};
+  const lf::mesh::Mesh& mesh{*fe_space->Mesh()};
   // The local-to-global index map for the finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs = dofh.NumDofs();
   // Object taking care of local computations. No selection of a subset
   // of cells is specified.
@@ -156,7 +156,7 @@ TEST(sufem, inflow) {
                     return Eigen::Vector2d(-x[1], x[0]);
                   }));
   // Run through all nodes of the mesh, print their location and the flag
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     // Fetch location of the node
     Eigen::Vector2d pos = lf::geometry::Corners(*(node->Geometry())).col(0);
     std::cout << "Node @ [" << pos.transpose()
@@ -167,7 +167,7 @@ TEST(sufem, inflow) {
 
 TEST(sufem, convergencerate) {
   unsigned int reflevels = 6;
-  const char *filename = "rotation";
+  const char* filename = "rotation";
   std::cout << "Convergence test for SU FEM on unit square, pure advection"
             << std::endl;
   // Velocity field: rigid body rotation
@@ -189,7 +189,7 @@ TEST(sufem, convergencerate) {
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(cmesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput information about hierarchy of nested meshes
   std::cout << "\t Sequence of nested meshes used in test\n";
   multi_mesh.PrintInfo(std::cout);
@@ -203,7 +203,7 @@ TEST(sufem, convergencerate) {
     // Set up global FE space; lowest order Lagrangian finite elements
     auto fe_space =
         std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
-    const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+    const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
     const lf::base::size_type N_dofs = dofh.NumDofs();
     // Solve Dirichlet boundary value problem
     Eigen::VectorXd uh_coeffs =

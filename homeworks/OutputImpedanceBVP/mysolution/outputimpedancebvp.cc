@@ -20,7 +20,7 @@ namespace OutputImpedanceBVP {
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::VectorXd solveImpedanceBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::Vector2d g) {
   // Related implementations:
   // Homework problem ErrorEstimatesForTraces:
@@ -29,7 +29,7 @@ Eigen::VectorXd solveImpedanceBVP(
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -93,13 +93,13 @@ Eigen::VectorXd solveImpedanceBVP(
 /* SAM_LISTING_BEGIN_3 */
 double computeBoundaryOutputFunctional(
     const Eigen::VectorXd eta,
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::Vector2d d) {
   double func_val = 0.0;
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
 
   // Obtain an array of boolean flags for the edges of the mesh, 'true'
   // indicates that the edge lies on the boundary
@@ -110,7 +110,7 @@ double computeBoundaryOutputFunctional(
   //====================
 
   // Computing value of the functional
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     //====================
     // Your code goes here
     //====================

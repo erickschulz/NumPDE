@@ -29,12 +29,12 @@ void testConvergenceScalarImplicitTimestepping();
 
 template <typename FUNC_ALPHA, typename FUNC_BETA, typename FUNC_GAMMA>
 lf::assemble::COOMatrix<double> computeGalerkinMat(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     FUNC_ALPHA alpha, FUNC_GAMMA gamma, FUNC_BETA beta) {
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -77,13 +77,13 @@ lf::assemble::COOMatrix<double> computeGalerkinMat(
 
 class progress_bar {
   static const auto overhead = sizeof " [100%]";
-  std::ostream &os;
+  std::ostream& os;
   const std::size_t bar_width;
   std::string message;
   const std::string full_bar;
 
  public:
-  progress_bar(std::ostream &os, std::size_t line_width, std::string message_,
+  progress_bar(std::ostream& os, std::size_t line_width, std::string message_,
                const char symbol = '.')
       : os{os},
         bar_width{line_width - overhead},
@@ -99,8 +99,8 @@ class progress_bar {
     write(0.0);
   }
 
-  progress_bar(const progress_bar &) = delete;
-  progress_bar &operator=(const progress_bar &) = delete;
+  progress_bar(const progress_bar&) = delete;
+  progress_bar& operator=(const progress_bar&) = delete;
 
   ~progress_bar() {
     write(1.0);
@@ -117,7 +117,7 @@ class WaveABC2DTimestepper {
  public:
   // Main constructor; precomputations are done here
   WaveABC2DTimestepper(
-      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
       FUNC_RHO rho, unsigned int M, double T);
 
   // Public member functions
@@ -140,7 +140,7 @@ class WaveABC2DTimestepper {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNC_RHO, typename FUNC_MU0, typename FUNC_NU0>
 WaveABC2DTimestepper<FUNC_RHO, FUNC_MU0, FUNC_NU0>::WaveABC2DTimestepper(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     FUNC_RHO rho, unsigned int M, double T)
 
     : fe_space_p_(fe_space_p),

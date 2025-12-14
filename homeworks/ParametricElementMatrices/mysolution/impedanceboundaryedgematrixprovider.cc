@@ -23,7 +23,7 @@ ImpedanceBoundaryEdgeMatrixProvider::ImpedanceBoundaryEdgeMatrixProvider(
 
 /* SAM_LISTING_BEGIN_1 */
 bool ImpedanceBoundaryEdgeMatrixProvider::isActive(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   bool is_bd_edge;
   //====================
   // Your code goes here
@@ -39,7 +39,7 @@ bool ImpedanceBoundaryEdgeMatrixProvider::isActive(
  * @param edge current edge */
 /* SAM_LISTING_BEGIN_2 */
 Eigen::MatrixXd ImpedanceBoundaryEdgeMatrixProvider::Eval(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   Eigen::MatrixXd element_matrix(2, 2);
 
   //====================

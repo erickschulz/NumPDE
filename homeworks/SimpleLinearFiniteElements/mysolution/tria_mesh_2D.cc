@@ -7,7 +7,7 @@
 namespace SimpleLinearFiniteElements {
 
 template <typename Derived>
-std::istream &operator>>(std::istream &is, Eigen::MatrixBase<Derived> &matrix) {
+std::istream& operator>>(std::istream& is, Eigen::MatrixBase<Derived>& matrix) {
   for (int i = 0; i < matrix.rows(); ++i) {
     for (int j = 0; j < matrix.cols(); ++j) {
       is >> matrix(i, j);
@@ -69,7 +69,7 @@ TriGeo_t TriaMesh2D::getVtCoords(int i) const {
  * @param z vector of z values, in correct order
  */
 void TriaMesh2D::SaveMesh3D(std::string filename,
-                            const Eigen::VectorXd &z) const {
+                            const Eigen::VectorXd& z) const {
   int n_vertices = _nodecoords.rows();
   int n_elements = _elements.rows();
 

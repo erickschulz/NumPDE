@@ -67,7 +67,7 @@ int main() {
     lf::io::VtkWriter vtk_writer(mesh_p, filename.str());
     // need the newest pointer
     auto mds = lf::mesh::utils::make_CodimMeshDataSet<double>(mesh_p, 2);
-    for (auto *node : mesh_p->Entities(2)) {
+    for (auto* node : mesh_p->Entities(2)) {
       mds->operator()(*node) = sol_vec(dofh.GlobalDofIndices(*node)[0]);
     }
     vtk_writer.WritePointData("solution_data", *mds);

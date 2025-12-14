@@ -25,7 +25,7 @@ void wavePropSimulation(unsigned int m) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -106,7 +106,7 @@ double testStab() {
     // Catch exception thrown in case of blow-up
     try {
       wavePropSimulation(m);
-    } catch (const char *msg) {
+    } catch (const char* msg) {
       // Blow-up detected!
       std::cout << "Energy blows up!" << std::endl;
       m_lower = m;

@@ -19,7 +19,7 @@
 namespace SDIRK {
 
 /* SAM_LISTING_BEGIN_0 */
-Eigen::Vector2d SdirkStep(const Eigen::Vector2d &z0, double h, double gamma) {
+Eigen::Vector2d SdirkStep(const Eigen::Vector2d& z0, double h, double gamma) {
   Eigen::Vector2d res;
   // Compute one timestep of the SDIRK implicit RK-SSM for the linear ODE
 #if SOLUTION
@@ -46,7 +46,7 @@ Eigen::Vector2d SdirkStep(const Eigen::Vector2d &z0, double h, double gamma) {
 /* SAM_LISTING_END_0 */
 
 /* SAM_LISTING_BEGIN_1 */
-std::vector<Eigen::Vector2d> SdirkSolve(const Eigen::Vector2d &z0,
+std::vector<Eigen::Vector2d> SdirkSolve(const Eigen::Vector2d& z0,
                                         unsigned int M, double T,
                                         double gamma) {
   // Solution vector

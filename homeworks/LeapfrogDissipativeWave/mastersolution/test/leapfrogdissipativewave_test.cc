@@ -22,7 +22,7 @@ TEST(LeapfrogDissipativeWave, timestepDissipativeWaveEquation) {
   const double scale = 1.0 / 3.0;
   std::shared_ptr<lf::mesh::Mesh> mesh_p =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(selector, scale);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Set up global FE space; quadratic Lagrangian finite elements
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);

@@ -133,8 +133,8 @@ void cvgL2SUPG() {
   std::cout << "N" << std::setw(8) << "|"
             << "L2 Error" << std::endl;
 
-  // Compute error on 6 meshes of dyadically increasing resolution
-  for (int i = 0; i < 6; i++) {
+  // Compute error on 4 meshes of dyadically increasing resolution
+  for (int i = 0; i < 4; i++) {
     // Refine mesh
     builder.setNumXCells(10 * pow(2, i)).setNumYCells(10 * pow(2, i));
     // Get the mesh
@@ -152,7 +152,7 @@ void cvgL2SUPG() {
     // Print the error in console
     std::cout << fe_space->LocGlobMap().NumDofs() << std::setw(20) << "|"
               << err[i] << std::endl;
-    if (i == 5) {
+    if (i == 3) {
       visSolution(fe_space, u_h[i]);
     }
   }

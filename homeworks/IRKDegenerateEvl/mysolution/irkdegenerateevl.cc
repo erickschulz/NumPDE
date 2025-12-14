@@ -29,7 +29,7 @@ lf ::assemble::COOMatrix<double> buildM(
   // Extract mesh
   const std::shared_ptr<const lf::mesh::Mesh> mesh_p{fes_p->Mesh()};
   // Fetch DofHandler
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const size_t N = dofh.NumDofs();
   // Sparse matrix in triplet format
   lf::assemble::COOMatrix<double> M_coo(N, N);
@@ -44,9 +44,9 @@ lf::assemble::COOMatrix<double> buildA(
     std::shared_ptr<const lf::uscalfe::UniformScalarFESpace<double>> fes_p) {
   // Extract mesh
   const std::shared_ptr<const lf::mesh::Mesh> mesh_p{fes_p->Mesh()};
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Fetch DofHandler
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const size_t N = dofh.NumDofs();
   // Set up ENTITY_MATRIX_PROVIDER
   lf::mesh::utils::MeshFunctionGlobal mf_one{

@@ -23,10 +23,10 @@ class CRFeSpace : public lf::uscalfe::UniformScalarFESpace<double> {
  public:
   /** @brief no default constructors*/
   CRFeSpace() = delete;
-  CRFeSpace(const CRFeSpace &) = delete;
-  CRFeSpace(CRFeSpace &&) noexcept = default;
-  CRFeSpace &operator=(const CRFeSpace &) = delete;
-  CRFeSpace &operator=(CRFeSpace &&) noexcept = default;
+  CRFeSpace(const CRFeSpace&) = delete;
+  CRFeSpace(CRFeSpace&&) noexcept = default;
+  CRFeSpace& operator=(const CRFeSpace&) = delete;
+  CRFeSpace& operator=(CRFeSpace&&) noexcept = default;
 
   /** Main constructor that sets up the local-to-global index mapping
    * by calling the constructor if its base class

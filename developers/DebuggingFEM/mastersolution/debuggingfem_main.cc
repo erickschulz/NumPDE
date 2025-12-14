@@ -37,7 +37,7 @@ int main() {
   const int reflevels = 4;
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh, reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   lf::base::size_type L = multi_mesh.NumLevels();
 
   // vector holding pointers to the different element matrix providers
@@ -59,7 +59,7 @@ int main() {
     // set up fespace and dof handler for the mesh at the current level
     auto mesh_p = multi_mesh.getMesh(level);
     lf::uscalfe::FeSpaceLagrangeO2<double> fespace(mesh_p);
-    const auto &dofh = fespace.LocGlobMap();
+    const auto& dofh = fespace.LocGlobMap();
 
     // Dimension of finite element space
     N[level] = dofh.NumDofs();
@@ -67,7 +67,7 @@ int main() {
     // compute error for each element matrix provider
     for (int i = 0; i < num_emp; ++i) {
       // function to interpolateOntoQuadFE
-      auto f = [](const Eigen::VectorXd &x) -> double {
+      auto f = [](const Eigen::VectorXd& x) -> double {
         return std::exp(x(1) * x(1) + x(0) * x(0));
       };
       double energy = 0.0;

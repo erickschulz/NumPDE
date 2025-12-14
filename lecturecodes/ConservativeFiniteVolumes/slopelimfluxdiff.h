@@ -25,8 +25,8 @@ namespace ConsFV {
 // semidiscretization of the Cauchy problem for a 1D scalar
 // conservation law \eqref{eq:clcp}.
 template <typename FunctionF, typename FunctionSlopes>
-Eigen::VectorXd slopelimfluxdiff(const Eigen::VectorXd &mu, FunctionF &&F,
-                                 FunctionSlopes &&slopes) {
+Eigen::VectorXd slopelimfluxdiff(const Eigen::VectorXd& mu, FunctionF&& F,
+                                 FunctionSlopes&& slopes) {
   unsigned n = mu.size();  // Number of active dual grid cells
   Eigen::VectorXd sigma = Eigen::VectorXd::Zero(n);  // Vector of slopes
   Eigen::VectorXd fd = Eigen::VectorXd::Zero(n);

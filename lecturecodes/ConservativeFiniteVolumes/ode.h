@@ -44,8 +44,8 @@ namespace ConsFV {
  */
 template <typename ODEFUN>
 std::pair<std::vector<double>, std::vector<Eigen::VectorXd>> ode45(
-    ODEFUN &&odefun, const double t0, const double tfinal,
-    const Eigen::VectorXd &y0, const double abserr = 1.0E-8,
+    ODEFUN&& odefun, const double t0, const double tfinal,
+    const Eigen::VectorXd& y0, const double abserr = 1.0E-8,
     const double relerr = 1.0E-6) {
   // initialization
   Eigen::VectorXd mu0 = y0;
@@ -60,7 +60,7 @@ std::pair<std::vector<double>, std::vector<Eigen::VectorXd>> ode45(
   // at every step
   boost::numeric::odeint::integrate_adaptive(
       stepper, odefun, mu0, t0, tfinal, 0.01,
-      [&mus, &timesteps](const Eigen::VectorXd &x, double t) {
+      [&mus, &timesteps](const Eigen::VectorXd& x, double t) {
         mus.resize(mus.size() + 1, x);
         timesteps.resize(timesteps.size() + 1, t);
       });

@@ -19,19 +19,19 @@ TEST(NeumannDataRecovery, UnitNormals) {
   const double scale = 1.0 / 3.0;
   std::shared_ptr<lf::mesh::Mesh> mesh_p =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(selector, scale);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Loop through all cells of the mesh
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // Obtain geometry information
-    const lf::geometry::Geometry *geo_ptr = cell->Geometry();
+    const lf::geometry::Geometry* geo_ptr = cell->Geometry();
     // Compute exterior unit normals
     const Eigen::Matrix<double, 2, 4> unit_normals =
         exteriorUnitNormals(*geo_ptr);
     // Run through the edges of the current cell and check whether the normals
     // are really orthogonal to the edge direction vectors
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     int ed_cnt = 0;
-    for (const lf::mesh::Entity *edge : edges) {
+    for (const lf::mesh::Entity* edge : edges) {
       LF_ASSERT_MSG((edge->RefEl() == lf::base::RefEl::kSegment()),
                     "Edge must be a segment");
       const Eigen::Matrix<double, 2, 2> ed_vt =
@@ -51,7 +51,7 @@ TEST(NeumannDataRecovery, PwconstNeumannData) {
   const double scale = 1.0 / 3.0;
   std::shared_ptr<lf::mesh::Mesh> mesh_p =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(selector, scale);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Set up global FE space; lowest order Lagrangian finite elements
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
@@ -71,7 +71,7 @@ TEST(NeumannDataRecovery, PwconstNeumannData) {
   // Loop over all edges of the mesh
   double s = 0.0;
   bool some_nonzero = false;
-  for (const lf::mesh::Entity *edge : fe_space->Mesh()->Entities(1)) {
+  for (const lf::mesh::Entity* edge : fe_space->Mesh()->Entities(1)) {
     LF_ASSERT_MSG(edge->RefEl() == lf::base::RefEl::kSegment(),
                   "Edge must be of segment type!");
     if (bded_flags(*edge)) {

@@ -125,7 +125,7 @@ TEST(FVMShallowWater, numfluxHLLESWE3) {
   ASSERT_NEAR((res - exact_flux).norm(), 0.0, 1e-5);
 }
 
-inline double vec_norm(std::vector<double> &u) {
+inline double vec_norm(std::vector<double>& u) {
   const size_t N = u.size();
   double s = 0.0;
   for (int j = 0; j < N; ++j) {
@@ -150,9 +150,9 @@ TEST(FVMShallowWater, GenEvl) {
   std::vector<double> u{u0};
   FVMShallowWater::FVMEvlGeneric(
       a, b, T,
-      [](double h, const std::vector<double> & /*u*/) -> double { return h; },
-      u, [](double v, double /*w*/) -> double { return v; },
-      [&data, &times](double t, const std::vector<double> &u) -> void {
+      [](double h, const std::vector<double>& /*u*/) -> double { return h; }, u,
+      [](double v, double /*w*/) -> double { return v; },
+      [&data, &times](double t, const std::vector<double>& u) -> void {
         times.push_back(t);
         data.push_back(u);
       });

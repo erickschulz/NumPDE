@@ -52,14 +52,14 @@ class FunctionMFWrapper {
 
   explicit FunctionMFWrapper(MESHFUNCTION mf, FUNCTION F)
       : mf_(std::move(mf)), F_(std::move(F)) {}
-  FunctionMFWrapper(const FunctionMFWrapper &) = default;
-  FunctionMFWrapper(FunctionMFWrapper &&) noexcept = default;
-  FunctionMFWrapper &operator=(const FunctionMFWrapper &) = delete;
-  FunctionMFWrapper &operator=(FunctionMFWrapper &&) = delete;
+  FunctionMFWrapper(const FunctionMFWrapper&) = default;
+  FunctionMFWrapper(FunctionMFWrapper&&) noexcept = default;
+  FunctionMFWrapper& operator=(const FunctionMFWrapper&) = delete;
+  FunctionMFWrapper& operator=(FunctionMFWrapper&&) = delete;
   ~FunctionMFWrapper() = default;
 
-  std::vector<F_result_t> operator()(const lf::mesh::Entity &e,
-                                     const Eigen::MatrixXd &local) const {
+  std::vector<F_result_t> operator()(const lf::mesh::Entity& e,
+                                     const Eigen::MatrixXd& local) const {
     LF_ASSERT_MSG(e.RefEl().Dimension() == local.rows(),
                   "mismatch between entity dimension and local.rows()");
     const std::vector<mf_result_t> mf_result = mf_(e, local);
@@ -83,7 +83,7 @@ class FunctionMFWrapper {
  */
 void fixedPointNextIt(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    Eigen::VectorXd &mu_vec, Eigen::VectorXd &rhs_vec);
+    Eigen::VectorXd& mu_vec, Eigen::VectorXd& rhs_vec);
 
 /** @brief Computation of Newton iteration update
  *
@@ -92,7 +92,7 @@ void fixedPointNextIt(
  */
 void newtonNextIt(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    Eigen::VectorXd &mu_vec, Eigen::VectorXd &rhs_vec);
+    Eigen::VectorXd& mu_vec, Eigen::VectorXd& rhs_vec);
 
 /** @brief Solves semi-linear elliptic BVP by means of a fixed-point iteration
  *
@@ -104,18 +104,18 @@ void newtonNextIt(
 
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNCTOR_F, typename RECORDER = std::function<
-                                  void(const Eigen::VectorXd &, double)>>
+                                  void(const Eigen::VectorXd&, double)>>
 Eigen::VectorXd solveSemilinearBVP(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
     FUNCTOR_F f, double rtol = 1.0E-4, double atol = 1.0E-8,
     unsigned int itmax = 100,
-    RECORDER &&rec = [](const Eigen::VectorXd &, double) -> void {}) {
+    RECORDER&& rec = [](const Eigen::VectorXd&, double) -> void {}) {
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
 
@@ -162,18 +162,18 @@ Eigen::VectorXd solveSemilinearBVP(
 
 /* SAM_LISTING_BEGIN_2 */
 template <typename FUNCTOR_F, typename RECORDER = std::function<
-                                  void(const Eigen::VectorXd &, double)>>
+                                  void(const Eigen::VectorXd&, double)>>
 Eigen::VectorXd newtonSolveSemilinearBVP(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
     FUNCTOR_F f, double rtol = 1.0E-4, double atol = 1.0E-8,
     unsigned int itmax = 100,
-    RECORDER &&rec = [](const Eigen::VectorXd &, double) -> void {}) {
+    RECORDER&& rec = [](const Eigen::VectorXd&, double) -> void {}) {
   // Wrap right hand side source function into a Mesh Function
   lf::mesh::utils::MeshFunctionGlobal mf_f(f);
   // Reference to current mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const std::size_t N_dofs(dofh.NumDofs());
 

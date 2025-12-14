@@ -18,7 +18,7 @@ constexpr double Square(double x) { return x * x; }
 struct TestPair {
   typedef Eigen::Matrix<double, 6, 1> Vector6d;
 
-  TestPair(const Vector6d &a) {
+  TestPair(const Vector6d& a) {
     function = [a](Eigen::Vector2d x) {
       return a(0) * Square(x(0)) + a(1) * Square(x(1)) + a(2) * x(0) * x(1) +
              a(3) * x(0) + a(4) * x(1) + a(5);

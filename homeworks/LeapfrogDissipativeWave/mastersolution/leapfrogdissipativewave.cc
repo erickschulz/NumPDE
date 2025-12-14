@@ -26,7 +26,7 @@ computeGalerkinMatrices(
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
   // Instantiating N_dofs x N_dofs zero matrices in triplet format
@@ -118,10 +118,10 @@ Eigen::VectorXd timestepDissipativeWaveEquation(
     double T, unsigned int M, Eigen::VectorXd mu0, Eigen::VectorXd nu0) {
   // Pointer and reference to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Obtain local->global index mapping
   // for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space = number of nodes of the mesh
   const lf::base::size_type N_dofs(dofh.NumDofs());
   LF_VERIFY_MSG(mu0.size() == N_dofs, "Wrong length of mu0");
@@ -145,10 +145,10 @@ Eigen::VectorXd timestepDissipativeWaveEquation(
   // Build sparse matrices M+0.5*tau*B and M-0.5*tau*B
   // Timestep size
   const double tau = T / M;
-  const std::vector<Eigen::Triplet<double>> &B_trp = B_COO.triplets();
+  const std::vector<Eigen::Triplet<double>>& B_trp = B_COO.triplets();
   std::vector<Eigen::Triplet<double>> MBp_trp = M_COO.triplets();
   std::vector<Eigen::Triplet<double>> MBm_trp = M_COO.triplets();
-  for (auto &triplet : B_trp) {
+  for (auto& triplet : B_trp) {
     MBp_trp.emplace_back(triplet.row(), triplet.col(),
                          0.5 * tau * triplet.value());
     MBm_trp.emplace_back(triplet.row(), triplet.col(),
@@ -201,7 +201,7 @@ void convergenceDissipativeLeapfrog(unsigned int reflevels, double T,
   std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(c_mesh_p,
                                                               reflevels);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput information about hierarchy of nested meshes
   std::cout << "\t Unit square: Sequence of nested meshes used for convergence "
                "test\n";
@@ -226,7 +226,7 @@ void convergenceDissipativeLeapfrog(unsigned int reflevels, double T,
   unsigned int M = M0;
   for (lf::base::size_type level = 0; level < L; ++level, M *= Mfac) {
     std::shared_ptr<const lf::mesh::Mesh> mesh_p = multi_mesh.getMesh(level);
-    const lf::mesh::Mesh &mesh{*mesh_p};
+    const lf::mesh::Mesh& mesh{*mesh_p};
     // Set up global FE space; second-order Lagrangian finite elements
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO2<double>> fe_space_p =
         fe_space_ptrs[level];
@@ -237,7 +237,7 @@ void convergenceDissipativeLeapfrog(unsigned int reflevels, double T,
     mu_vecs.push_back(
         timestepDissipativeWaveEquation(fe_space_p, T, M, u0_vec, v0_vec));
   }
-  const lf::mesh::Mesh &fine_mesh = *multi_mesh.getMesh(L - 1);
+  const lf::mesh::Mesh& fine_mesh = *multi_mesh.getMesh(L - 1);
   // create mesh functions representing solution / gradient of solution
   const lf::fe::MeshFunctionFE mf_sol(fe_space_ptrs[L - 1], mu_vecs[L - 1]);
   const lf::fe::MeshFunctionGradFE mf_grad_sol(fe_space_ptrs[L - 1],
@@ -282,7 +282,7 @@ void testDissipativeLeapfrog(void) {
   const double scale = 1.0 / 3.0;
   std::shared_ptr<lf::mesh::Mesh> mesh_p =
       lf::mesh::test_utils::GenerateHybrid2DTestMesh(selector, scale);
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Set up global FE space; quadratic Lagrangian finite elements
   auto fe_space_p =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);

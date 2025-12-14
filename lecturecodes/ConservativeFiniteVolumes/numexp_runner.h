@@ -57,7 +57,7 @@ static auto nfn_god_burger = [](double v, double w) {
  */
 
 template <typename EVLFUNCTION>
-void consform_compute(EVLFUNCTION &&evl, std::string filename, double T = 4.0,
+void consform_compute(EVLFUNCTION&& evl, std::string filename, double T = 4.0,
                       double a = -1.0, double b = 5.0) {
   std::cout << "Running driver for discrete evolution in conservation form"
             << std::endl;

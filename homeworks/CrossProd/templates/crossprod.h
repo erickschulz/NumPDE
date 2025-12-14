@@ -22,8 +22,8 @@ namespace CrossProd {
 
 /* SAM_LISTING_BEGIN_1 */
 template <class Function, class Jacobian>
-std::vector<Eigen::VectorXd> solve_imp_mid(Function &&f, Jacobian &&Jf,
-                                           double T, const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> solve_imp_mid(Function&& f, Jacobian&& Jf,
+                                           double T, const Eigen::VectorXd& y0,
                                            unsigned int M) {
   std::vector<Eigen::VectorXd> res(M + 1);
   // Construct the implicit mid-point method with the class
@@ -38,8 +38,8 @@ std::vector<Eigen::VectorXd> solve_imp_mid(Function &&f, Jacobian &&Jf,
 
 /* SAM_LISTING_BEGIN_2 */
 template <class Function, class Jacobian>
-std::vector<Eigen::VectorXd> solve_lin_mid(Function &&f, Jacobian &&Jf,
-                                           double T, const Eigen::VectorXd &y0,
+std::vector<Eigen::VectorXd> solve_lin_mid(Function&& f, Jacobian&& Jf,
+                                           double T, const Eigen::VectorXd& y0,
                                            unsigned int M) {
   std::vector<Eigen::VectorXd> res;
   // Implement the linear implicit mid-point method for

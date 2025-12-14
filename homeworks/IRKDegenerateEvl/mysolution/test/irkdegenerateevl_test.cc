@@ -179,7 +179,7 @@ TEST(IRKDegenerateEvl, SUBPROBLEM_H) {
   auto fes = std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
   // Define a simple initial condition: u0(x, y) = x + y
-  auto u0 = [](const Eigen::Vector2d &x) -> double { return x[0] + x[1]; };
+  auto u0 = [](const Eigen::Vector2d& x) -> double { return x[0] + x[1]; };
 
   // Define time-stepping parameters
   unsigned int no_ts = 30;  // Number of time steps

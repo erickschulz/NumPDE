@@ -42,22 +42,20 @@ class HodgeLaplacian2DElementMatrixProvider {
   // The size of the element matrix is $6\times 6$.
   using ElemMat = Eigen::Matrix<double, 6, 6>;
   HodgeLaplacian2DElementMatrixProvider(
-      const HodgeLaplacian2DElementMatrixProvider &) = delete;
+      const HodgeLaplacian2DElementMatrixProvider&) = delete;
   HodgeLaplacian2DElementMatrixProvider(
-      HodgeLaplacian2DElementMatrixProvider &&) noexcept = default;
-  HodgeLaplacian2DElementMatrixProvider &operator=(
-      const HodgeLaplacian2DElementMatrixProvider &) = delete;
-  HodgeLaplacian2DElementMatrixProvider &operator=(
-      HodgeLaplacian2DElementMatrixProvider &&) = delete;
+      HodgeLaplacian2DElementMatrixProvider&&) noexcept = default;
+  HodgeLaplacian2DElementMatrixProvider& operator=(
+      const HodgeLaplacian2DElementMatrixProvider&) = delete;
+  HodgeLaplacian2DElementMatrixProvider& operator=(
+      HodgeLaplacian2DElementMatrixProvider&&) = delete;
   HodgeLaplacian2DElementMatrixProvider() = default;
   virtual ~HodgeLaplacian2DElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
   // Computation of element matrix $\VM_K$: two versions
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
   // Alternative implementation created for debugging purposes
-  [[nodiscard]] ElemMat Eval_ref(const lf::mesh::Entity &cell);
+  [[nodiscard]] ElemMat Eval_ref(const lf::mesh::Entity& cell);
 
  private:
   ElemMat MK_;
@@ -75,20 +73,18 @@ class HodgeLaplacian2DElementVectorProvider {
  public:
   using ElemVec = Eigen::Matrix<double, 6, 1>;
   HodgeLaplacian2DElementVectorProvider(
-      const HodgeLaplacian2DElementVectorProvider &) = delete;
+      const HodgeLaplacian2DElementVectorProvider&) = delete;
   HodgeLaplacian2DElementVectorProvider(
-      HodgeLaplacian2DElementVectorProvider &&) noexcept = default;
-  HodgeLaplacian2DElementVectorProvider &operator=(
-      const HodgeLaplacian2DElementVectorProvider &) = delete;
-  HodgeLaplacian2DElementVectorProvider &operator=(
-      HodgeLaplacian2DElementVectorProvider &&) = delete;
+      HodgeLaplacian2DElementVectorProvider&&) noexcept = default;
+  HodgeLaplacian2DElementVectorProvider& operator=(
+      const HodgeLaplacian2DElementVectorProvider&) = delete;
+  HodgeLaplacian2DElementVectorProvider& operator=(
+      HodgeLaplacian2DElementVectorProvider&&) = delete;
   virtual ~HodgeLaplacian2DElementVectorProvider() = default;
 
   HodgeLaplacian2DElementVectorProvider(MESH_FUNCTION f) : f_(f) {}
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemVec Eval(const lf::mesh::Entity& cell);
 
  private:
   ElemVec phiK_;
@@ -100,7 +96,7 @@ class HodgeLaplacian2DElementVectorProvider {
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 typename HodgeLaplacian2DElementVectorProvider<MESH_FUNCTION>::ElemVec
 HodgeLaplacian2DElementVectorProvider<MESH_FUNCTION>::Eval(
-    const lf::mesh::Entity &cell) {
+    const lf::mesh::Entity& cell) {
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Area of the triangle
@@ -131,7 +127,7 @@ HodgeLaplacian2DElementVectorProvider<MESH_FUNCTION>::Eval(
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
 Eigen::VectorXd computeHodgeLaplaceRhsVector(
-    const lf::assemble::DofHandler &dofh, MESH_FUNCTION f) {
+    const lf::assemble::DofHandler& dofh, MESH_FUNCTION f) {
   // Total number of FE d.o.f.s
   lf::assemble::size_type N = dofh.NumDofs();
   // Right-hand side vector
@@ -150,7 +146,7 @@ Eigen::VectorXd computeHodgeLaplaceRhsVector(
  * @param dofh DofHandler object  for all FE spaces
  */
 lf::assemble::COOMatrix<double> buildHodgeLaplacianGalerkinMatrix(
-    const lf::assemble::DofHandler &dofh);
+    const lf::assemble::DofHandler& dofh);
 
 /**
  * @brief Compute Whitney FEM solution of Hodge Laplace BVP
@@ -160,7 +156,7 @@ lf::assemble::COOMatrix<double> buildHodgeLaplacianGalerkinMatrix(
  * @param f MeshFunction providing source vector field
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
-Eigen::VectorXd solveHodgeLaplaceBVP(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd solveHodgeLaplaceBVP(const lf::assemble::DofHandler& dofh,
                                      MESH_FUNCTION f) {
   // Galerkin matrix in COO format
   lf::assemble::COOMatrix<double> M_COO{
@@ -196,9 +192,9 @@ Eigen::VectorXd solveHodgeLaplaceBVP(const lf::assemble::DofHandler &dofh,
  */
 class MeshFunctionWF1 {
  public:
-  MeshFunctionWF1(const lf::assemble::DofHandler &dofh, Eigen::VectorXd coeffs)
+  MeshFunctionWF1(const lf::assemble::DofHandler& dofh, Eigen::VectorXd coeffs)
       : dofh_(dofh), coeffs_(std::move(coeffs)) {
-    const lf::mesh::Mesh &mesh = *dofh.Mesh();
+    const lf::mesh::Mesh& mesh = *dofh.Mesh();
     LF_ASSERT_MSG(dofh_.NumDofs() == coeffs_.size(),
                   "Size mismatch for coeff vector");
     LF_ASSERT_MSG(dofh.NumDofs() == (mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -207,11 +203,11 @@ class MeshFunctionWF1 {
 
   // Evaluation operator: returns the values of the vectorfield in the space of
   // Whitney 1-forms at a number of points inside a cell
-  std::vector<Eigen::Vector2d> operator()(const lf::mesh::Entity &cell,
-                                          const Eigen::MatrixXd &local) const;
+  std::vector<Eigen::Vector2d> operator()(const lf::mesh::Entity& cell,
+                                          const Eigen::MatrixXd& local) const;
 
  private:
-  const lf::assemble::DofHandler &dofh_;
+  const lf::assemble::DofHandler& dofh_;
   Eigen::VectorXd coeffs_;
 };
 
@@ -230,9 +226,9 @@ class MeshFunctionWF1 {
  */
 class MeshFunctionWF0 {
  public:
-  MeshFunctionWF0(lf::assemble::DofHandler &dofh, Eigen::VectorXd coeffs)
+  MeshFunctionWF0(lf::assemble::DofHandler& dofh, Eigen::VectorXd coeffs)
       : dofh_(dofh), coeffs_(std::move(coeffs)) {
-    const lf::mesh::Mesh &mesh = *dofh.Mesh();
+    const lf::mesh::Mesh& mesh = *dofh.Mesh();
     LF_ASSERT_MSG(dofh_.NumDofs() == coeffs_.size(),
                   "Size mismatch for coeff vector");
     LF_ASSERT_MSG(dofh.NumDofs() == (mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -241,11 +237,11 @@ class MeshFunctionWF0 {
 
   // Evaluation operator: returns the values of a function in the space of
   // Whitney 0-forms at a number of points inside a cell
-  std::vector<double> operator()(const lf::mesh::Entity &cell,
-                                 const Eigen::MatrixXd &local) const;
+  std::vector<double> operator()(const lf::mesh::Entity& cell,
+                                 const Eigen::MatrixXd& local) const;
 
  private:
-  lf::assemble::DofHandler &dofh_;
+  lf::assemble::DofHandler& dofh_;
   Eigen::VectorXd coeffs_;
 };
 
@@ -259,9 +255,9 @@ class MeshFunctionWF0 {
  * @param DofHandler for Whitney finite element space of 0-forms and 1-forms
  */
 template <lf::mesh::utils::MeshFunction MESH_FUNCTION>
-Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler &dofh,
+Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler& dofh,
                                    MESH_FUNCTION vf) {
-  const lf::mesh::Mesh &mesh = *dofh.Mesh();
+  const lf::mesh::Mesh& mesh = *dofh.Mesh();
   const Eigen::Index N = dofh.NumDofs();
   LF_ASSERT_MSG(N == (mesh.NumEntities(2) + mesh.NumEntities(1)),
                 "DofH must manage 1 dof/node and 1 dof/edge");
@@ -270,7 +266,7 @@ Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler &dofh,
   // Reference coordinates of midpoint of edge
   Eigen::MatrixXd mpc(1, 1);
   mpc(0, 0) = 0.5;
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     // Obtain number of global d.o.f. assciated with edge
     std::span<const lf::assemble::gdof_idx_t> edofs{
         dofh.InteriorGlobalDofIndices(*edge)};
@@ -289,8 +285,8 @@ Eigen::VectorXd nodalProjectionWF1(const lf::assemble::DofHandler &dofh,
  */
 std::pair<lf::mesh::utils::CodimMeshDataSet<double>,
           lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d>>
-reconstructNodalFields(const lf::assemble::DofHandler &dofh,
-                       const Eigen::VectorXd &coeffs);
+reconstructNodalFields(const lf::assemble::DofHandler& dofh,
+                       const Eigen::VectorXd& coeffs);
 
 /** @brief test of convergence based on manufactured solution
  *

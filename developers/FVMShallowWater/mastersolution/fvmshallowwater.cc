@@ -40,7 +40,7 @@ Eigen::Vector2d numfluxLFSWE(Eigen::Vector2d v, Eigen::Vector2d w) {
   assert((w[0] > 0.0) && "w-height must be positive!");
   Eigen::Vector2d nfLF{};
 #if SOLUTION
-  const auto &F = &sweFluxFunction;
+  const auto& F = &sweFluxFunction;
   // Compute Row average and asscoiated characteristic speeds
   const auto [u_bar, l1, l2] = RoeAvgSWE(v, w);
   // Compute "modulus" of Roe matrix
@@ -65,7 +65,7 @@ Eigen::Vector2d numfluxHLLESWE(Eigen::Vector2d v, Eigen::Vector2d w) {
   assert((w[0] > 0.0) && "w-height must be positive!");
   Eigen::Vector2d nfHLLE{};
 #if SOLUTION
-  const auto &F = &sweFluxFunction;
+  const auto& F = &sweFluxFunction;
   // Compute characteristic speeds for edge states
   const auto [l1v, l2v] = sweLambdas(v);
   const auto [l1w, l2w] = sweLambdas(w);
@@ -97,7 +97,7 @@ Eigen::Vector2d numfluxHLLESWE(Eigen::Vector2d v, Eigen::Vector2d w) {
 
 /* SAM_LISTING_BEGIN_4 */
 #if SOLUTION
-bool checkSWERHJC(Eigen::Vector2d ul, Eigen::Vector2d ur, double *speed) {
+bool checkSWERHJC(Eigen::Vector2d ul, Eigen::Vector2d ur, double* speed) {
   Eigen::Matrix2d M;
   double g = 1;
   M << ur(0) - ul(0), ul(1) - ur(1), ur(1) - ul(1),

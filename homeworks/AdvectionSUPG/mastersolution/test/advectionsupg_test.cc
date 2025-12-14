@@ -25,10 +25,10 @@ namespace AdvectionSUPG::test {
 
 // Output element matrices
 template <class ELEMAT_PROVIDER>
-void printElementMatrices(const lf::mesh::Mesh &mesh,
-                          ELEMAT_PROVIDER &elmat_builder) {
+void printElementMatrices(const lf::mesh::Mesh& mesh,
+                          ELEMAT_PROVIDER& elmat_builder) {
   // Traverse the cells of the mesh and compute element matrices
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     const typename ELEMAT_PROVIDER::ElemMat M{elmat_builder.Eval(*cell)};
     const Eigen::MatrixXd vertices = lf::geometry::Corners(*cell->Geometry());
     std::cout << "=== Element matrix for triangle\n " << vertices << ":"
@@ -39,8 +39,8 @@ void printElementMatrices(const lf::mesh::Mesh &mesh,
 
 template <typename V_FUNCTOR, typename U_FUNCTOR, typename W_FUNCTOR,
           typename GRAD_U_FUNCTOR, typename GRAD_W_FUNCTOR>
-bool checkBilinearForm(V_FUNCTOR &&v, U_FUNCTOR &&u, W_FUNCTOR &&w,
-                       GRAD_U_FUNCTOR &&grad_u, GRAD_W_FUNCTOR &&grad_w) {
+bool checkBilinearForm(V_FUNCTOR&& v, U_FUNCTOR&& u, W_FUNCTOR&& w,
+                       GRAD_U_FUNCTOR&& grad_u, GRAD_W_FUNCTOR&& grad_w) {
   // I. Direct integration
   // Build a lambda function for the integrand
   auto itg = [&](Eigen::Vector2d x) -> double {
@@ -69,7 +69,7 @@ bool checkBilinearForm(V_FUNCTOR &&v, U_FUNCTOR &&u, W_FUNCTOR &&w,
   // Set up finite element space
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space`
   const lf::assemble::size_type N_dofs(dofh.NumDofs());
   // Interpolate the functions u and w

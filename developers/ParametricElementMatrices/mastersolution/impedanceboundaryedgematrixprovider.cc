@@ -23,7 +23,7 @@ ImpedanceBoundaryEdgeMatrixProvider::ImpedanceBoundaryEdgeMatrixProvider(
 
 /* SAM_LISTING_BEGIN_1 */
 bool ImpedanceBoundaryEdgeMatrixProvider::isActive(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   bool is_bd_edge;
 #if SOLUTION
   is_bd_edge = (*bd_flags_)(edge);
@@ -43,13 +43,13 @@ bool ImpedanceBoundaryEdgeMatrixProvider::isActive(
  * @param edge current edge */
 /* SAM_LISTING_BEGIN_2 */
 Eigen::MatrixXd ImpedanceBoundaryEdgeMatrixProvider::Eval(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   Eigen::MatrixXd element_matrix(2, 2);
 
 #if SOLUTION
   /* TOOLS AND DATA */
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_->LocGlobMap()};
   // Obtain edge data
   auto edge_global_idx = dofh.GlobalDofIndices(edge);
 

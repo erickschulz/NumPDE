@@ -38,8 +38,8 @@ double godnfn(double v, double w);
  */
 /* SAM_LISTING_BEGIN_1 */
 template <typename FunctionF, typename SourceFunction>
-Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd &mu, FunctionF &&F,
-                               SourceFunction &&s, double h) {
+Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd& mu, FunctionF&& F,
+                               SourceFunction&& s, double h) {
 #if SOLUTION
   unsigned n = mu.size();
   Eigen::VectorXd fd = Eigen::VectorXd::Zero(n);
@@ -88,7 +88,7 @@ Eigen::VectorXd fluxdiffsource(const Eigen::VectorXd &mu, FunctionF &&F,
  */
 /* SAM_LISTING_BEGIN_2 */
 template <typename U0Functor>
-Eigen::VectorXd traceMass(U0Functor &&u0, unsigned int N) {
+Eigen::VectorXd traceMass(U0Functor&& u0, unsigned int N) {
   // Spacial boundaries
   double a = -5.0;
   double b = 10.0;
@@ -108,7 +108,7 @@ Eigen::VectorXd traceMass(U0Functor &&u0, unsigned int N) {
   tau = 3.0 / M;  // Timestep size
 
   // Compute solution and total masses at different times
-  auto totalMass = [h](const Eigen::VectorXd &mu) { return (mu * h).sum(); };
+  auto totalMass = [h](const Eigen::VectorXd& mu) { return (mu * h).sum(); };
   Eigen::VectorXd m(M + 1);
   for (int i = 0; i < M; ++i) {
     m(i) = totalMass(mu);

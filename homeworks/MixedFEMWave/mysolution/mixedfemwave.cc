@@ -36,7 +36,7 @@ lf::quad::QuadRule make_TriaQR_TrapezoidalRule() {
 
 
 /* SAM_LISTING_BEGIN_2 */
-Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q) {
+Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler& dofh_Q) {
   // TOOLS AND DATA
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs_Q(dofh_Q.NumDofs());
@@ -54,8 +54,8 @@ Eigen::SparseMatrix<double> computeMQ(const lf::assemble::DofHandler &dofh_Q) {
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_9 */
-Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler &dofh_V,
-                                     const lf::assemble::DofHandler &dofh_Q) {
+Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler& dofh_V,
+                                     const lf::assemble::DofHandler& dofh_Q) {
   // TOOLS AND DATA
   auto mesh_p = dofh_V.Mesh();
   // Dimension of finite element space
@@ -74,7 +74,7 @@ Eigen::SparseMatrix<double> computeB(const lf::assemble::DofHandler &dofh_V,
 
 /* SAM_LISTING_BEGIN_B */
 Eigen::Matrix<double, 2, 3> BElemMatProvider::Eval(
-    const lf::mesh::Entity &tria) {
+    const lf::mesh::Entity& tria) {
   // Obtain vertex coordinates of the triangle in a 2x3 matrix
   const auto vertices = lf::geometry::Corners(*(tria.Geometry()));
   LF_ASSERT_MSG((vertices.cols() == 3) && (vertices.rows() == 2),

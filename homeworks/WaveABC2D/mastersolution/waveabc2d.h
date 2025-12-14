@@ -29,12 +29,12 @@ void testConvergenceScalarImplicitTimestepping();
 
 template <typename FUNC_ALPHA, typename FUNC_BETA, typename FUNC_GAMMA>
 lf::assemble::COOMatrix<double> computeGalerkinMat(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     FUNC_ALPHA alpha, FUNC_GAMMA gamma, FUNC_BETA beta) {
   // Pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space_p->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -77,13 +77,13 @@ lf::assemble::COOMatrix<double> computeGalerkinMat(
 
 class progress_bar {
   static const auto overhead = sizeof " [100%]";
-  std::ostream &os;
+  std::ostream& os;
   const std::size_t bar_width;
   std::string message;
   const std::string full_bar;
 
  public:
-  progress_bar(std::ostream &os, std::size_t line_width, std::string message_,
+  progress_bar(std::ostream& os, std::size_t line_width, std::string message_,
                const char symbol = '.')
       : os{os},
         bar_width{line_width - overhead},
@@ -99,8 +99,8 @@ class progress_bar {
     write(0.0);
   }
 
-  progress_bar(const progress_bar &) = delete;
-  progress_bar &operator=(const progress_bar &) = delete;
+  progress_bar(const progress_bar&) = delete;
+  progress_bar& operator=(const progress_bar&) = delete;
 
   ~progress_bar() {
     write(1.0);
@@ -117,7 +117,7 @@ class WaveABC2DTimestepper {
  public:
   // Main constructor; precomputations are done here
   WaveABC2DTimestepper(
-      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
       FUNC_RHO rho, unsigned int M, double T);
 
   // Public member functions
@@ -146,7 +146,7 @@ class WaveABC2DTimestepper {
 /* SAM_LISTING_BEGIN_1 */
 template <typename FUNC_RHO, typename FUNC_MU0, typename FUNC_NU0>
 WaveABC2DTimestepper<FUNC_RHO, FUNC_MU0, FUNC_NU0>::WaveABC2DTimestepper(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     FUNC_RHO rho, unsigned int M, double T)
 
     : fe_space_p_(fe_space_p),
@@ -174,7 +174,7 @@ WaveABC2DTimestepper<FUNC_RHO, FUNC_MU0, FUNC_NU0>::WaveABC2DTimestepper(
       computeGalerkinMat(fe_space_p, zero_mf, zero_mf,
                          one_mf);  // Boundary mass matrix
 
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   N_dofs_ = dofh.NumDofs();
   std::cout << "Number of degrees of freedom : " << N_dofs_ << std::endl;
 
@@ -189,16 +189,16 @@ WaveABC2DTimestepper<FUNC_RHO, FUNC_MU0, FUNC_NU0>::WaveABC2DTimestepper(
   M_triplets_vec_ = M_COO.triplets();
   const std::vector<Eigen::Triplet<double>> B_triplets_vec = B_COO.triplets();
   // Inserting M in L
-  for (auto &triplet : M_triplets_vec_) {
+  for (auto& triplet : M_triplets_vec_) {
     L_COO.AddToEntry(triplet.row(), triplet.col(), triplet.value());
   }
   // Inserting B in L
-  for (auto &triplet : B_triplets_vec) {
+  for (auto& triplet : B_triplets_vec) {
     L_COO.AddToEntry(triplet.row(), triplet.col(),
                      0.5 * step_size_ * triplet.value());
   }
   // Inserting A in L
-  for (auto &triplet : A_triplets_vec_) {
+  for (auto& triplet : A_triplets_vec_) {
     L_COO.AddToEntry(triplet.row(), triplet.col() + N_dofs_,
                      0.5 * step_size_ * triplet.value());
   }
@@ -223,16 +223,16 @@ WaveABC2DTimestepper<FUNC_RHO, FUNC_MU0, FUNC_NU0>::WaveABC2DTimestepper(
   //                                                         */
   lf::assemble::COOMatrix<double> R_COO(2 * N_dofs_, 2 * N_dofs_);
   // Inserting M in R
-  for (auto &triplet : M_triplets_vec_) {
+  for (auto& triplet : M_triplets_vec_) {
     R_COO.AddToEntry(triplet.row(), triplet.col(), triplet.value());
   }
   // Inserting B in R
-  for (auto &triplet : B_triplets_vec) {
+  for (auto& triplet : B_triplets_vec) {
     R_COO.AddToEntry(triplet.row(), triplet.col(),
                      -0.5 * step_size_ * triplet.value());
   }
   // Inserting A in R
-  for (auto &triplet : A_triplets_vec_) {
+  for (auto& triplet : A_triplets_vec_) {
     R_COO.AddToEntry(triplet.row(), triplet.col() + N_dofs_,
                      -0.5 * step_size_ * triplet.value());
   }

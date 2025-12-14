@@ -13,16 +13,16 @@
 /* SAM_LISTING_BEGIN_0 */
 // Auxiliary function: default norm for an \eigen vector type
 template <class State>
-double _norm(const State &y) {
+double _norm(const State& y) {
   return y.norm();
 }
 // Adaptive single-step integrator
 template <class DiscEvolOp, class State,
           class NormFunc = decltype(_norm<State>)>
 std::vector<std::pair<double, State>> odeintssctrl(
-    DiscEvolOp &&Psilow, unsigned int p, DiscEvolOp &&Psihigh, const State &y0,
+    DiscEvolOp&& Psilow, unsigned int p, DiscEvolOp&& Psihigh, const State& y0,
     double T, double h0, double reltol, double abstol, double hmin,
-    NormFunc &norm = _norm<State>) {
+    NormFunc& norm = _norm<State>) {
   double t = 0;   // initial time $\cob{t_0=0}$\Label[line]{odeintadapt:1}
   State y = y0;   // current state, initialized here
   double h = h0;  // timestep to start with

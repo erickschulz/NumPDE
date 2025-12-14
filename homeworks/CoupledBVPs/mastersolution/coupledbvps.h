@@ -22,11 +22,11 @@ namespace CoupledBVPs {
 template <typename MESHFN_ALPHA, typename MESHFN_F, typename G_FUNCTOR>
 Eigen::VectorXd solveDirichletBVP(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    MESHFN_ALPHA alpha, MESHFN_F F, G_FUNCTOR &&g) {
+    MESHFN_ALPHA alpha, MESHFN_F F, G_FUNCTOR&& g) {
   // Obtain the mesh
-  const lf::mesh::Mesh &mesh{*(fes_p->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fes_p->Mesh())};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   // Dimension of finite element space`
   const lf::base::size_type N_dofs(dofh.NumDofs());
   // Matrix in triplet format holding Galerkin matrix, zero initially.
@@ -54,7 +54,7 @@ Eigen::VectorXd solveDirichletBVP(
   // they are associated with an entity on the boundary, store Dirichlet data.
   std::vector<std::pair<bool, double>> ess_dof_select{};
   for (lf::assemble::gdof_idx_t dofnum = 0; dofnum < N_dofs; ++dofnum) {
-    const lf::mesh::Entity &dof_node{dofh.Entity(dofnum)};
+    const lf::mesh::Entity& dof_node{dofh.Entity(dofnum)};
     const Eigen::Vector2d node_pos{
         lf::geometry::Corners(*dof_node.Geometry()).col(0)};
     const double g_val = g(node_pos);
@@ -95,7 +95,7 @@ Eigen::VectorXd solveDirichletBVP(
 template <typename F_FUNCTOR>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> solveModulatedHeatFlow(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_p,
-    F_FUNCTOR &&f) {
+    F_FUNCTOR&& f) {
   // We need the following lambda functions to call solveDirichletBVP
   auto f2 = [&f](Eigen::Vector2d x) -> double { return f(x) * f(x); };
   auto g = [](Eigen::Vector2d /*x*/) -> double { return 1.; };

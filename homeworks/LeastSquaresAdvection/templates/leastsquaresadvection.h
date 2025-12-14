@@ -48,19 +48,19 @@ class LSQAdvectionMatrixProvider {
   using Scalar = double;
   using ElemMat = Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic>;
   // Standard constructors
-  LSQAdvectionMatrixProvider(const LSQAdvectionMatrixProvider &) = delete;
-  LSQAdvectionMatrixProvider(LSQAdvectionMatrixProvider &&) noexcept = default;
-  LSQAdvectionMatrixProvider &operator=(const LSQAdvectionMatrixProvider &) =
+  LSQAdvectionMatrixProvider(const LSQAdvectionMatrixProvider&) = delete;
+  LSQAdvectionMatrixProvider(LSQAdvectionMatrixProvider&&) noexcept = default;
+  LSQAdvectionMatrixProvider& operator=(const LSQAdvectionMatrixProvider&) =
       delete;
-  LSQAdvectionMatrixProvider &operator=(LSQAdvectionMatrixProvider &&) = delete;
+  LSQAdvectionMatrixProvider& operator=(LSQAdvectionMatrixProvider&&) = delete;
   virtual ~LSQAdvectionMatrixProvider() = default;
   // Constructor, initializes data members and cell-indepedent quantities
   LSQAdvectionMatrixProvider(
       std::shared_ptr<const lf::uscalfe::UniformScalarFESpace<double>> fe_space,
       Eigen::Vector2d velocity, REACTION_COEFF kappa);
   // Standard interface for ENTITY MATRIX PROVIDERS
-  virtual bool isActive(const lf::mesh::Entity & /*cell*/) { return true; }
-  ElemMat Eval(const lf::mesh::Entity &cell);
+  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  ElemMat Eval(const lf::mesh::Entity& cell);
 
  private:
   REACTION_COEFF kappa_;      // Reaction coefficient $\cob{\kappa=\kappa(\Bx)}$
@@ -96,16 +96,16 @@ LSQAdvectionMatrixProvider<REACTION_COEFF>::LSQAdvectionMatrixProvider(
 /* SAM_LISTING_BEGIN_1 */
 template <lf::mesh::utils::MeshFunction REACTION_COEFF>
 typename LSQAdvectionMatrixProvider<REACTION_COEFF>::ElemMat
-LSQAdvectionMatrixProvider<REACTION_COEFF>::Eval(const lf::mesh::Entity &cell) {
+LSQAdvectionMatrixProvider<REACTION_COEFF>::Eval(const lf::mesh::Entity& cell) {
   // Topological type of the cell
   const lf::base::RefEl ref_el{cell.RefEl()};
   // Obtain precomputed information about values of local shape functions
   // and their gradients at quadrature points.
-  const lf::uscalfe::PrecomputedScalarReferenceFiniteElement<double> &pfe =
+  const lf::uscalfe::PrecomputedScalarReferenceFiniteElement<double>& pfe =
       fe_precomp_[ref_el.Id()];
   LF_ASSERT_MSG(pfe.isInitialized(), "Precomputed data missing!");
   // Query the shape of the cell
-  const lf::geometry::Geometry *geo_ptr = cell.Geometry();
+  const lf::geometry::Geometry* geo_ptr = cell.Geometry();
   LF_ASSERT_MSG(geo_ptr != nullptr, "Invalid geometry!");
   LF_ASSERT_MSG((geo_ptr->DimLocal() == 2),
                 "Only 2D implementation available!");
@@ -143,7 +143,7 @@ LSQAdvectionMatrixProvider<REACTION_COEFF>::Eval(const lf::mesh::Entity &cell) {
  *         of the inflow boundary part
  */
 lf::mesh::utils::AllCodimMeshDataSet<bool> flagEntitiesOnInflow(
-    const std::shared_ptr<const lf::mesh::Mesh> &mesh_p,
+    const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
     Eigen::Vector2d velocity);
 
 /** @brief Compute least squares finite element Galerkin solution
@@ -160,10 +160,10 @@ template <lf::mesh::utils::MeshFunction REACTION_COEFF,
           lf::mesh::utils::MeshFunction GFUNCTION>
 Eigen::VectorXd solveAdvectionDirichletBVP(
     std::shared_ptr<const lf::uscalfe::UniformScalarFESpace<double>> fe_space,
-    Eigen::Vector2d velocity, const REACTION_COEFF &kappa, const GFUNCTION &g) {
+    Eigen::Vector2d velocity, const REACTION_COEFF& kappa, const GFUNCTION& g) {
   // I. Assemble the full Galerkin matrix for the least squares variational
   // formulation Fetch DofHandler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const size_t N = dofh.NumDofs();
   // Sparse matrix in triplet format
   lf::assemble::COOMatrix<double> A_coo(N, N);
@@ -214,7 +214,7 @@ Eigen::VectorXd solveAdvectionDirichletBVP(
  */
 
 template <typename LAGRFESPACE, typename GFUNCTOR>
-void testCVGLSQAdvectionReaction(GFUNCTOR &&g, double kappa_val,
+void testCVGLSQAdvectionReaction(GFUNCTOR&& g, double kappa_val,
                                  unsigned int refsteps = 4) {
   // Velocity vector (must not be changed!)
   const Eigen::Vector2d v(2.0, 1.0);
@@ -233,7 +233,7 @@ void testCVGLSQAdvectionReaction(GFUNCTOR &&g, double kappa_val,
   const std::shared_ptr<lf::refinement::MeshHierarchy> multi_mesh_p =
       lf::refinement::GenerateMeshHierarchyByUniformRefinemnt(mesh_ptr,
                                                               refsteps);
-  lf::refinement::MeshHierarchy &multi_mesh{*multi_mesh_p};
+  lf::refinement::MeshHierarchy& multi_mesh{*multi_mesh_p};
   // Ouput summary information about hierarchy of nested meshes
   std::cout << "\t Sequence of nested meshes created\n";
   multi_mesh.PrintInfo(std::cout);
@@ -265,7 +265,7 @@ void testCVGLSQAdvectionReaction(GFUNCTOR &&g, double kappa_val,
             << std::left << std::setw(10) << "N" << std::right << std::setw(16)
             << "L2 err\n";
   std::cout << "---------------------------------------------" << '\n';
-  for (const auto &err : errs) {
+  for (const auto& err : errs) {
     auto [N, L2err] = err;
     out_file << std::left << std::setw(10) << N << std::left << std::setw(16)
              << L2err << '\n';

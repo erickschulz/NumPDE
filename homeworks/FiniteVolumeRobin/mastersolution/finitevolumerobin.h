@@ -52,7 +52,7 @@ class EdgeMatrixProvider {
    * Actual computation is based on linear finite elements and the trapezoidal
    * rule.
    */
-  Eigen::Matrix2d Eval(const lf::mesh::Entity &edge);
+  Eigen::Matrix2d Eval(const lf::mesh::Entity& edge);
 
   /**
    * @brief If true, then an edge is taken into account during assembly
@@ -63,7 +63,7 @@ class EdgeMatrixProvider {
    * (For the finite volume scheme considered in the exercise only the boundary
    * edges are active.)
    */
-  bool isActive(const lf::mesh::Entity &edge) const {
+  bool isActive(const lf::mesh::Entity& edge) const {
     LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                   "Wrong type for an edge");
     return edge_sel_(edge);
@@ -76,10 +76,10 @@ class EdgeMatrixProvider {
 
 template <typename FUNCTOR, typename EDGESELECTOR>
 Eigen::Matrix2d EdgeMatrixProvider<FUNCTOR, EDGESELECTOR>::Eval(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                 "Function only defined on segments");
-  const lf::geometry::Geometry *geo_ptr = edge.Geometry();
+  const lf::geometry::Geometry* geo_ptr = edge.Geometry();
   Eigen::Matrix2d loc_mat;
 
   // get the length of the edge
@@ -137,7 +137,7 @@ class EdgeVectorProvider {
    *
    * Actual computation is based on the trapezoidal rule.
    */
-  Eigen::Vector2d Eval(const lf::mesh::Entity &edge);
+  Eigen::Vector2d Eval(const lf::mesh::Entity& edge);
 
   /**
    * @brief If true, then an edge is taken into account during assembly
@@ -148,7 +148,7 @@ class EdgeVectorProvider {
    * (For the finite volume scheme considered in the exercise only the boundary
    * are active.)
    */
-  bool isActive(const lf::mesh::Entity &edge) const {
+  bool isActive(const lf::mesh::Entity& edge) const {
     LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                   "Wrong type for an edge");
     return edge_sel_(edge);
@@ -161,10 +161,10 @@ class EdgeVectorProvider {
 
 template <typename FUNCTOR, typename EDGESELECTOR>
 Eigen::Vector2d EdgeVectorProvider<FUNCTOR, EDGESELECTOR>::Eval(
-    const lf::mesh::Entity &edge) {
+    const lf::mesh::Entity& edge) {
   LF_ASSERT_MSG(edge.RefEl() == lf::base::RefEl::kSegment(),
                 "Function only defined on segments");
-  const lf::geometry::Geometry *geo_ptr = edge.Geometry();
+  const lf::geometry::Geometry* geo_ptr = edge.Geometry();
   Eigen::Vector2d loc_vec;
 
   // get the length of the edge

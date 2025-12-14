@@ -28,19 +28,19 @@ class QFEProviderTester {
    * @param dofh dof handler
    * @param element_matrix_provider an instance of LocalLaplaceQFEX, X=1,2,3
    */
-  QFEProviderTester(const lf::assemble::DofHandler &dofh,
-                    ENTITY_MATRIX_PROVIDER &element_matrix_provider);
+  QFEProviderTester(const lf::assemble::DofHandler& dofh,
+                    ENTITY_MATRIX_PROVIDER& element_matrix_provider);
 
   /**
    * @brief Computes the energy (H_1-seminorm) of u
    * @param u function of type double(Eigen::Vector2d)
    */
   template <typename FUNCTOR>
-  double energyOfInterpolant(FUNCTOR &&u) const;
+  double energyOfInterpolant(FUNCTOR&& u) const;
 
  private:
-  const lf::assemble::DofHandler &dofh_;
-  ENTITY_MATRIX_PROVIDER &element_matrix_provider_;
+  const lf::assemble::DofHandler& dofh_;
+  ENTITY_MATRIX_PROVIDER& element_matrix_provider_;
   Eigen::SparseMatrix<double> A_;
 };
 /* SAM_LISTING_END_1 */
@@ -48,8 +48,8 @@ class QFEProviderTester {
 /* SAM_LISTING_BEGIN_2 */
 template <lf::assemble::EntityMatrixProvider ENTITY_MATRIX_PROVIDER>
 QFEProviderTester<ENTITY_MATRIX_PROVIDER>::QFEProviderTester(
-    const lf::assemble::DofHandler &dofh,
-    ENTITY_MATRIX_PROVIDER &element_matrix_provider)
+    const lf::assemble::DofHandler& dofh,
+    ENTITY_MATRIX_PROVIDER& element_matrix_provider)
     : dofh_(dofh), element_matrix_provider_(element_matrix_provider) {
   // Assemble the Galerkin matrix and store it into A_
   const lf::base::size_type N_dofs(dofh.NumDofs());
@@ -64,7 +64,7 @@ QFEProviderTester<ENTITY_MATRIX_PROVIDER>::QFEProviderTester(
 template <lf::assemble::EntityMatrixProvider ENTITY_MATRIX_PROVIDER>
 template <typename FUNCTOR>
 double QFEProviderTester<ENTITY_MATRIX_PROVIDER>::energyOfInterpolant(
-    FUNCTOR &&u) const {
+    FUNCTOR&& u) const {
   double energy = 0.0;
   Eigen::VectorXd eta = DebuggingFEM::interpolateOntoQuadFE(dofh_, u);
   // Compute $\cob{\vec{\etabf}^{\top}\VA\vec{\etabf}}$

@@ -65,7 +65,7 @@ std::shared_ptr<lf::mesh::Mesh> createDemoMesh() {
  */
 /* SAM_LISTING_BEGIN_1 */
 Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
-    const lf::mesh::Mesh &mesh) {
+    const lf::mesh::Mesh& mesh) {
   // Store edge-vertex incidence matrix here
   Eigen::SparseMatrix<int, Eigen::RowMajor> G;
 
@@ -84,7 +84,7 @@ Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
  */
 /* SAM_LISTING_BEGIN_2 */
 Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
-    const lf::mesh::Mesh &mesh) {
+    const lf::mesh::Mesh& mesh) {
   // Store cell-edge incidence matrix here
   Eigen::SparseMatrix<int, Eigen::RowMajor> D;
 
@@ -103,7 +103,7 @@ Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
  * @return true, if the product is zero and false otherwise
  */
 /* SAM_LISTING_BEGIN_3 */
-bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh &mesh) {
+bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh& mesh) {
   bool isZero = false;
 
   //====================
@@ -114,7 +114,7 @@ bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh &mesh) {
 /* SAM_LISTING_END_3 */
 
 /* SAM_LISTING_BEGIN_4 */
-Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh) {
+Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh& mesh) {
   // Size of Hodge Laplacian matrix for discrete 1-forms is equal to the number
   // of edges of the mesh
   const size_t N = mesh.NumEntities(1);

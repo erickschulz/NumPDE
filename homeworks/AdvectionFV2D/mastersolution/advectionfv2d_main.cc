@@ -29,13 +29,13 @@
 #include "systemcall.h"
 
 // Use this function to plot your solution
-void write_vtk(const lf::assemble::DofHandler &dofh,
-               const Eigen::VectorXd &solution, std::string name) {
+void write_vtk(const lf::assemble::DofHandler& dofh,
+               const Eigen::VectorXd& solution, std::string name) {
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = dofh.Mesh();
   lf::io::VtkWriter vtk_writer(mesh_p, name + ".vtk");
   auto cell_data_ref =
       lf::mesh::utils::make_CodimMeshDataSet<double>(mesh_p, 0);
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     int row = dofh.GlobalDofIndices(*cell)[0];
     cell_data_ref->operator()(*cell) = solution[row];
   }
@@ -94,7 +94,7 @@ int main() {
 
     // Compute adjecent cells
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-        std::array<const lf::mesh::Entity *, 4>>>
+        std::array<const lf::mesh::Entity*, 4>>>
         adjacentCells = AdvectionFV2D::getAdjacentCellPointers(cur_dofh.Mesh());
 
     // Get approximate solution from simulation
@@ -108,8 +108,8 @@ int main() {
 
     // Compute L2 error in barycenter
     double l2_error = 0;
-    for (const lf::mesh::Entity *cell : cur_mesh->Entities(0)) {
-      const lf::geometry::Geometry *geo_p = cell->Geometry();
+    for (const lf::mesh::Entity* cell : cur_mesh->Entities(0)) {
+      const lf::geometry::Geometry* geo_p = cell->Geometry();
       double area = lf::geometry::Volume(*geo_p);
       int idx = cur_dofh.GlobalDofIndices(*cell)[0];
       l2_error += std::pow((mu_approx[idx] - mu_exact[idx]), 2) * area;

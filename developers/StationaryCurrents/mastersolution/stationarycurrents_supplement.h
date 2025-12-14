@@ -41,7 +41,7 @@ getTriangleGradLambdaNormals(Eigen::Matrix<double, 2, 3> vertices);
  * @param corners 2xn-matrix whose columns contain the vertex coordinates of the
  * n vertices
  */
-Eigen::MatrixXd exteriorCellNormals(const Eigen::MatrixXd &corners);
+Eigen::MatrixXd exteriorCellNormals(const Eigen::MatrixXd& corners);
 
 /** @brief Compute exterior edge-length-weighted normals for edges on the
  * boundary
@@ -55,9 +55,9 @@ lf::mesh::utils::CodimMeshDataSet<Eigen::Vector2d> exteriorEdgeWeightedNormals(
     std::shared_ptr<const lf::mesh::Mesh> mesh_p);
 
 // A debugging function
-bool validateNormals(const lf::mesh::Mesh &mesh);
-void printNodeTags(const lf::mesh::Mesh &mesh,
-                   lf::mesh::utils::CodimMeshDataSet<int> &nodeids);
+bool validateNormals(const lf::mesh::Mesh& mesh);
+void printNodeTags(const lf::mesh::Mesh& mesh,
+                   lf::mesh::utils::CodimMeshDataSet<int>& nodeids);
 
 /** @brief Evaluation of boundary formula for contact flux
  *
@@ -74,10 +74,10 @@ void printNodeTags(const lf::mesh::Mesh &mesh,
 template <typename SIGMAFUNCTION>
 double contactFlux(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma,
-    const lf::mesh::utils::CodimMeshDataSet<int> &edgeids, int contact_id = 0) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma,
+    const lf::mesh::utils::CodimMeshDataSet<int>& edgeids, int contact_id = 0) {
   // Obtain object managing dof indexing
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Check whether coefficient vector matches dof handler
   LF_ASSERT_MSG(sol_vec.size() == dofh.NumDofs(),
                 "Size mismatch for coefficient vector");
@@ -87,18 +87,18 @@ double contactFlux(
   // Counter for edges on selected contact (optional)
   unsigned int ed_cnt = 0;
 #endif
-  const lf::mesh::Mesh &mesh{*dofh.Mesh()};
+  const lf::mesh::Mesh& mesh{*dofh.Mesh()};
   // We cannot loop over edges, because information from dofs not located on the
   // boundary is also required. Therefore we have to loop over all cells and
   // check whether they abut the relevant boundary part.
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // Implemented for triangles only
     // Make sure the cell is of triangular shape
     const lf::base::RefEl ref_el_type{cell->RefEl()};
     LF_ASSERT_MSG(ref_el_type == lf::base::RefEl::kTria(),
                   "contactFlux: implemented for triangles only");
     // Obtain array of edge pointers (sub-entities of co-dimension 1)
-    std::span<const lf::mesh::Entity *const> sub_ent_range{
+    std::span<const lf::mesh::Entity* const> sub_ent_range{
         cell->SubEntities(1)};
     // Must be three edges
     LF_ASSERT_MSG(sub_ent_range.size() == 3, "Triangle must have three edges!");
@@ -107,7 +107,7 @@ double contactFlux(
     unsigned int cnt = 0;
     // loop over the edges and check whether they belong to the boundary
     for (lf::base::sub_idx_t j = 0; j < ref_el_type.NumSubEntities(1); ++j) {
-      const lf::mesh::Entity &edge{*sub_ent_range[j]};
+      const lf::mesh::Entity& edge{*sub_ent_range[j]};
       if (edgeids(edge) == contact_id) {
         on_contact[j] = true;
         cnt++;
@@ -121,7 +121,7 @@ double contactFlux(
     if (cnt > 0) {
       // A contact edge belongs to the current cell
       // Compute the gradients, edge-weighted exterior normals and area
-      const lf::geometry::Geometry &geo{*(cell->Geometry())};
+      const lf::geometry::Geometry& geo{*(cell->Geometry())};
       auto [grad_bary_coords, normals, area] =
           getTriangleGradLambdaNormals(lf::geometry::Corners(geo));
 #if SOLUTION
@@ -181,23 +181,23 @@ double contactFlux(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFluxEXT(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   // Underlying FE mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Local-to-Global map for local/global shape function indices
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Obtain quadrature rule
   const lf::quad::QuadRule quadrule{
       lf::quad::make_QuadRule(lf::base::RefEl::kTria(), 2)};
   // Summation variable
   double s = 0.0;
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     // Check matching of reference element (unit triangle)
     LF_VERIFY_MSG(cell->RefEl() == quadrule.RefEl(),
                   "Mismatch of reference element for " << *cell);
     // Obtain geometry information for entity
-    const lf::geometry::Geometry &geo{*cell->Geometry()};
+    const lf::geometry::Geometry& geo{*cell->Geometry()};
     // Compute the gradients, edge-weighted exterior normals and area
     auto [grad_bary_coords, normals, area] =
         getTriangleGradLambdaNormals(lf::geometry::Corners(geo));
@@ -242,7 +242,7 @@ double stabFluxEXT(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFluxMF(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{fe_space->Mesh()};
   // Coefficient function and weight function
   const lf::mesh::utils::MeshFunctionGlobal mf_sigma(sigma);
@@ -254,7 +254,7 @@ double stabFluxMF(
   const auto mf_itg{lf::mesh::utils::transpose(mf_sigma * mf_grad) *
                     mf_gradpsi};
   const double s = lf::fe::IntegrateMeshFunction(
-      *mesh_p, mf_itg, [](const lf::mesh::Entity &e) {
+      *mesh_p, mf_itg, [](const lf::mesh::Entity& e) {
         return lf::quad::make_QuadRule(e.RefEl(), 2);
       })(0, 0);
   return s;
@@ -269,22 +269,22 @@ double stabFluxMF(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFluxMPR(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   // Underlying FE mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Local-to-Global map for local/global shape function indices
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Reference coordinates of "midpoint" of a triangle
   const Eigen::MatrixXd zeta_ref{
       (Eigen::Matrix<double, 2, 1>() << 1.0 / 3.0, 1.0 / 3.0).finished()};
   // Summation variable
   double s = 0.0;
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Not implemented for " << *cell);
     // Obtain geometry information for entity
-    const lf::geometry::Geometry &geo{*cell->Geometry()};
+    const lf::geometry::Geometry& geo{*cell->Geometry()};
     // Compute the gradients, edge-weighted exterior normals and area
     // (The normals are not used here)
     // An alternative implementation could use ScalarReferenceElement
@@ -315,16 +315,16 @@ double stabFluxMPR(
 template <typename SIGMAFUNCTION, typename PSIGRAD>
 double stabFluxTRF(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &sol_vec, SIGMAFUNCTION &&sigma, PSIGRAD &&gradpsi) {
+    const Eigen::VectorXd& sol_vec, SIGMAFUNCTION&& sigma, PSIGRAD&& gradpsi) {
   // Underlying FE mesh
-  const lf::mesh::Mesh &mesh{*(fe_space->Mesh())};
+  const lf::mesh::Mesh& mesh{*(fe_space->Mesh())};
   // Local-to-Global map for local/global shape function indices
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Reference coordinates of "midpoint" of a triangle (center of gravity)
   const Eigen::MatrixXd zeta_ref{
       (Eigen::Matrix<double, 2, 1>() << 1.0 / 3.0, 1.0 / 3.0).finished()};
   // Obtain gradients of reference shape functions at center of gravity
-  const lf::fe::ScalarReferenceFiniteElement<double> &ref_lsf{
+  const lf::fe::ScalarReferenceFiniteElement<double>& ref_lsf{
       *fe_space->ShapeFunctionLayout(lf::base::RefEl::kTria())};
   LF_ASSERT_MSG(
       ref_lsf.NumRefShapeFunctions() == 3,
@@ -336,11 +336,11 @@ double stabFluxTRF(
   // Summation variable
   double s = 0.0;
   // Loop over all cells
-  for (const lf::mesh::Entity *cell : mesh.Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh.Entities(0)) {
     LF_ASSERT_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Not implemented for " << *cell);
     // Obtain geometry information for entity
-    const lf::geometry::Geometry &geo{*cell->Geometry()};
+    const lf::geometry::Geometry& geo{*cell->Geometry()};
     // Fetch the transformation matrix for gradients
     const Eigen::MatrixXd JinvT{geo.JacobianInverseGramian(zeta_ref)};
     LF_ASSERT_MSG(

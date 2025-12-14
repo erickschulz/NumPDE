@@ -83,7 +83,7 @@ TEST(MixedFEMWave_computeB, test) {
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_V =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Scalar dofhandler as built along with the finite-element space for V
-  const lf::assemble::DofHandler &dofh_V = fe_space_V->LocGlobMap();
+  const lf::assemble::DofHandler& dofh_V = fe_space_V->LocGlobMap();
 
   // Vector dofhandler for the finite element space Q
   lf::assemble::UniformFEDofHandler dofh_Q(mesh_p,

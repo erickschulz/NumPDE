@@ -35,8 +35,8 @@ namespace EmbeddedRKSSM {
  */
 template <typename RHSFunction>
 std::vector<std::pair<double, Eigen::VectorXd>> embeddedRKSSM(
-    RHSFunction &&f_rhs, const Eigen::MatrixXd &A, const Eigen::VectorXd &b,
-    const Eigen::VectorXd &bh, unsigned int p, const Eigen::VectorXd &y0,
+    RHSFunction&& f_rhs, const Eigen::MatrixXd& A, const Eigen::VectorXd& b,
+    const Eigen::VectorXd& bh, unsigned int p, const Eigen::VectorXd& y0,
     double T, double h0, double reltol, double abstol, double hmin) {
   // Check parameters defining embedded RK-SSM
   unsigned int s = A.cols();  // Number of stages
@@ -92,8 +92,8 @@ std::vector<std::pair<double, Eigen::VectorXd>> embeddedRKSSM(
 }
 
 // Helper function for testing
-void testrun(const Eigen::MatrixXd &A, const Eigen::VectorXd &b,
-             const Eigen::VectorXd &bh, unsigned int p) {
+void testrun(const Eigen::MatrixXd& A, const Eigen::VectorXd& b,
+             const Eigen::VectorXd& bh, unsigned int p) {
   std::cout << "Test run of embedded RK-SSM" << std::endl;
   std::cout << "Butcher matrix = \n " << A << std::endl;
   std::cout << "Weight vector (order p+1) = " << b.transpose() << std::endl;
@@ -115,7 +115,7 @@ void testrun(const Eigen::MatrixXd &A, const Eigen::VectorXd &b,
   for (int j = 0; j < m; ++j) {
     auto res = embeddedRKSSM(f, A, b, bh, p, y0, T, h0, rtol[j], atol[j], hmin);
     double err = 0.0;
-    for (const auto &i : res) {
+    for (const auto& i : res) {
       const double t = i.first;
       const Eigen::Vector2d exact(std::cos(t), std::sin(t));
       const Eigen::Vector2d approx = i.second;
@@ -128,7 +128,7 @@ void testrun(const Eigen::MatrixXd &A, const Eigen::VectorXd &b,
 
 }  // namespace EmbeddedRKSSM
 
-int main(int /*argc*/, char ** /*argv*/) {
+int main(int /*argc*/, char** /*argv*/) {
   std::cout << "Adaptive embedded Runge-Kutta-Fehlberg single-step method"
             << std::endl;
   {

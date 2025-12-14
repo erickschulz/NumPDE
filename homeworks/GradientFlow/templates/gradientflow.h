@@ -22,17 +22,17 @@ Eigen::MatrixXd ButcherMatrix();
 /* SAM_LISTING_BEGIN_0 */
 // Use Newton method to approximate a stage.
 template <typename Functor, typename Jacobian>
-Eigen::VectorXd SolveGenStageEquation(Functor &&f, Jacobian &&df,
-                                      const Eigen::VectorXd &y,
-                                      const Eigen::VectorXd &b, double h,
+Eigen::VectorXd SolveGenStageEquation(Functor&& f, Jacobian&& df,
+                                      const Eigen::VectorXd& y,
+                                      const Eigen::VectorXd& b, double h,
                                       double rtol = 1E-6, double atol = 1E-8) {
   // Need to solve the equation lhs(g) = g - h*f(y+g)/4 - b = 0.
   // lhs and its Jacobian Jlhs
-  auto lhs = [f, y, b, h](const Eigen::VectorXd &g) {
+  auto lhs = [f, y, b, h](const Eigen::VectorXd& g) {
     Eigen::VectorXd val = g - 0.25 * h * f(y + g) - b;
     return val;
   };
-  auto Jlhs = [df, y, h](const Eigen::VectorXd &g) {
+  auto Jlhs = [df, y, h](const Eigen::VectorXd& g) {
     // Jlhs(g) = Id - h*df(y+g)/4
     int dim = y.size();
     Eigen::MatrixXd Jval =
@@ -60,8 +60,8 @@ Eigen::VectorXd SolveGenStageEquation(Functor &&f, Jacobian &&df,
 // Compute the stages [g_1, ... , g_5] of the SDIRK method based on Newtons
 // method
 template <typename Func, typename Jac>
-std::array<Eigen::VectorXd, 5> ComputeStages(Func &&f, Jac &&df,
-                                             const Eigen::VectorXd &y, double h,
+std::array<Eigen::VectorXd, 5> ComputeStages(Func&& f, Jac&& df,
+                                             const Eigen::VectorXd& y, double h,
                                              double rtol = 1E-6,
                                              double atol = 1E-8) {
   std::array<Eigen::VectorXd, 5> G;  // array of stages
@@ -86,7 +86,7 @@ std::array<Eigen::VectorXd, 5> ComputeStages(Func &&f, Jac &&df,
 /* SAM_LISTING_BEGIN_4 */
 // Compute one step of the SDIRK scheme
 template <typename Func, typename Jac>
-Eigen::VectorXd DiscEvolSDIRK(Func &&f, Jac &&df, const Eigen::VectorXd &y,
+Eigen::VectorXd DiscEvolSDIRK(Func&& f, Jac&& df, const Eigen::VectorXd& y,
                               double h, double rtol = 1E-6,
                               double atol = 1E-8) {
   // The b weights are in the last row of coeffs.
@@ -105,9 +105,9 @@ Eigen::VectorXd DiscEvolSDIRK(Func &&f, Jac &&df, const Eigen::VectorXd &y,
 /* SAM_LISTING_END_4 */
 // Solve the gradient flow problem based on the SDIRK scheme using M uniform
 // timesteps. Return the full approximated solution trajectory
-std::vector<Eigen::VectorXd> SolveGradientFlow(const Eigen::VectorXd &d,
+std::vector<Eigen::VectorXd> SolveGradientFlow(const Eigen::VectorXd& d,
                                                double lambda,
-                                               const Eigen::VectorXd &y0,
+                                               const Eigen::VectorXd& y0,
                                                double T, unsigned int M);
 
 }  // namespace GradientFlow

@@ -30,7 +30,7 @@ TEST(AvgValBoundary, TestH1SemiNorm) {
   auto mesh = reader.mesh();
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // get solution of test problem
   Eigen::VectorXd mu = solveTestProblem(dofh);
@@ -47,7 +47,7 @@ TEST(AvgValBoundary, TestBoundaryFunctional) {
   auto mesh = reader.mesh();
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // get solution of test problem
   Eigen::VectorXd mu = solveTestProblem(dofh);

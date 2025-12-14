@@ -22,7 +22,7 @@ using namespace Eigen;
 // return value:  Vector with differences of numerical fluxes, which provides
 // the right hand side of \eqref{eq:2pcf}
 template <typename FunctionF>
-VectorXd fluxdiff(const VectorXd &mu, FunctionF &&F) {
+VectorXd fluxdiff(const VectorXd& mu, FunctionF&& F) {
   unsigned n = mu.size();           // length of state vector
   VectorXd fd = VectorXd::Zero(n);  // return vector
 
@@ -57,7 +57,7 @@ VectorXd fluxdiff(const VectorXd &mu, FunctionF &&F) {
 // of order 5(4).
 template <typename FunctionU0, typename FunctionF>
 VectorXd consformevl(double a, double b, unsigned N, FunctionU0 u0, double T,
-                     FunctionF &&F) {
+                     FunctionF&& F) {
   double h = (b - a) / N;  // meshwidth
   // centers of dual cells
   VectorXd x = VectorXd::LinSpaced(N, a + 0.5 * h, b - 0.5 * h);
@@ -67,7 +67,7 @@ VectorXd consformevl(double a, double b, unsigned N, FunctionU0 u0, double T,
   VectorXd mu0 = x.unaryExpr(u0);
 
   // right hand side function for ode solver
-  auto odefun = [&](const VectorXd &mu, VectorXd &dmdt, double t) {
+  auto odefun = [&](const VectorXd& mu, VectorXd& dmdt, double t) {
     dmdt = -1. / h * fluxdiff<FunctionF>(mu, F);
   };
 

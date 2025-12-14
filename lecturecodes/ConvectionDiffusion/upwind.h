@@ -30,7 +30,7 @@ namespace ConvectionDiffusion {
 template <typename DIFFUSION_COEFF, typename CONVECTION_COEFF,
           typename FUNCTOR_F, typename FUNCTOR_G>
 Eigen::VectorXd SolveCDBVPUpwind(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space,
     DIFFUSION_COEFF eps, CONVECTION_COEFF v, FUNCTOR_F f, FUNCTOR_G g) {
   // Wrap functions into mesh functions
   lf::mesh::utils::MeshFunctionGlobal mf_g{g};
@@ -39,7 +39,7 @@ Eigen::VectorXd SolveCDBVPUpwind(
 
   // mesh and dofhanlder
   auto mesh_p = fe_space->Mesh();
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
 
   // Matrix in triplet format holding Galerkin matrix, zero initially.
   lf::assemble::COOMatrix<double> A(dofh.NumDofs(), dofh.NumDofs());
@@ -64,7 +64,7 @@ Eigen::VectorXd SolveCDBVPUpwind(
 
   // IMPOSE DIRICHLET BC
   // Obtain specification for shape functions on edges
-  const lf::fe::ScalarReferenceFiniteElement<double> *rsf_edge_p =
+  const lf::fe::ScalarReferenceFiniteElement<double>* rsf_edge_p =
       fe_space->ShapeFunctionLayout(lf::base::RefEl::kSegment());
 
   // Create a dataset of boolean flags indicating edges on the boundary of the

@@ -21,16 +21,16 @@ namespace HEST {
 
 template <typename MESHFUNCTION_ALPHA, typename MESHFUNCTION_F>
 Eigen::VectorXd solveBVPWithLinFE(
-    const MESHFUNCTION_ALPHA &mf_alpha, const MESHFUNCTION_F &mf_f,
+    const MESHFUNCTION_ALPHA& mf_alpha, const MESHFUNCTION_F& mf_f,
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_lin_p) {
   // For conveneicne we set up references to essential objects for FE
   // discretization in the lowest-order Lagrangian finite element space
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &linfespc{*fes_lin_p};
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& linfespc{*fes_lin_p};
   // The underlying finite-element mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{linfespc.Mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{linfespc.LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{linfespc.LocGlobMap()};
   // Dimension of linear finite element space, number of unknowns
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
@@ -64,7 +64,7 @@ Eigen::VectorXd solveBVPWithLinFE(
   lf::assemble::FixFlaggedSolutionCompAlt<double>(
       [&bd_flags,
        &dofh](lf::assemble::glb_idx_t dof_idx) -> std::pair<bool, double> {
-        const lf::mesh::Entity &node{dofh.Entity(dof_idx)};
+        const lf::mesh::Entity& node{dofh.Entity(dof_idx)};
         return (bd_flags(node) ? std::make_pair(true, 0.0)
                                : std::make_pair(false, 0.0));
       },
@@ -96,8 +96,8 @@ Eigen::VectorXd solveBVPWithLinFE(
  * @param A matrix in LehrFEM++ internal triplet format. Will be modified!
  */
 template <typename SCALAR, typename SELECTOR>
-void dropMatrixRowsColumns(SELECTOR &&selectvals,
-                           lf::assemble::COOMatrix<SCALAR> &A) {
+void dropMatrixRowsColumns(SELECTOR&& selectvals,
+                           lf::assemble::COOMatrix<SCALAR>& A) {
   const lf::assemble::size_type N(A.cols());
   LF_ASSERT_MSG(A.rows() == N, "Matrix must be square!");
   // Set the selected rows and columns to zero
@@ -117,27 +117,27 @@ void dropMatrixRowsColumns(SELECTOR &&selectvals,
 Eigen::VectorXd trfLinToQuad(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_lin_p,
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO2<double>> fes_quad_p,
-    const Eigen::VectorXd &mu);
+    const Eigen::VectorXd& mu);
 
 /* SAM_LISTING_BEGIN_3 */
 template <typename MESHFUNCTION_ALPHA, typename MESHFUNCTION_F>
 Eigen::VectorXd compHierSurplusSolution(
-    const MESHFUNCTION_ALPHA &mf_alpha, const MESHFUNCTION_F &mf_f,
+    const MESHFUNCTION_ALPHA& mf_alpha, const MESHFUNCTION_F& mf_f,
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fes_lin_p,
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO2<double>> fes_quad_p,
-    const Eigen::VectorXd &mu) {
+    const Eigen::VectorXd& mu) {
   // References to FE space
-  const lf::uscalfe::FeSpaceLagrangeO2<double> &quad_space{*fes_quad_p};
-  const lf::uscalfe::FeSpaceLagrangeO1<double> &lfe_space{*fes_lin_p};
+  const lf::uscalfe::FeSpaceLagrangeO2<double>& quad_space{*fes_quad_p};
+  const lf::uscalfe::FeSpaceLagrangeO1<double>& lfe_space{*fes_lin_p};
   // Get references to DofHandlers
-  const lf::assemble::DofHandler &dh_quad{quad_space.LocGlobMap()};
-  const lf::assemble::DofHandler &dh_lfe{lfe_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_quad{quad_space.LocGlobMap()};
+  const lf::assemble::DofHandler& dh_lfe{lfe_space.LocGlobMap()};
   LF_ASSERT_MSG(dh_lfe.Mesh() == dh_quad.Mesh(),
                 "DofHandlers must be based on the same mesh");
   LF_ASSERT_MSG(dh_lfe.NumDofs() == mu.size(), "Vector length mismath");
   // Underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{dh_lfe.Mesh()};
-  const lf::mesh::Mesh &mesh{*mesh_p};
+  const lf::mesh::Mesh& mesh{*mesh_p};
   LF_ASSERT_MSG(
       (dh_lfe.NumDofs() == mesh.NumEntities(2)) &&
           (dh_quad.NumDofs() == mesh.NumEntities(2) + mesh.NumEntities(1)),
@@ -181,7 +181,7 @@ Eigen::VectorXd compHierSurplusSolution(
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};
   // Flag vector indicating inactive edges
   std::vector<bool> dropped_ed(N_qdofs, false);
-  for (const lf::mesh::Entity *edge : mesh.Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh.Entities(1)) {
     std::span<const lf::assemble::gdof_idx_t> qf_dof_idx{
         dh_quad.GlobalDofIndices(*edge)};
     LF_ASSERT_MSG(qf_dof_idx.size() == 3,

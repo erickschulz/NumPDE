@@ -22,12 +22,12 @@ template <typename SCALAR>
 class FeSpaceLagrangeO2 : public lf::uscalfe::UniformScalarFESpace<SCALAR> {
  public:
   FeSpaceLagrangeO2() = delete;
-  FeSpaceLagrangeO2(const FeSpaceLagrangeO2 &) = delete;
-  FeSpaceLagrangeO2(FeSpaceLagrangeO2 &&) noexcept = default;
-  FeSpaceLagrangeO2 &operator=(const FeSpaceLagrangeO2 &) = delete;
-  FeSpaceLagrangeO2 &operator=(FeSpaceLagrangeO2 &&) noexcept = default;
+  FeSpaceLagrangeO2(const FeSpaceLagrangeO2&) = delete;
+  FeSpaceLagrangeO2(FeSpaceLagrangeO2&&) noexcept = default;
+  FeSpaceLagrangeO2& operator=(const FeSpaceLagrangeO2&) = delete;
+  FeSpaceLagrangeO2& operator=(FeSpaceLagrangeO2&&) noexcept = default;
   explicit FeSpaceLagrangeO2(
-      const std::shared_ptr<const lf::mesh::Mesh> &mesh_p)
+      const std::shared_ptr<const lf::mesh::Mesh>& mesh_p)
       : lf::uscalfe::UniformScalarFESpace<SCALAR>(
             mesh_p, std::make_shared<lf::uscalfe::FeLagrangeO2Tria<SCALAR>>(),
             std::make_shared<lf::uscalfe::FeLagrangeO2Quad<SCALAR>>(),
@@ -43,8 +43,8 @@ class FeSpaceLagrangeO2 : public lf::uscalfe::UniformScalarFESpace<SCALAR> {
  * @param selectvals is the predicate identifying the boundary indices of the
  * rows and columns that are to be dropped */
 template <typename SCALAR, typename SELECTOR>
-void dropMatrixRowsAndColumns(SELECTOR &&selectvals,
-                              lf::assemble::COOMatrix<SCALAR> &A) {
+void dropMatrixRowsAndColumns(SELECTOR&& selectvals,
+                              lf::assemble::COOMatrix<SCALAR>& A) {
   const lf::assemble::size_type N(A.cols());
   LF_ASSERT_MSG(A.rows() == N, "Matrix must be square!");
   A.setZero(
@@ -66,7 +66,7 @@ void dropMatrixRowsAndColumns(SELECTOR &&selectvals,
  * @param selectvals is the predicate identifying the boundary indices of the
  * rows that are to be dropped */
 template <typename SCALAR, typename SELECTOR>
-void dropMatrixRows(SELECTOR &&selectvals, lf::assemble::COOMatrix<SCALAR> &M) {
+void dropMatrixRows(SELECTOR&& selectvals, lf::assemble::COOMatrix<SCALAR>& M) {
   M.setZero(
       [&selectvals](lf::assemble::gdof_idx_t i, lf::assemble::gdof_idx_t j) {
         return (selectvals(i));
@@ -76,13 +76,13 @@ void dropMatrixRows(SELECTOR &&selectvals, lf::assemble::COOMatrix<SCALAR> &M) {
 // Function solving the coupled BVP
 template <typename FUNCTOR>
 Eigen::VectorXd solveCoupledBVP(
-    std::shared_ptr<FeSpaceLagrangeO2<double>> &fe_space, double gamma,
-    FUNCTOR &&f) {
+    std::shared_ptr<FeSpaceLagrangeO2<double>>& fe_space, double gamma,
+    FUNCTOR&& f) {
   Eigen::VectorXd sol_vec;  // solution vector
   // Get pointer to current mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p = fe_space->Mesh();
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Dimension of finite element space
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
@@ -153,7 +153,7 @@ Eigen::VectorXd solveCoupledBVP(
   // Invoke assembly on cells (codim == 0)
   AssembleVectorLocally(0, dofh, elvec_builder, phi);
   // Assigning zero to the boundary values of phi
-  for (const lf::mesh::Entity *node : mesh_p->Entities(2)) {
+  for (const lf::mesh::Entity* node : mesh_p->Entities(2)) {
     if (nodes_bd_flags(*node)) {
       auto dof_idx = dofh.GlobalDofIndices(*node);
       LF_ASSERT_MSG(
@@ -170,12 +170,12 @@ Eigen::VectorXd solveCoupledBVP(
   //
   // V.i Inserting A0 in L
   const std::vector<Eigen::Triplet<double>> A0_triplets_vec = A0.triplets();
-  for (auto &triplet : A0_triplets_vec) {
+  for (auto& triplet : A0_triplets_vec) {
     L.AddToEntry(triplet.row(), triplet.col(), triplet.value());
   }
   // V.ii Inserting A1 in L
   const std::vector<Eigen::Triplet<double>> A1_triplets_vec = A1.triplets();
-  for (auto &triplet : A1_triplets_vec) {
+  for (auto& triplet : A1_triplets_vec) {
     L.AddToEntry(triplet.row() + N_dofs, triplet.col() + N_dofs,
                  triplet.value());
   }
@@ -184,7 +184,7 @@ Eigen::VectorXd solveCoupledBVP(
   // are flipped so that it is the tranpose of M that is added to the left lower
   // diagonal block of L.
   const std::vector<Eigen::Triplet<double>> M_triplets_vec = M.triplets();
-  for (auto &triplet : M_triplets_vec) {
+  for (auto& triplet : M_triplets_vec) {
     L.AddToEntry(triplet.row(), triplet.col() + N_dofs,
                  triplet.value());  // for M in upper right block
     L.AddToEntry(triplet.col() + N_dofs, triplet.row(),

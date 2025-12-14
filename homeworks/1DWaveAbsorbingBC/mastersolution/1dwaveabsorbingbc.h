@@ -32,6 +32,6 @@ Eigen::MatrixXd waveLeapfrogABC(double c, double T, unsigned int N,
  * 0=t_0<...<t_{m}=T
  */
 std::pair<Eigen::VectorXd, Eigen::VectorXd> computeEnergies(
-    const Eigen::MatrixXd &full_solution, double c, double tau);
+    const Eigen::MatrixXd& full_solution, double c, double tau);
 
 }  // namespace WaveAbsorbingBC1D

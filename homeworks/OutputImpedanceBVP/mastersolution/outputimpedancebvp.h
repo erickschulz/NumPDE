@@ -22,18 +22,18 @@ namespace OutputImpedanceBVP {
 
 // Library functions
 Eigen::VectorXd solveImpedanceBVP(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::Vector2d);
 
 double computeBoundaryOutputFunctional(
     const Eigen::VectorXd,
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p,
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
     Eigen::Vector2d);
 
 template <typename FUNCTOR_U>
 Eigen::VectorXd interpolateData(
     std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fe_space_p,
-    FUNCTOR_U &&u) {
+    FUNCTOR_U&& u) {
   // Generate Lehrfem++ mesh functions out of the functors
   auto mf_u = lf::mesh::utils::MeshFunctionGlobal(
       [&u](Eigen::Vector2d x) -> double { return u(x); });

@@ -32,17 +32,17 @@ namespace NitscheMethod {
 /* SAM_LISTING_BEGIN_2 */
 class NitscheBoundaryMatProvider {
  public:
-  NitscheBoundaryMatProvider(lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags,
+  NitscheBoundaryMatProvider(lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags,
                              double c)
       : bd_flags_(bd_flags), c_(c) {}
   virtual ~NitscheBoundaryMatProvider() = default;
-  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity &edge) const {
+  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity& edge) const {
     return bd_flags_(edge);
   }
-  [[nodiscard]] Eigen::Matrix2d Eval(const lf::mesh::Entity &edge) const;
+  [[nodiscard]] Eigen::Matrix2d Eval(const lf::mesh::Entity& edge) const;
 
  private:
-  lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags_;
+  lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags_;
   double c_;
 };
 /* SAM_LISTING_END_2 */
@@ -58,16 +58,16 @@ class NitscheBoundaryMatProvider {
 class LinearFENitscheElementMatrix {
  public:
   LinearFENitscheElementMatrix(
-      lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags, double c)
+      lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags, double c)
       : bd_flags_(bd_flags), c_(c) {}
   virtual ~LinearFENitscheElementMatrix() = default;
-  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity & /*cell*/) const {
+  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity& /*cell*/) const {
     return true;
   }
-  [[nodiscard]] Eigen::Matrix3d Eval(const lf::mesh::Entity &cell) const;
+  [[nodiscard]] Eigen::Matrix3d Eval(const lf::mesh::Entity& cell) const;
 
  private:
-  lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags_;
+  lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags_;
   double c_;
   // Constant matrices for use in Eval()
   const Eigen::MatrixXd c_hat_ = Eigen::Vector2d(1.0 / 3.0, 1.0 / 3.0);
@@ -92,19 +92,19 @@ template <typename FUNCTOR>
 class NitscheElemVecProvider {
  public:
   NitscheElemVecProvider(FUNCTOR g,
-                         lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags,
+                         lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags,
                          double c)
       : g_(g), bd_flags_(bd_flags), c_(c) {}
   virtual ~NitscheElemVecProvider() = default;
-  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity & /*cell*/) {
+  [[nodiscard]] virtual bool isActive(const lf::mesh::Entity& /*cell*/) {
     return true;
   }
-  [[nodiscard]] Eigen::Vector3d Eval(const lf::mesh::Entity &cell) const;
+  [[nodiscard]] Eigen::Vector3d Eval(const lf::mesh::Entity& cell) const;
 
  private:
   FUNCTOR g_;  // $\cob{\Bx\mapsto g(\Bx)}$
   // Flags marking edges on the boundary
-  lf::mesh::utils::CodimMeshDataSet<bool> &bd_flags_;
+  lf::mesh::utils::CodimMeshDataSet<bool>& bd_flags_;
   double c_;  // Penalty parameter $\cob{c}$
   // Reference coordinate of barycentre of a triangle
   const Eigen::MatrixXd c_hat_ = Eigen::Vector2d(1.0 / 3.0, 1.0 / 3.0);
@@ -119,12 +119,12 @@ class NitscheElemVecProvider {
 /* SAM_LISTING_BEGIN_7 */
 template <typename FUNCTOR>
 Eigen::Vector3d NitscheElemVecProvider<FUNCTOR>::Eval(
-    const lf::mesh::Entity &cell) const {
+    const lf::mesh::Entity& cell) const {
   // Throw error in case no triangular cell
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
   // Fetch geometry object for current cell
-  const lf::geometry::Geometry &K_geo{*(cell.Geometry())};
+  const lf::geometry::Geometry& K_geo{*(cell.Geometry())};
   const Eigen::MatrixXd cell_pts{lf::geometry::Corners(K_geo)};
   LF_ASSERT_MSG(K_geo.DimGlobal() == 2, "Mesh must be planar");
   // Obtain physical coordinates of barycenter of triangle
@@ -138,7 +138,7 @@ Eigen::Vector3d NitscheElemVecProvider<FUNCTOR>::Eval(
   Eigen::Vector3d el_vec = Eigen::Vector3d::Zero();
   // Loop over edges and check whether they are
   // located on the bondary
-  std::span<const lf::mesh::Entity *const> edges{cell.SubEntities(1)};
+  std::span<const lf::mesh::Entity* const> edges{cell.SubEntities(1)};
   for (int k = 0; k < 3; ++k) {
     if (bd_flags_(*edges[k])) {
       // Edge with local index k is an edge on the boundary
@@ -191,7 +191,7 @@ Eigen::VectorXd computeNitscheLoadVector(
   // Pointer to underlying mesh
   std::shared_ptr<const lf::mesh::Mesh> mesh_p{lin_fes_p->Mesh()};
   // Obtain local-to-global index mapper "D.o.f. handler"
-  const lf::assemble::DofHandler &dofh{lin_fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{lin_fes_p->LocGlobMap()};
   // Flag all edge (co-dimension-1 entities) on the boundary
   lf::mesh::utils::CodimMeshDataSet<bool> bd_flags{
       lf::mesh::utils::flagEntitiesOnBoundary(mesh_p, 1)};

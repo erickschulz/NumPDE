@@ -18,8 +18,8 @@ namespace BlendedParameterization::test {
 class BlendedParametrizationElementMatrixProvider {
  public:
   BlendedParametrizationElementMatrixProvider() = default;
-  bool isActive(const lf::mesh::Entity &) { return true; }
-  Eigen::MatrixXd Eval(const lf::mesh::Entity &cell) {
+  bool isActive(const lf::mesh::Entity&) { return true; }
+  Eigen::MatrixXd Eval(const lf::mesh::Entity& cell) {
     LF_ASSERT_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                   "Only implemented for Triangles");
     auto geo_p = cell.Geometry();
@@ -41,7 +41,7 @@ TEST(BlendedParameterization, TestGalerkin) {
   auto mesh = lf::mesh::test_utils::GenerateHybrid2DTestMesh(3, 1);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
   // Using the implemented function in blendedparametrization.cc to compute the

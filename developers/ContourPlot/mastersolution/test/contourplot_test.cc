@@ -22,7 +22,7 @@ const Eigen::Vector2d y0(2.0, 0.0);
 const double T = 6.0;
 
 // Compute F(x) - 2 along isoline, which should be zero
-Eigen::VectorXd errorAlongIsoline(const Eigen::MatrixXd &isolinePoints) {
+Eigen::VectorXd errorAlongIsoline(const Eigen::MatrixXd& isolinePoints) {
   int M = isolinePoints.cols();
   Eigen::VectorXd errors(M);
   for (int m = 0; m < M; ++m) {

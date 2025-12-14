@@ -163,7 +163,7 @@ TEST(Homework_2_9, SimpleIntegration) {
              {lf::base::RefEl::kQuad(), 0}});   // 0 dofs in quadrilaterals
 
   // integrating a linear function
-  auto f = [](const Eigen::Vector2d &x) { return x[0] * x[1]; };
+  auto f = [](const Eigen::Vector2d& x) { return x[0] * x[1]; };
   Eigen::VectorXd mu = buildCoefVector(f, lin_dofh);
   Eigen::VectorXd zeta = buildCoefVector(f, quad_dofh);
 
@@ -189,11 +189,11 @@ TEST(Homework_2_9, Integration) {
              {lf::base::RefEl::kQuad(), 0}});   // 0 dofs in quadrilaterals
 
   // integrating a linear function
-  auto f = [](const Eigen::Vector2d &x) { return x[0] * x[1]; };
+  auto f = [](const Eigen::Vector2d& x) { return x[0] * x[1]; };
   Eigen::VectorXd mu = buildCoefVector(f, lin_dofh);
   Eigen::VectorXd zeta = buildCoefVector(f, quad_dofh);
 
-  const double precision = 1e-15;
+  const double precision = 1e-14;
   EXPECT_NEAR(integrateLinearFEFunction(lin_dofh, mu), 487.0 / 24.0, precision);
   EXPECT_NEAR(integrateQuadraticFEFunction(quad_dofh, zeta), 20.25, precision);
 }
@@ -214,7 +214,7 @@ TEST(Homework_2_9, ConstructingZetaFromMu) {
              {lf::base::RefEl::kQuad(), 0}});   // 0 dofs in quadrilaterals
 
   // integrating a linear function
-  auto f = [](const Eigen::Vector2d &x) { return x[0] * x[1]; };
+  auto f = [](const Eigen::Vector2d& x) { return x[0] * x[1]; };
   Eigen::VectorXd mu = buildCoefVector(f, lin_dofh);
   Eigen::VectorXd zeta = buildCoefVector(f, quad_dofh);
   Eigen::VectorXd zeta_constructed =

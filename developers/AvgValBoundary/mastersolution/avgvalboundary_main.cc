@@ -27,7 +27,7 @@ int main() {
   // obtain dofh for lagrangian finite element space
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   // Solve test problem
   Eigen::VectorXd mu = AvgValBoundary::solveTestProblem(dofh);
   // compute H1 seminorm of the solution

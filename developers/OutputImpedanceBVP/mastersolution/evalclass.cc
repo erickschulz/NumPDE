@@ -11,7 +11,7 @@ namespace OutputImpedanceBVP {
 
 /* SAM_LISTING_BEGIN_1 */
 EvalResponse::EvalResponse(
-    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> &fe_space_p) {
+    const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p) {
   // Basis vectors for 2D Euclidean space ("unit vectors")
   Eigen::Vector2d e0{1.0, 0.0}, e1{0.0, 1.0};
 #if SOLUTION

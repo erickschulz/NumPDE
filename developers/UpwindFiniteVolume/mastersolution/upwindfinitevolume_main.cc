@@ -81,8 +81,8 @@ int main() {
     auto bd_flags{lf::mesh::utils::flagEntitiesOnBoundary(cur_mesh, 2)};
     auto my_selector = [&cur_dofh, &u, &bd_flags](unsigned int dof_idx) {
       if (bd_flags(cur_dofh.Entity(dof_idx))) {
-        const lf::mesh::Entity &entity{cur_dofh.Entity(dof_idx)};
-        const lf::geometry::Geometry *geo_p = entity.Geometry();
+        const lf::mesh::Entity& entity{cur_dofh.Entity(dof_idx)};
+        const lf::geometry::Geometry* geo_p = entity.Geometry();
         const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
         Eigen::Vector2d corner = corners.col(0);
         return std::make_pair(true, u(corner));
@@ -104,8 +104,8 @@ int main() {
     // Exact Solution
     Eigen::VectorXd exact_sol(N_dofs);
     for (int i = 0; i < N_dofs; ++i) {
-      const lf::mesh::Entity &entity{cur_dofh.Entity(i)};
-      const lf::geometry::Geometry *geo_p = entity.Geometry();
+      const lf::mesh::Entity& entity{cur_dofh.Entity(i)};
+      const lf::geometry::Geometry* geo_p = entity.Geometry();
       const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
       exact_sol[i] = u(corners.col(0));
     }

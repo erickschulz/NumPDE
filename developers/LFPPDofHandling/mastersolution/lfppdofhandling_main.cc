@@ -55,7 +55,7 @@ int main() {
   // Subproblem e)
   std::cout << "\n -- Subproblem (e)\n";
   // integrating a linear function
-  auto f = [](const Eigen::Vector2d &x) { return x[0] * x[1]; };
+  auto f = [](const Eigen::Vector2d& x) { return x[0] * x[1]; };
   Eigen::VectorXd mu = LFPPDofHandling::buildCoefVector(f, lin_dofh);
   std::cout << "Integrating u..\n";
   std::cout << ".. with linear basis functions: I = "

@@ -1,0 +1,191 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  HUNTER_ROOT: ${{ github.workspace }}/hunter
+
+jobs:
+  # Format check disabled - can be re-enabled later if needed
+  # format:
+  #   name: clang-format-18
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #
+  #   - name: Install clang-format-18
+  #     run: |
+  #       wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+  #       sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+  #       sudo apt-get update
+  #       sudo apt-get install -y clang-format-18
+  #
+  #   - name: Check formatting
+  #     run: |
+  #       echo "Checking if the code is well formatted"
+  #       clang-format-18 --version
+  #       echo "Checking developers folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always developers/
+  #       echo "Checking include folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always include/
+  #       echo "Checking lecturecodes folder"
+  #       ./scripts/ci/run-clang-format.py -r --clang-format-executable clang-format-18 --color always lecturecodes/
+
+  build-linux:
+    name: Build & Test (Linux)
+    runs-on: ubuntu-24.04
+    env:
+      CXX: g++
+      CXXFLAGS: "-Werror=cpp"
+      BUILD_TYPE: Release
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache Hunter packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.HUNTER_ROOT }}
+        key: hunter-linux-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          hunter-linux-
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3 python3-pip ccache
+        pip3 install matplotlib numpy
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ccache-linux-${{ github.sha }}
+        restore-keys: ccache-linux-
+        max-size: 2G
+
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DHUNTER_CONFIGURATION_TYPES=$BUILD_TYPE -DCMAKE_CXX_FLAGS_DEBUG="$CXXFLAGS" -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+
+    - name: Build
+      run: |
+        cd build
+        make -j $(nproc)
+
+    - name: Test
+      continue-on-error: true
+      run: |
+        cd build
+        echo "Testing developer folder master solutions"
+        ../scripts/ci/test_developers.sh
+        echo "Testing lecture codes"
+        ../scripts/ci/run_lecturecodes.sh
+
+  build-macos:
+    name: Build & Test (macOS ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+    env:
+      CXX: clang++
+      CXXFLAGS: "-Werror=#warnings"
+      BUILD_TYPE: Release
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache Hunter packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.HUNTER_ROOT }}
+        key: hunter-${{ matrix.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          hunter-${{ matrix.os }}-
+
+    - name: Install dependencies
+      run: |
+        brew install ccache
+        pip3 install --break-system-packages matplotlib numpy
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ccache-${{ matrix.os }}-${{ github.sha }}
+        restore-keys: ccache-${{ matrix.os }}-
+        max-size: 2G
+
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DHUNTER_CONFIGURATION_TYPES=$BUILD_TYPE -DCMAKE_CXX_FLAGS_DEBUG="$CXXFLAGS" -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+
+    - name: Build
+      run: |
+        cd build
+        make -j $(sysctl -n hw.ncpu)
+
+    - name: Test
+      continue-on-error: true
+      run: |
+        cd build
+        echo "Testing developer folder master solutions"
+        ../scripts/ci/test_developers.sh
+        echo "Testing lecture codes"
+        ../scripts/ci/run_lecturecodes.sh
+
+  tidy:
+    name: clang-tidy-21
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install clang-tidy-21
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/noble/ llvm-toolchain-noble-21 main"
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy-21
+
+    - name: Cache Hunter packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.HUNTER_ROOT }}
+        key: hunter-tidy-${{ hashFiles('**/CMakeLists.txt') }}
+        restore-keys: |
+          hunter-tidy-
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3 python3-pip
+        pip3 install matplotlib numpy
+
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DHOMEWORKS=OFF -DCMAKE_BUILD_TYPE=Release -DHUNTER_CONFIGURATION_TYPES=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DMYSOLUTION=OFF ..
+
+    - name: Run clang-tidy on developers folder
+      run: |
+        cd build
+        echo "Running clang-tidy on developers folder"
+        clang-tidy-21 --version
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-21 -p . -config-file ../.clang-tidy "../developers/.*\.cc"
+
+    - name: Check for std::system usage
+      run: |
+        echo "Checking if std::system is used in developers folder"
+        ./scripts/ci/forbid_stdsystem.sh ./developers/
+
+    - name: Run clang-tidy on lecturecodes folder
+      run: |
+        cd build
+        echo "Running clang-tidy on lecturecodes folder"
+        ../scripts/ci/run-clang-tidy.py -clang-tidy-binary clang-tidy-21 -p . -config-file ../.clang-tidy "../lecturecodes/.*\.cc"

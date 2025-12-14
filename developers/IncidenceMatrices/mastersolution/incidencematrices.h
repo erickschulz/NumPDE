@@ -17,7 +17,7 @@ std::shared_ptr<lf::mesh::Mesh> createDemoMesh();
  * @return The edge-vertex incidence matrix as Eigen::SparseMatrix<int>
  */
 Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
-    const lf::mesh::Mesh &mesh);
+    const lf::mesh::Mesh& mesh);
 
 /** @brief Compute the cell-edge incidence matrix D for a given mesh
  * @param mesh The input mesh of type lf::mesh::Mesh (or of derived type,
@@ -25,7 +25,7 @@ Eigen::SparseMatrix<int> computeEdgeVertexIncidenceMatrix(
  * @return The cell-edge incidence matrix as Eigen::SparseMatrix<int>
  */
 Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
-    const lf::mesh::Mesh &mesh);
+    const lf::mesh::Mesh& mesh);
 
 /** @brief For a given mesh test if the product of cell-edge and edge-vertex
  *         incidence matrix is zero: D*G == 0?
@@ -33,13 +33,13 @@ Eigen::SparseMatrix<int> computeCellEdgeIncidenceMatrix(
  *        such as lf::mesh::hybrid2d::Mesh)
  * @return true, if the product is zero and false otherwise
  */
-bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh &mesh);
+bool testZeroIncidenceMatrixProduct(const lf::mesh::Mesh& mesh);
 
 /** @brief Compute the Hodge-Laplacian matrix L for the given mesh
  * @param mesh The input mesh of type lf::mesh::Mesh (or of derived type,
  *        such as lf::mesh::hybrid2d::Mesh)
  * @return The Hodge-Laplacian matrix in sparse matrix format
  */
-Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh &mesh);
+Eigen::SparseMatrix<int> computeHodgeLaplaceMatrix(const lf::mesh::Mesh& mesh);
 
 }  // namespace IncidenceMatrices

@@ -23,9 +23,9 @@
 constexpr double PI = 3.14159265358979323846;
 
 // Helper function to compute the meshwidth of a refinement
-double maxLength(const std::span<const lf::mesh::Entity *const> &edges) {
+double maxLength(const std::span<const lf::mesh::Entity* const>& edges) {
   double length = 0.0;
-  for (const lf::mesh::Entity *edge : edges) {
+  for (const lf::mesh::Entity* edge : edges) {
     Eigen::Matrix2d corners = lf::geometry::Corners(*(edge->Geometry()));
     double new_length = (corners.col(1) - corners.col(0)).norm();
     length = std::max(length, new_length);
@@ -53,7 +53,7 @@ int main() {
   // Write the solution to a .vtk file
   lf::io::VtkWriter vtk_writer(mesh_p, "solution.vtk");
   auto nodal_data = lf::mesh::utils::make_CodimMeshDataSet<double>(mesh_p, 2);
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
   for (int i = 0; i < mu.size(); ++i) {
     nodal_data->operator()(dofh.Entity(i)) = mu(i);
   };
@@ -105,7 +105,7 @@ int main() {
 
     // Fills the error vector that is captured by reference
     auto recorder = [&h1s_error, &fe_space, grad_u](double t,
-                                                    const Eigen::VectorXd &mu) {
+                                                    const Eigen::VectorXd& mu) {
       lf::mesh::utils::MeshFunctionGlobal grad_mf(
           [t, grad_u](Eigen::Vector2d x) { return grad_u(x, t); });
       lf::uscalfe::MeshFunctionL2GradientDifference loc_comp_h1(fe_space,

@@ -51,7 +51,7 @@ TEST(FluxLimitedFV, fluxlimAdvectionTestDiscontiuous) {
   Eigen::VectorXd flux_sol = fluxlimAdvection(beta, mu, h, tau, N);
   ASSERT_TRUE(flux_sol.size() == 20);
 
-  Eigen::VectorXd ref_sol(20);
+  Eigen::VectorXd ref_sol = Eigen::VectorXd::Zero(20);
   for (int i = 0; i < 14; i++) {
     ref_sol(i) = 1.;
   }

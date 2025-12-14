@@ -15,13 +15,13 @@ namespace SymplecticTimesteppingWaves {
 
 class progress_bar {
   static const auto overhead = sizeof " [100%]";
-  std::ostream &os;
+  std::ostream& os;
   const std::size_t bar_width;
   std::string message;
   const std::string full_bar;
 
  public:
-  progress_bar(std::ostream &os, std::size_t line_width, std::string message_,
+  progress_bar(std::ostream& os, std::size_t line_width, std::string message_,
                const char symbol = '.')
       : os{os},
         bar_width{line_width - overhead},
@@ -37,8 +37,8 @@ class progress_bar {
     write(0.0);
   }
 
-  progress_bar(const progress_bar &) = delete;
-  progress_bar &operator=(const progress_bar &) = delete;
+  progress_bar(const progress_bar&) = delete;
+  progress_bar& operator=(const progress_bar&) = delete;
 
   ~progress_bar() {
     write(1.0);
@@ -74,9 +74,9 @@ class SympTimestepWaveEq {
                   "Cholesky LDLT decomposition for sparse matrix M_ failed");
   }
   /* Public member functions */
-  void compTimestep(double tau, Eigen::VectorXd &p, Eigen::VectorXd &q) const;
-  double computeEnergies(const Eigen::VectorXd &p,
-                         const Eigen::VectorXd &q) const;
+  void compTimestep(double tau, Eigen::VectorXd& p, Eigen::VectorXd& q) const;
+  double computeEnergies(const Eigen::VectorXd& p,
+                         const Eigen::VectorXd& q) const;
 
  private:
   Eigen::SparseMatrix<double> A_;  // Galerkin matrix for volume integrals
@@ -88,8 +88,8 @@ class SympTimestepWaveEq {
 /* Implementing member functions of class SympTimestepWaveEq */
 /* SAM_LISTING_BEGIN_9 */
 template <typename FUNCTION>
-void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd &p,
-                                                Eigen::VectorXd &q) const {
+void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd& p,
+                                                Eigen::VectorXd& q) const {
   // Coefficients of the method
   Eigen::VectorXd a(3);
   a << 2.0 / 3.0, -2.0 / 3.0, 1.0;
@@ -110,7 +110,7 @@ void SympTimestepWaveEq<FUNCTION>::compTimestep(double tau, Eigen::VectorXd &p,
 /* SAM_LISTING_BEGIN_0 */
 template <typename FUNCTION>
 double SympTimestepWaveEq<FUNCTION>::computeEnergies(
-    const Eigen::VectorXd &p, const Eigen::VectorXd &q) const {
+    const Eigen::VectorXd& p, const Eigen::VectorXd& q) const {
   double energy;
   energy = 0.5 * (p.dot(M_ * p) + q.dot(A_ * q));
   return energy;
@@ -121,7 +121,7 @@ double SympTimestepWaveEq<FUNCTION>::computeEnergies(
 template <typename FUNCTION>
 std::pair<Eigen::VectorXd, Eigen::VectorXd> solvewave(
     std::shared_ptr<lf::uscalfe::UniformScalarFESpace<double>> fes_p,
-    FUNCTION c, const Eigen::VectorXd &u0_vec, const Eigen::VectorXd &v0_vec,
+    FUNCTION c, const Eigen::VectorXd& u0_vec, const Eigen::VectorXd& v0_vec,
     double T, unsigned int m) {
   std::pair<Eigen::VectorXd, Eigen::VectorXd> solution_pair;
   double tau = T / m;  // time step
@@ -129,7 +129,7 @@ std::pair<Eigen::VectorXd, Eigen::VectorXd> solvewave(
   progress_bar progress{std::clog, 70u, "Timestepping"};
   double progress_pourcentage;
   // Obtain local->global index mapping for current finite element space
-  const lf::assemble::DofHandler &dofh{fes_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fes_p->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());  // dim. of FE space size
   LF_VERIFY_MSG(u0_vec.size() == N_dofs, "Wrong size of initial conditions u0");
   LF_VERIFY_MSG(v0_vec.size() == N_dofs, "Wrong size of initial conditions");

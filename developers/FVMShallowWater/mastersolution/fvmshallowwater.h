@@ -23,7 +23,7 @@ bool isPhysicalTwoShockSolution(Eigen::Vector2d ul, Eigen::Vector2d us,
                                 Eigen::Vector2d ur);
 
 #if SOLUTION
-bool checkSWERHJC(Eigen::Vector2d ul, Eigen::Vector2d ur, double *speed);
+bool checkSWERHJC(Eigen::Vector2d ul, Eigen::Vector2d ur, double* speed);
 
 bool checkSWEPhysicalShock(Eigen::Vector2d ul, Eigen::Vector2d ur);
 
@@ -112,12 +112,12 @@ Eigen::Vector2d numfluxLFSWE(Eigen::Vector2d v, Eigen::Vector2d w);
 /* SAM_LISTING_BEGIN_5 */
 template <
     typename STATE, typename TIMESTEPPER, typename NUMFLUX,
-    typename RECORDER = std::function<void(double, const std::vector<STATE> &)>>
+    typename RECORDER = std::function<void(double, const std::vector<STATE>&)>>
 void FVMEvlGeneric(
-    double a, double b, double T, TIMESTEPPER &&ts_control,
-    std::vector<STATE> &u, NUMFLUX &&NF,
-    RECORDER &&rec = [](double /*t*/,
-                        const std::vector<STATE> & /*u*/) -> void {}) {
+    double a, double b, double T, TIMESTEPPER&& ts_control,
+    std::vector<STATE>& u, NUMFLUX&& NF,
+    RECORDER&& rec = [](double /*t*/, const std::vector<STATE>& /*u*/) -> void {
+    }) {
   size_t N = u.size();  // number of cells = number of (spatial) unknowns
   double h = (b - a) / N;
   // Main timestepping loop
@@ -161,9 +161,9 @@ void FVMEvlGeneric(
 
 /* SAM_LISTING_BEGIN_6 */
 template <typename U0FUNCTOR, typename NUMFLUX>
-std::vector<Eigen::Vector2d> solveSWE(double T, unsigned int N, NUMFLUX &&NF,
-                                      U0FUNCTOR &&u0,
-                                      std::ostream *out = nullptr) {
+std::vector<Eigen::Vector2d> solveSWE(double T, unsigned int N, NUMFLUX&& NF,
+                                      U0FUNCTOR&& u0,
+                                      std::ostream* out = nullptr) {
   // Initialize initial data for N cell values
   std::vector<Eigen::Vector2d> u0_vec{N};
   // Sample initial values on equidistant mesh
@@ -175,19 +175,19 @@ std::vector<Eigen::Vector2d> solveSWE(double T, unsigned int N, NUMFLUX &&NF,
   // Functor for timestep control
 #if SOLUTION
   auto ts_ctrl = [](double h,
-                    const std::vector<Eigen::Vector2d> &u_vec) -> double {
+                    const std::vector<Eigen::Vector2d>& u_vec) -> double {
     double s_max = 0.0;
     double l1;
     double l2;
     // Determine maximal characteristic speed
-    for (const Eigen::Vector2d &u : u_vec) {
+    for (const Eigen::Vector2d& u : u_vec) {
       std::tie(l1, l2) = sweLambdas(u);
       s_max = std::max({s_max, std::abs(l1), std::abs(l2)});
     }
     return h / s_max;
   };
 #else
-  auto ts_ctrl = [](double h, const std::vector<Eigen::Vector2d> &) -> double {
+  auto ts_ctrl = [](double h, const std::vector<Eigen::Vector2d>&) -> double {
     /* **************************************************
        Your code here
        The next three lines is just a flawed "dummy" implementation.
@@ -199,7 +199,7 @@ std::vector<Eigen::Vector2d> solveSWE(double T, unsigned int N, NUMFLUX &&NF,
   std::vector<double> times;
   FVMEvlGeneric(
       -1.0, 1.0, T, ts_ctrl, u0_vec, NF,
-      [&data, &times](double t, const std::vector<Eigen::Vector2d> &u) -> void {
+      [&data, &times](double t, const std::vector<Eigen::Vector2d>& u) -> void {
         times.push_back(t);
         data.push_back(u);
       });
@@ -210,14 +210,14 @@ std::vector<Eigen::Vector2d> solveSWE(double T, unsigned int N, NUMFLUX &&NF,
     }
     (*out) << "];\n u1 = [ ...\n";
     for (auto u_vec : data) {
-      for (const Eigen::Vector2d &u : u_vec) {
+      for (const Eigen::Vector2d& u : u_vec) {
         (*out) << u[0] << ' ';
       }
       (*out) << "; ...\n";
     }
     (*out) << "]; \n u2 = [ ...\n";
     for (auto u_vec : data) {
-      for (const Eigen::Vector2d &u : u_vec) {
+      for (const Eigen::Vector2d& u : u_vec) {
         (*out) << u[1] << ' ';
       }
       (*out) << "; ...\n";

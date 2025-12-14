@@ -13,7 +13,7 @@ constexpr double PI = 3.14159265358979323846;
 namespace SymplecticTimestepping {
 
 /* SAM_LISTING_BEGIN_0 */
-void sympTimestep(double tau, Eigen::Vector2d &pq_j) {
+void sympTimestep(double tau, Eigen::Vector2d& pq_j) {
   // Coefficients of the method
   const Eigen::Vector3d a{2. / 3., -2. / 3., 1.};
   const Eigen::Vector3d b{7. / 24., 3. / 4., -1. / 24.};
@@ -63,8 +63,8 @@ void sympTimesteppingODETest() {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_3 */
-Eigen::MatrixXd simulateHamiltonianDynamics(const Eigen::VectorXd &p0,
-                                            const Eigen::VectorXd &q0, double T,
+Eigen::MatrixXd simulateHamiltonianDynamics(const Eigen::VectorXd& p0,
+                                            const Eigen::VectorXd& q0, double T,
                                             unsigned int M) {
   int n = p0.size();
   Eigen::MatrixXd PQ(2 * n, M + 1);

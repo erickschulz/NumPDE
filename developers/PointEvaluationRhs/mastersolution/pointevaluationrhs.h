@@ -17,8 +17,8 @@
 namespace PointEvaluationRhs {
 
 std::pair<double, double> normsSolutionPointLoadDirichletBVP(
-    const lf::assemble::DofHandler &dofh, Eigen::Vector2d source_point,
-    Eigen::VectorXd &sol_vec);
+    const lf::assemble::DofHandler& dofh, Eigen::Vector2d source_point,
+    Eigen::VectorXd& sol_vec);
 
 Eigen::Vector2d GlobalInverseTria(Eigen::Matrix<double, 2, 3> mycorners,
                                   Eigen::Vector2d x);
@@ -39,10 +39,10 @@ class DeltaLocalVectorAssembler {
  public:
   explicit DeltaLocalVectorAssembler(Eigen::Vector2d x)
       : x_0(x), already_found(false) {}
-  bool isActive(const lf::mesh::Entity &entity) const {
+  bool isActive(const lf::mesh::Entity& entity) const {
     return (!already_found);
   }
-  Eigen::VectorXd Eval(const lf::mesh::Entity &cell);
+  Eigen::VectorXd Eval(const lf::mesh::Entity& cell);
 };
 
 }  // namespace PointEvaluationRhs

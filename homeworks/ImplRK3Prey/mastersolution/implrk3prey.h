@@ -21,15 +21,7 @@ namespace ImplRK3Prey {
 // Compute the Kronecker product $C = A \otimes B$
 // A is m x n matrix, B is l x k matrix
 // return Kronecker product of A and B: dim is m*l x n*k
-Eigen::MatrixXd kron(const Eigen::MatrixXd &A, const Eigen::MatrixXd &B) {
-  Eigen::MatrixXd C(A.rows() * B.rows(), A.cols() * B.cols());
-  for (unsigned int i = 0; i < A.rows(); ++i) {
-    for (unsigned int j = 0; j < A.cols(); ++j) {
-      C.block(i * B.rows(), j * B.cols(), B.rows(), B.cols()) = A(i, j) * B;
-    }
-  }
-  return C;
-}
+Eigen::MatrixXd kron(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B);
 
 // Implements a Runge-Kutta implicit solver for a given Butcher tableau
 // for autonomous ODEs.
@@ -39,7 +31,7 @@ class implicitRKIntegrator {
   // Constructor
   // A is a  matrix containing coefficents of Butcher tableau
   // b is a vector containing coefficients of lower part of Butcher tableau
-  implicitRKIntegrator(const Eigen::MatrixXd &A, const Eigen::VectorXd &b)
+  implicitRKIntegrator(const Eigen::MatrixXd& A, const Eigen::VectorXd& b)
       : A(A), b(b), s(b.size()) {
     assert(A.cols() == A.rows() && "Matrix must be square.");
     assert(A.cols() == b.size() && "Incompatible matrix/vector size.");
@@ -52,8 +44,8 @@ class implicitRKIntegrator {
    * time T with initial condition y0.
    * Returns a vector containing all steps y^n (for each n) inclu. y0 */
   template <class Function, class Jacobian>
-  std::vector<Eigen::VectorXd> solve(Function &&f, Jacobian &&Jf, double T,
-                                     const Eigen::VectorXd &y0,
+  std::vector<Eigen::VectorXd> solve(Function&& f, Jacobian&& Jf, double T,
+                                     const Eigen::VectorXd& y0,
                                      unsigned int N) const {
     // Iniz step size
     double h = T / N;
@@ -69,8 +61,8 @@ class implicitRKIntegrator {
     Eigen::VectorXd ytemp1 = y0;
     Eigen::VectorXd ytemp2 = y0;
     // Pointers to swap previous value
-    Eigen::VectorXd *yold = &ytemp1;
-    Eigen::VectorXd *ynew = &ytemp2;
+    Eigen::VectorXd* yold = &ytemp1;
+    Eigen::VectorXd* ynew = &ytemp2;
 
     // Loop over all fixed steps
     for (unsigned int k = 0; k < N; ++k) {
@@ -87,8 +79,8 @@ class implicitRKIntegrator {
   /* Perform a single step of the RK method for the for of the autonomous ODE */
   /* SAM_LISTING_BEGIN_0 */
   template <class Function, class Jacobian>
-  void step(Function &&f, Jacobian &&Jf, double h, const Eigen::VectorXd &y0,
-            Eigen::VectorXd &y1) const {
+  void step(Function&& f, Jacobian&& Jf, double h, const Eigen::VectorXd& y0,
+            Eigen::VectorXd& y1) const {
     int d = y0.size();
     const Eigen::MatrixXd eye = Eigen::MatrixXd::Identity(d, d);
 

@@ -26,8 +26,8 @@ TEST(FisherKPP, assembleGalerkinMatrices) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // Dofhandler
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
-  auto c = [](const Eigen::Vector2d & /*x*/) -> double { return 1.; };
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
+  auto c = [](const Eigen::Vector2d& /*x*/) -> double { return 1.; };
   auto galerkinpair = FisherKPP::assembleGalerkinMatrices(dofh, c);
 
   Eigen::MatrixXd A(galerkinpair.first);
@@ -66,11 +66,11 @@ TEST(FisherKPP, DiffusionEvolutionOperator) {
   double T = 1.;
   unsigned int m = 100;
   double lambda = 0.;
-  auto c = [](const Eigen::Vector2d & /*x*/) -> double { return 1.; };
+  auto c = [](const Eigen::Vector2d& /*x*/) -> double { return 1.; };
   StrangSplit strang_split(fe_space, T, m, lambda, c);
 
   double tau = T / m;
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   Eigen::VectorXd mu = Eigen::VectorXd::Zero(dofh.NumDofs());
   mu(5) = 100.;
 
@@ -96,7 +96,7 @@ TEST(FisherKPP, Evolution) {
   double T = 1.;
   unsigned int m = 100;
   double lambda = 0.;
-  auto c = [](const Eigen::Vector2d & /*x*/) -> double { return 1.; };
+  auto c = [](const Eigen::Vector2d& /*x*/) -> double { return 1.; };
   StrangSplit strang_split(fe_space, T, m, lambda, c);
 
   Eigen::VectorXd mu = Eigen::VectorXd::Zero(13);

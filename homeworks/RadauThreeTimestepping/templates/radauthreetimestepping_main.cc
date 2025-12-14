@@ -21,7 +21,7 @@
 
 using namespace RadauThreeTimestepping;
 
-int main(int /*argc*/, char ** /*argv*/) {
+int main(int /*argc*/, char** /*argv*/) {
   /* Solving the ODE problem */
   // This function prints to the terminal the convergence rates and average rate
   // of a convergence study performed for the ODE (d/dt)y = -y.

@@ -22,7 +22,7 @@ Eigen::SparseMatrix<double> buildLaplacian2D(int n);
 /** @brief Initialization of initial vector
  */
 template <typename FUNCTOR>
-Eigen::VectorXd init_u0(FUNCTOR &&u0_fn, int n) {
+Eigen::VectorXd init_u0(FUNCTOR&& u0_fn, int n) {
   const int N = n * n;       // Total number of vector components
   double h = 1.0 / (n + 1);  // Mesh width
   Eigen::VectorXd u0(N);
@@ -43,9 +43,9 @@ Eigen::VectorXd init_u0(FUNCTOR &&u0_fn, int n) {
  *         timestepping
  *
  */
-std::pair<double, double> geten(const Eigen::SparseMatrix<double> &A,
-                                double tau, const Eigen::VectorXd &u0,
-                                const Eigen::VectorXd &u1);
+std::pair<double, double> geten(const Eigen::SparseMatrix<double>& A,
+                                double tau, const Eigen::VectorXd& u0,
+                                const Eigen::VectorXd& u1);
 
 /** @brief Leapfrof timestepping for constant-coefficients 2D wave equation on
    equidistant spatial mesh: tracking of energies.
@@ -54,9 +54,9 @@ std::pair<double, double> geten(const Eigen::SparseMatrix<double> &A,
    @param n number of grid points in one direction
    @param m number of leapfrog timesteps
  */
-std::vector<std::array<double, 4>> leapfrog(const Eigen::VectorXd &u0,
+std::vector<std::array<double, 4>> leapfrog(const Eigen::VectorXd& u0,
                                             unsigned int n, unsigned int m);
 
-void tabulate_energies(int n, int m, const char *filename = nullptr);
+void tabulate_energies(int n, int m, const char* filename = nullptr);
 
 }  // namespace LeapfrogWave

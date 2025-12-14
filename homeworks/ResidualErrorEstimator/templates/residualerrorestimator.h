@@ -42,7 +42,7 @@ class MeshFunctionPWConst {
    */
   template <typename FUNCTOR>
   MeshFunctionPWConst(std::shared_ptr<const lf::mesh::Mesh> mesh_p,
-                      FUNCTOR &&f);
+                      FUNCTOR&& f);
   /** @brief evaluation operator
    *
    * @param e reference to a cell of the underlying mesh
@@ -50,8 +50,8 @@ class MeshFunctionPWConst {
    * is used!
    * @return vector of function values, all the same!
    */
-  std::vector<double> operator()(const lf::mesh::Entity &e,
-                                 const Eigen::MatrixXd &refc) const {
+  std::vector<double> operator()(const lf::mesh::Entity& e,
+                                 const Eigen::MatrixXd& refc) const {
     LF_ASSERT_MSG(e.RefEl().Dimension() == 2, "Implemented for 2D cells only!");
     return std::vector<double>(refc.cols(), data_(e));
   }
@@ -63,14 +63,14 @@ class MeshFunctionPWConst {
 
 template <typename FUNCTOR>
 MeshFunctionPWConst::MeshFunctionPWConst(
-    std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR &&f)
+    std::shared_ptr<const lf::mesh::Mesh> mesh_p, FUNCTOR&& f)
     : mesh_p_(mesh_p), data_(mesh_p, 0, 0.0) {
   // Run through the cells of the mesh
-  for (const lf::mesh::Entity *cell : mesh_p->Entities(0)) {
+  for (const lf::mesh::Entity* cell : mesh_p->Entities(0)) {
     // Fetch type of cell
     const lf::base::RefEl ref_el{cell->RefEl()};
     // Get geometry, corners of cell
-    const lf::geometry::Geometry &geo{*(cell->Geometry())};
+    const lf::geometry::Geometry& geo{*(cell->Geometry())};
     const Eigen::MatrixXd corners{lf::geometry::Corners(geo)};
     // Compute physical coordinates of center point
     Eigen::MatrixXd center(2, 1);
@@ -100,8 +100,8 @@ MeshFunctionPWConst::MeshFunctionPWConst(
  */
 /* SAM_LISTING_BEGIN_1 */
 struct dataDiscreteBVP {
-  dataDiscreteBVP &operator=(const dataDiscreteBVP &) = delete;
-  dataDiscreteBVP &operator=(const dataDiscreteBVP &&) = delete;
+  dataDiscreteBVP& operator=(const dataDiscreteBVP&) = delete;
+  dataDiscreteBVP& operator=(const dataDiscreteBVP&&) = delete;
 
   /** @brief Constructor, which essentially copies the passed arguments
    */
@@ -117,15 +117,15 @@ struct dataDiscreteBVP {
 
 /** @briefs Solves homogeneous Dirichlet boundary value problem
  */
-Eigen::VectorXd solveBVP(const dataDiscreteBVP &disc_bvp);
+Eigen::VectorXd solveBVP(const dataDiscreteBVP& disc_bvp);
 
 /** @brief Computes cell contributions to error estimator */
 lf::mesh::utils::CodimMeshDataSet<double> volumeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd &u_vec);
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& u_vec);
 
 /** @brief Evaluates edge terms for  error estimator */
 lf::mesh::utils::CodimMeshDataSet<double> edgeResiduals(
-    const dataDiscreteBVP &disc_bvp, const Eigen::VectorXd &u_vec);
+    const dataDiscreteBVP& disc_bvp, const Eigen::VectorXd& u_vec);
 
 /** @brief solves boundary value problem and estimates error
 

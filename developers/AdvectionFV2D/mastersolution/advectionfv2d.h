@@ -39,7 +39,7 @@ computeCellNormals(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
  * @return CodimMeshDataSet which stores for each cell all neighbor cells.
  */
 std::shared_ptr<
-    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity *, 4>>>
+    lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
 getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
 
 /**
@@ -50,7 +50,7 @@ getAdjacentCellPointers(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
  * @return Matrix providing the coefficients.
  */
 Eigen::Matrix<double, 2, 3> gradbarycoordinates(
-    const Eigen::Matrix<double, 2, 3> &triangle);
+    const Eigen::Matrix<double, 2, 3>& triangle);
 
 /**
  * @brief Compute the barycenter of a QUAD or TRIA
@@ -74,9 +74,9 @@ Eigen::Vector2d barycenter(const Eigen::MatrixXd corners);
 /* SAM_LISTING_BEGIN_1 */
 template <typename VECTORFIELD>
 Eigen::SparseMatrix<double> initializeMOLODEMatrix(
-    const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta,
+    const lf::assemble::DofHandler& dofh, VECTORFIELD&& beta,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-        std::array<const lf::mesh::Entity *, 4>>>
+        std::array<const lf::mesh::Entity*, 4>>>
         adjacentCells,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
         Eigen::Matrix<double, 2, Eigen::Dynamic>>>
@@ -93,9 +93,9 @@ Eigen::SparseMatrix<double> initializeMOLODEMatrix(
   B_Matrix.reserve(bound_nnz);
 
   // Iterate over all cells
-  for (const lf::mesh::Entity *cell : dofh.Mesh()->Entities(0)) {
+  for (const lf::mesh::Entity* cell : dofh.Mesh()->Entities(0)) {
     // Compute area of cell
-    const lf::geometry::Geometry *geo_p = cell->Geometry();
+    const lf::geometry::Geometry* geo_p = cell->Geometry();
     double area = lf::geometry::Volume(*geo_p);
 
     // Corresponting DOF of ref. cell
@@ -106,7 +106,7 @@ Eigen::SparseMatrix<double> initializeMOLODEMatrix(
         (*normal_vectors)(*cell);
 
     // Get adjacent cells of ref. cell
-    std::array<const lf::mesh::Entity *, 4> neighbour_cells =
+    std::array<const lf::mesh::Entity*, 4> neighbour_cells =
         (*adjacentCells)(*cell);
 
     // Get edges of ref. cell
@@ -116,7 +116,7 @@ Eigen::SparseMatrix<double> initializeMOLODEMatrix(
     int num_edges = cur_normal_vectors.cols();
     for (int edge_nr = 0; edge_nr < num_edges; ++edge_nr) {
       // Geo pointer of current edge
-      const lf::geometry::Geometry *edge_geo_p =
+      const lf::geometry::Geometry* edge_geo_p =
           (cell_edges[edge_nr])->Geometry();
 
       // Length of current edge
@@ -131,7 +131,7 @@ Eigen::SparseMatrix<double> initializeMOLODEMatrix(
           (corner_edges.col(0) + corner_edges.col(1)) * 0.5;
 
       // Get neighbor cell
-      const lf::mesh::Entity *next_cell = neighbour_cells[edge_nr];
+      const lf::mesh::Entity* next_cell = neighbour_cells[edge_nr];
 
       if (next_cell != nullptr) {
         // Corresponting DOF of next_cell
@@ -196,10 +196,10 @@ double computeHmin(std::shared_ptr<const lf::mesh::Mesh> mesh_p);
 /* SAM_LISTING_BEGIN_2 */
 template <typename VECTORFIELD>
 Eigen::VectorXd solveAdvection2D(
-    const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta,
-    const Eigen::VectorXd &u0_h,
+    const lf::assemble::DofHandler& dofh, VECTORFIELD&& beta,
+    const Eigen::VectorXd& u0_h,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-        std::array<const lf::mesh::Entity *, 4>>>
+        std::array<const lf::mesh::Entity*, 4>>>
         adjacentCells,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
         Eigen::Matrix<double, 2, Eigen::Dynamic>>>
@@ -220,7 +220,7 @@ Eigen::VectorXd solveAdvection2D(
       lf::mesh::utils::flagEntitiesOnBoundary(dofh.Mesh(), 1)};
 
   // Iterate over all cells
-  for (const lf::mesh::Entity *cell : dofh.Mesh()->Entities(0)) {
+  for (const lf::mesh::Entity* cell : dofh.Mesh()->Entities(0)) {
     int counter = 0;
     // Iterate over all edges
     for (auto edge : cell->SubEntities(1)) {
@@ -290,9 +290,9 @@ Eigen::VectorXd solveAdvection2D(
 /* SAM_LISTING_BEGIN_3 */
 template <typename FUNCTOR, typename VECTORFIELD>
 Eigen::VectorXd simulateAdvection(
-    const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta, FUNCTOR &&u0,
+    const lf::assemble::DofHandler& dofh, VECTORFIELD&& beta, FUNCTOR&& u0,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-        std::array<const lf::mesh::Entity *, 4>>>
+        std::array<const lf::mesh::Entity*, 4>>>
         adjacentCells,
     std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
         Eigen::Matrix<double, 2, Eigen::Dynamic>>>
@@ -306,8 +306,8 @@ Eigen::VectorXd simulateAdvection(
   Eigen::VectorXd u0_h(num_dof);
 
   // Iterate over all cells
-  for (const lf::mesh::Entity *cell : dofh.Mesh()->Entities(0)) {
-    const lf::geometry::Geometry *geo_p = cell->Geometry();
+  for (const lf::mesh::Entity* cell : dofh.Mesh()->Entities(0)) {
+    const lf::geometry::Geometry* geo_p = cell->Geometry();
     const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
     // Compute barycenter of the cell
@@ -343,7 +343,7 @@ Eigen::VectorXd simulateAdvection(
  */
 /* SAM_LISTING_BEGIN_4 */
 template <typename FUNCTOR>
-Eigen::VectorXd refSolution(const lf::assemble::DofHandler &dofh, FUNCTOR &&u0,
+Eigen::VectorXd refSolution(const lf::assemble::DofHandler& dofh, FUNCTOR&& u0,
                             double T) {
   // Setup inverted phi^-1
   Eigen::Matrix2d phi_inv;
@@ -357,8 +357,8 @@ Eigen::VectorXd refSolution(const lf::assemble::DofHandler &dofh, FUNCTOR &&u0,
 
 #if SOLUTION
   // Iterate over all cells
-  for (const lf::mesh::Entity *cell : dofh.Mesh()->Entities(0)) {
-    const lf::geometry::Geometry *geo_p = cell->Geometry();
+  for (const lf::mesh::Entity* cell : dofh.Mesh()->Entities(0)) {
+    const lf::geometry::Geometry* geo_p = cell->Geometry();
     const Eigen::MatrixXd corners = lf::geometry::Corners(*geo_p);
 
     // Compute the barycenter of the cell
@@ -395,7 +395,7 @@ Eigen::VectorXd refSolution(const lf::assemble::DofHandler &dofh, FUNCTOR &&u0,
  */
 /* SAM_LISTING_BEGIN_5 */
 template <typename VECTORFIELD>
-int findCFLthreshold(const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta,
+int findCFLthreshold(const lf::assemble::DofHandler& dofh, VECTORFIELD&& beta,
                      double T) {
 #if SOLUTION
   // Set upper and lower limit
@@ -408,8 +408,8 @@ int findCFLthreshold(const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta,
       normal_vectors = AdvectionFV2D::computeCellNormals(dofh.Mesh());
 
   // Compute adjecent cells
-  std::shared_ptr<lf::mesh::utils::CodimMeshDataSet<
-      std::array<const lf::mesh::Entity *, 4>>>
+  std::shared_ptr<
+      lf::mesh::utils::CodimMeshDataSet<std::array<const lf::mesh::Entity*, 4>>>
       adjacentCells = AdvectionFV2D::getAdjacentCellPointers(dofh.Mesh());
 
   // Initialize a vector for the result and
@@ -428,7 +428,7 @@ int findCFLthreshold(const lf::assemble::DofHandler &dofh, VECTORFIELD &&beta,
       solveAdvection2D(dofh, beta, u0_h, adjacentCells, normal_vectors, T,
                        M_middle);
       M_upper = M_middle;
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
       M_lower = M_middle;
     }
   }

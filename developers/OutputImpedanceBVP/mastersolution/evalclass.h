@@ -17,8 +17,8 @@ class EvalResponse {
  public:
   /* Constructor */
   explicit EvalResponse(
-      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>
-          &fe_space_p);
+      const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>&
+          fe_space_p);
   /* Evaluation operator */
   double operator()(Eigen::Vector2d g, Eigen::Vector2d d) const;
 

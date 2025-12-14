@@ -12,7 +12,7 @@ TEST(ParametricElementMatrices, TestGalerkin) {
   auto mesh = lf::mesh::test_utils::GenerateHybrid2DTestMesh(5, 1);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs(dofh.NumDofs());
 
   // compute galerkin matrix for d(x) = sin(|x|)x using the implemented class
@@ -59,7 +59,7 @@ TEST(ParametricElementMatrices, TestLoad) {
   auto mesh = lf::mesh::test_utils::GenerateHybrid2DTestMesh(5, 1);
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh);
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::base::size_type N_dofs(dofh.NumDofs());
   // An affine linear function that can be represented exactly
   // in the space of p.w. linear Lagrangian finite element functions

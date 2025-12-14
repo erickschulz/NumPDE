@@ -40,7 +40,7 @@ int main() {
   const std::string filename = "solution";
   lf::io::VtkWriter vtk_writer(mesh_p, filename + ".vtk");
   auto nodal_data = lf::mesh::utils::make_CodimMeshDataSet<double>(mesh_p, 2);
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
   for (int i = 0; i < mu.size(); ++i) {
     nodal_data->operator()(dofh.Entity(i)) = mu(i);
   };

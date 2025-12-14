@@ -19,7 +19,7 @@
 namespace Brachistochrone {
 
 /* SAM_LISTING_BEGIN_0 */
-double L2norm(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+double L2norm(const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   double norm = 0.;
   // Definition quadrature points (2-point Gauss)
   const double rh = .5 + .5 / std::sqrt(3.);
@@ -38,7 +38,7 @@ double L2norm(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
 /* SAM_LISTING_END_0 */
 
 /* SAM_LISTING_BEGIN_8 */
-double traveltime(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+double traveltime(const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   double out = 0.;
   // Definition quadrature points (2-point Gauss)
   const double rh = .5 + .5 / std::sqrt(3.);
@@ -65,7 +65,7 @@ double traveltime(const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
  */
 
 Eigen::VectorXd coeff_sigma_dbg(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   int M = knots.cols() - 1;
   Eigen::VectorXd sigma_vec(M);
   // Definition of locations quadrature points (2-point Gauss rule)
@@ -86,7 +86,7 @@ Eigen::VectorXd coeff_sigma_dbg(
 }
 
 Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2_dbg(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   const std::size_t M = knots.cols() - 1;
   Eigen::Matrix<double, Eigen::Dynamic, 2> f_mat(M, 2);
   // Definition of locations quadrature points (2-point Gauss rule)
@@ -110,7 +110,7 @@ Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2_dbg(
 
 /* SAM_LISTING_BEGIN_1 */
 Eigen::VectorXd coeff_sigma(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   int M = knots.cols() - 1;
   Eigen::VectorXd sigma(M);
   // Definition of locations quadrature points (2-point Gauss rule)
@@ -136,7 +136,7 @@ Eigen::VectorXd coeff_sigma(
 
 /* SAM_LISTING_BEGIN_2 */
 Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   const std::size_t M = knots.cols() - 1;
   Eigen::Matrix<double, Eigen::Dynamic, 2> f(M, 2);
   // Definition quadrature points (2-point Gauss)
@@ -162,7 +162,7 @@ Eigen::Matrix<double, Eigen::Dynamic, 2> sourcefn2(
 
 /* SAM_LISTING_BEGIN_3 */
 Eigen::SparseMatrix<double> matR(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots) {
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots) {
   const Eigen::Index M = knots.cols() - 1;
   // Reserve enough space for the tridiagonal matrix
   Eigen::SparseMatrix<double> R(M - 1, M - 1);
@@ -188,7 +188,7 @@ Eigen::SparseMatrix<double> matR(
 
 /* SAM_LISTING_BEGIN_4 */
 Eigen::VectorXd compute_rhs(
-    const Eigen::Matrix<double, 2, Eigen::Dynamic> &knots, Eigen::Vector2d a,
+    const Eigen::Matrix<double, 2, Eigen::Dynamic>& knots, Eigen::Vector2d a,
     Eigen::Vector2d b) {
   Eigen::Index M = knots.cols() - 1;
   double h = 1. / static_cast<double>(M);
@@ -227,7 +227,7 @@ void tabiterr(unsigned int M, double rtol, double atol, unsigned int maxit) {
   std::vector<Eigen::Matrix<double, 2, Eigen::Dynamic>> iterates;
   Eigen::Matrix<double, 2, Eigen::Dynamic> mu = brachistochrone(
       M, a, b, atol, rtol, maxit,
-      [&iterates](const Eigen::Matrix<double, 2, Eigen::Dynamic> &mu) -> void {
+      [&iterates](const Eigen::Matrix<double, 2, Eigen::Dynamic>& mu) -> void {
         iterates.push_back(mu);
       });
   // Print table with results
@@ -313,7 +313,7 @@ void iteration_test(std::string filename) {
   std::vector<Eigen::Matrix<double, 2, Eigen::Dynamic>> iterates;
   Eigen::Matrix<double, 2, Eigen::Dynamic> mu = brachistochrone(
       M, a, b, atol, rtol, maxit,
-      [&iterates](const Eigen::Matrix<double, 2, Eigen::Dynamic> &mu) -> void {
+      [&iterates](const Eigen::Matrix<double, 2, Eigen::Dynamic>& mu) -> void {
         iterates.push_back(mu);
       });
   // Write iterates to file

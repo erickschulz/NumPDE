@@ -31,20 +31,18 @@ namespace StokesMINIElement {  // namespace StokesMINIElement
 class SimpleFEMElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, 9, 9>;
-  SimpleFEMElementMatrixProvider(const SimpleFEMElementMatrixProvider &) =
+  SimpleFEMElementMatrixProvider(const SimpleFEMElementMatrixProvider&) =
       delete;
-  SimpleFEMElementMatrixProvider(SimpleFEMElementMatrixProvider &&) noexcept =
+  SimpleFEMElementMatrixProvider(SimpleFEMElementMatrixProvider&&) noexcept =
       default;
-  SimpleFEMElementMatrixProvider &operator=(
-      const SimpleFEMElementMatrixProvider &) = delete;
-  SimpleFEMElementMatrixProvider &operator=(SimpleFEMElementMatrixProvider &&) =
+  SimpleFEMElementMatrixProvider& operator=(
+      const SimpleFEMElementMatrixProvider&) = delete;
+  SimpleFEMElementMatrixProvider& operator=(SimpleFEMElementMatrixProvider&&) =
       delete;
   SimpleFEMElementMatrixProvider() = default;
   virtual ~SimpleFEMElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 };
 /* SAM_LISTING_END_1 */
 
@@ -55,17 +53,15 @@ class SimpleFEMElementMatrixProvider {
 class MINIElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, 11, 11>;
-  MINIElementMatrixProvider(const MINIElementMatrixProvider &) = delete;
-  MINIElementMatrixProvider(MINIElementMatrixProvider &&) noexcept = default;
-  MINIElementMatrixProvider &operator=(const MINIElementMatrixProvider &) =
+  MINIElementMatrixProvider(const MINIElementMatrixProvider&) = delete;
+  MINIElementMatrixProvider(MINIElementMatrixProvider&&) noexcept = default;
+  MINIElementMatrixProvider& operator=(const MINIElementMatrixProvider&) =
       delete;
-  MINIElementMatrixProvider &operator=(MINIElementMatrixProvider &&) = delete;
+  MINIElementMatrixProvider& operator=(MINIElementMatrixProvider&&) = delete;
   MINIElementMatrixProvider() = default;
   virtual ~MINIElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 };
 /* SAM_LISTING_END_5 */
 

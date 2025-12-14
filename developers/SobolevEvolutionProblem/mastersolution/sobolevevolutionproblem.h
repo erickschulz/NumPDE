@@ -31,8 +31,8 @@ namespace SobolevEVP {
  * @param A matrix in LehrFEM++ internal triplet format. Will be modified!
  */
 template <typename SCALAR, typename SELECTOR>
-void dropMatrixRowsColumns(SELECTOR &&selectvals,
-                           lf::assemble::COOMatrix<SCALAR> &A) {
+void dropMatrixRowsColumns(SELECTOR&& selectvals,
+                           lf::assemble::COOMatrix<SCALAR>& A) {
   const lf::assemble::size_type N(A.cols());
   LF_ASSERT_MSG(A.rows() == N, "Matrix must be square!");
   // Set the selected rows and columns to zero
@@ -61,10 +61,10 @@ void dropMatrixRowsColumns(SELECTOR &&selectvals,
 template <typename SCALAR, typename MESHFUNCTION>
 Eigen::SparseMatrix<SCALAR> getFEMatrixDirichlet(
     std::shared_ptr<const lf::fe::ScalarFESpace<SCALAR>> fe_space_p,
-    const MESHFUNCTION &mf_coeff) {
+    const MESHFUNCTION& mf_coeff) {
   // Step I: Building of full Galerkin matrix
   // Obtain local-to-global index mapper
-  const lf::assemble::DofHandler &dofh{fe_space_p->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space_p->LocGlobMap()};
   // Provider object for element matrices
   lf::fe::DiffusionElementMatrixProvider<double, MESHFUNCTION> elmat_builder(
       fe_space_p, mf_coeff);
@@ -85,7 +85,7 @@ Eigen::SparseMatrix<SCALAR> getFEMatrixDirichlet(
   // Visit all edges of the mesh, retrieve associated dofs and mark them as
   // lying on the boundary
   using gdof_idx_t = lf::assemble::gdof_idx_t;
-  for (const lf::mesh::Entity *edge : mesh_p->Entities(1)) {
+  for (const lf::mesh::Entity* edge : mesh_p->Entities(1)) {
     if (bd_ed_flags(*edge)) {
       // Fetch all dof indices associated with the current edge
       std::span<const gdof_idx_t> ed_dof_idx{dofh.GlobalDofIndices(*edge)};
@@ -126,9 +126,9 @@ Eigen::SparseMatrix<SCALAR> getFEMatrixDirichlet(
 template <typename MESHFUNCTION_BETA, typename MESHFUNCTION_ALPHA>
 Eigen::VectorXd solveRKSobEvl(
     std::shared_ptr<const lf::fe::ScalarFESpace<double>> fe_space_p,
-    const MESHFUNCTION_BETA &beta, const MESHFUNCTION_ALPHA &alpha,
-    const Eigen::VectorXd &mu0, double T, const Eigen::MatrixXd &RK_Mat,
-    const Eigen::VectorXd &b, unsigned int M) {
+    const MESHFUNCTION_BETA& beta, const MESHFUNCTION_ALPHA& alpha,
+    const Eigen::VectorXd& mu0, double T, const Eigen::MatrixXd& RK_Mat,
+    const Eigen::VectorXd& b, unsigned int M) {
   LF_ASSERT_MSG(mu0.size() == (fe_space_p->LocGlobMap()).NumDofs(),
                 "Wrong length of coefficient vector");
   // Build Galerkin matrices taking into account homogeneous Dirichlet boundary
@@ -157,7 +157,7 @@ Eigen::VectorXd solveRKSobEvl(
   // The r.h.s. vector field for MOL ODE in standard form
   // Invoking solver.solve() amounts to the application of the
   // inverse of the matrix B.
-  auto Vf = [&solver, &A](const Eigen::VectorXd &y) -> Eigen::VectorXd {
+  auto Vf = [&solver, &A](const Eigen::VectorXd& y) -> Eigen::VectorXd {
     const Eigen::VectorXd fy = -solver.solve(A * y);
     LF_VERIFY_MSG(solver.info() == Eigen::Success, "Solving LSE failed");
     return fy;

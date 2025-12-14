@@ -39,7 +39,7 @@ struct TriaMesh2D {
 
 // Signature of a function computing the element matrix for a triangular cell
 // and piecewise linear Lagrangian finite elements
-typedef std::function<Eigen::Matrix3d(const TriGeo_t &)> LocalMatrixHandle_t;
+typedef std::function<Eigen::Matrix3d(const TriGeo_t&)> LocalMatrixHandle_t;
 // Data type for a COO matrix: sequence of triplets
 typedef std::vector<Eigen::Triplet<double>> Triplet_t;
 
@@ -54,7 +54,7 @@ class MatrixAssembler {
       : localMatrixHandle(std::move(getElementMatrix)) {}
 
   // Assemble the Galerkin matrix for the provided mesh
-  Eigen::SparseMatrix<double> Assemble(const TriaMesh2D &mesh);
+  Eigen::SparseMatrix<double> Assemble(const TriaMesh2D& mesh);
 
  private:
   LocalMatrixHandle_t localMatrixHandle;
@@ -72,16 +72,16 @@ class SlowMatrixAssembler {
       : localMatrixHandle(std::move(getElementMatrix)) {}
 
   // Assemble the Galerkin matrix for the provided mesh
-  Eigen::SparseMatrix<double> Assemble(const TriaMesh2D &mesh);
+  Eigen::SparseMatrix<double> Assemble(const TriaMesh2D& mesh);
 
  private:
   LocalMatrixHandle_t localMatrixHandle;
 };
 
 // Type for a real-valued function on the computational domain
-typedef std::function<double(const Eigen::Vector2d &)> FHandle_t;
+typedef std::function<double(const Eigen::Vector2d&)> FHandle_t;
 // Signature of a function computing element vectors
-typedef std::function<Eigen::Vector3d(const TriGeo_t &, FHandle_t)>
+typedef std::function<Eigen::Vector3d(const TriGeo_t&, FHandle_t)>
     LocalVectorHandle_t;
 
 /**
@@ -97,7 +97,7 @@ class VectorAssembler {
         sourceFunction(std::move(sourceFunction)) {}
 
   // Assemble the load vector for the provided mesh
-  Eigen::VectorXd Assemble(const TriaMesh2D &mesh);
+  Eigen::VectorXd Assemble(const TriaMesh2D& mesh);
 
  private:
   LocalVectorHandle_t localVectorHandle;
@@ -115,16 +115,16 @@ class FESolver {
  public:
   // Constructor: stores source function f and a flag indicating
   // if the slow Galerkin matrix assembler should be used
-  FESolver(const FHandle_t &sourceFunction, int inefficient_flag = 0)
+  FESolver(const FHandle_t& sourceFunction, int inefficient_flag = 0)
       : sourceFunction(sourceFunction) {
     inefficient = inefficient_flag;
   };
 
   // Solve the discretized system
-  Eigen::VectorXd Solve(const TriaMesh2D &mesh);
+  Eigen::VectorXd Solve(const TriaMesh2D& mesh);
 
  private:
-  const FHandle_t &sourceFunction;
+  const FHandle_t& sourceFunction;
   int inefficient;
 };
 #endif

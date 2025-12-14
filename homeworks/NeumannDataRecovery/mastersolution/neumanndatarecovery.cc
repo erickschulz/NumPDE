@@ -31,7 +31,7 @@ Eigen::Matrix<double, 2, 3> GradsBaryCoords(
 }
 
 Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
-    const lf::geometry::Geometry &geo) {
+    const lf::geometry::Geometry& geo) {
   // Only available for flat triangles and quadrilaterals
   LF_ASSERT_MSG(geo.DimGlobal() == 2, "Only implemented for 2D meshes");
   // Return variable
@@ -76,7 +76,7 @@ Eigen::Matrix<double, 2, 4> exteriorUnitNormals(
 /* SAM_LISTING_BEGIN_1 */
 lf::mesh::utils::CodimMeshDataSet<double> getNeumannData(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space,
-    const Eigen::VectorXd &mu) {
+    const Eigen::VectorXd& mu) {
   lf::mesh::utils::CodimMeshDataSet<double> edge_vals(fe_space->Mesh(), 1, 0.0);
   // Obtain flags indicating edges on the boundary
   lf::mesh::utils::CodimMeshDataSet<bool> bded_flags{
@@ -86,16 +86,16 @@ lf::mesh::utils::CodimMeshDataSet<double> getNeumannData(
   // Reference coordinates of barycenter of mesh
   Eigen::MatrixXd refc_center = Eigen::Vector2d(1.0 / 3.0, 1.0 / 3.0);
   // Loop over all cells of the mesh
-  for (const lf::mesh::Entity *cell : fe_space->Mesh()->Entities(0)) {
+  for (const lf::mesh::Entity* cell : fe_space->Mesh()->Entities(0)) {
     LF_VERIFY_MSG(cell->RefEl() == lf::base::RefEl::kTria(),
                   "Only triangular cells admitted!");
     // Compute constant value of the gradient for the current cell
     const Eigen::Vector2d grad_fefun = mf_grad_fefun(*cell, refc_center)[0];
     // Visit edges of the cell and check whether they are located on the
     // boundary
-    std::span<const lf::mesh::Entity *const> edges{cell->SubEntities(1)};
+    std::span<const lf::mesh::Entity* const> edges{cell->SubEntities(1)};
     int ed_cnt = 0;
-    for (const lf::mesh::Entity *edge : edges) {
+    for (const lf::mesh::Entity* edge : edges) {
       if (bded_flags(*edge)) {
         // Edge is located on the boundary:
         // Obtain exterior unit normals for the triangle, pick that belonging to

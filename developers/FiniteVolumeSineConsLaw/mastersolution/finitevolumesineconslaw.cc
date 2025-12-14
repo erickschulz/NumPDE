@@ -44,7 +44,7 @@ double sineGodFlux(double v, double w) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-Eigen::VectorXd sineClawRhs(const Eigen::VectorXd &mu) {
+Eigen::VectorXd sineClawRhs(const Eigen::VectorXd& mu) {
   int N = mu.size();
   double h = 12.0 / N;
   Eigen::VectorXd result(N);
@@ -71,7 +71,7 @@ Eigen::VectorXd sineClawRhs(const Eigen::VectorXd &mu) {
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_3 */
-bool blowup(const Eigen::VectorXd &mu) {
+bool blowup(const Eigen::VectorXd& mu) {
   return mu.minCoeff() < 0.0 || mu.maxCoeff() > 2.0;
 }
 
@@ -103,7 +103,7 @@ unsigned int findTimesteps() {
 /* SAM_LISTING_END_3 */
 
 /* SAM_LISTING_BEGIN_4 */
-Eigen::VectorXd sineClawReactionRhs(const Eigen::VectorXd &mu, double c) {
+Eigen::VectorXd sineClawReactionRhs(const Eigen::VectorXd& mu, double c) {
   Eigen::VectorXd rhs(mu.size());
 #if SOLUTION
   rhs = sineClawRhs(mu) - c * mu;

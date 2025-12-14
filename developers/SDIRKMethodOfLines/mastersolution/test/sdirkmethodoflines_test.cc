@@ -16,10 +16,7 @@
 #include <utility>
 #include <vector>
 
-// In the interest of not changing the problem text over at
-// https://gitlab.math.ethz.ch/ralfh/npdeflipped, I will tell clang-tidy to
-// ignore the bugprone-suspicious-include warning. (Manuel Saladin, 2024-05-28)
-#include "../sdirkmethodoflines_ode.cc"  // NOLINT(bugprone-suspicious-include)
+#include "../sdirkmethodoflines_ode.h"
 
 namespace SDIRKMethodOfLines::test {
 
@@ -31,7 +28,7 @@ TEST(SDIRKMethodOfLines, assembleGalerkinMatrices) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
   double c = 1.0;
@@ -69,7 +66,7 @@ TEST(SDIRKMethodOfLines, solveTemperatureEvolution) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
   unsigned int m = 12;
@@ -108,7 +105,7 @@ TEST(SDIRKMethodOfLines, thermalEnergy) {
   auto fe_space =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
 
-  const lf::assemble::DofHandler &dofh{fe_space->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh{fe_space->LocGlobMap()};
   const lf::uscalfe::size_type N_dofs(dofh.NumDofs());
 
   Eigen::VectorXd init(N_dofs);

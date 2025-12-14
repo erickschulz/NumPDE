@@ -23,7 +23,7 @@ namespace GaussLobattoParabolic {
 /* SAM_LISTING_BEGIN_1 */
 lf::assemble::COOMatrix<double> initMbig(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space) {
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
 #if SOLUTION
   // Diffusion coefficient =0, reaction coefficient = 1
   lf::mesh::utils::MeshFunctionConstant alpha(0.0), gamma(1.0);
@@ -60,7 +60,7 @@ lf::assemble::COOMatrix<double> initMbig(
 /* SAM_LISTING_BEGIN_2 */
 lf::assemble::COOMatrix<double> initAbig(
     std::shared_ptr<const lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space) {
-  const lf::assemble::DofHandler &dofh = fe_space->LocGlobMap();
+  const lf::assemble::DofHandler& dofh = fe_space->LocGlobMap();
 #if SOLUTION
   // Diffusion coefficient =1, reaction coefficient = 0
   lf::mesh::utils::MeshFunctionConstant alpha(1.0), gamma(0.0);
@@ -99,7 +99,7 @@ lf::assemble::COOMatrix<double> initAbig(
 /* SAM_LISTING_END_2 */
 
 /* SAM_LISTING_BEGIN_3 */
-RHSProvider::RHSProvider(const lf::assemble::DofHandler &dofh,
+RHSProvider::RHSProvider(const lf::assemble::DofHandler& dofh,
                          std::function<double(double)> g)
     : g_(std::move(g)) {
 #if SOLUTION

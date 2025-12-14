@@ -40,17 +40,14 @@ class THBElementMatrixProvider {
  public:
   using ElemMat = Eigen::Matrix<double, 3, 6>;
   // Main constructor
-  THBElementMatrixProvider(const THBElementMatrixProvider &) = delete;
-  THBElementMatrixProvider(THBElementMatrixProvider &&) noexcept = default;
-  THBElementMatrixProvider &operator=(const THBElementMatrixProvider &) =
-      delete;
-  THBElementMatrixProvider &operator=(THBElementMatrixProvider &&) = delete;
+  THBElementMatrixProvider(const THBElementMatrixProvider&) = delete;
+  THBElementMatrixProvider(THBElementMatrixProvider&&) noexcept = default;
+  THBElementMatrixProvider& operator=(const THBElementMatrixProvider&) = delete;
+  THBElementMatrixProvider& operator=(THBElementMatrixProvider&&) = delete;
   THBElementMatrixProvider(DirFlag dirflag) : dirflag_(dirflag) {}
   virtual ~THBElementMatrixProvider() = default;
-  [[nodiscard]] bool isActive(const lf::mesh::Entity & /*cell*/) {
-    return true;
-  }
-  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity &cell);
+  [[nodiscard]] bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  [[nodiscard]] ElemMat Eval(const lf::mesh::Entity& cell);
 
  private:
   DirFlag dirflag_;  // Chooses partial derivative in bilinear form
@@ -63,14 +60,14 @@ class THBElementMatrixProvider {
 template <typename FFUNCTOR>
 std::tuple<Eigen::SparseMatrix<double>, Eigen::SparseMatrix<double>,
            Eigen::SparseMatrix<double>, Eigen::VectorXd, Eigen::VectorXd>
-buildStokesLSE(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FFUNCTOR &&force) {
+buildStokesLSE(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FFUNCTOR&& force) {
   LF_ASSERT_MSG(mesh_p != nullptr, "Mesh must be supplied!");
   // I. Assemble full Galerkin matrix A in triplet format
   // Initialize quadratic Lagrange FE space
   auto fes_velo_comp =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO2<double>>(mesh_p);
   // Unit "coefficient function", $\mu=1$!
-  auto one = [](const Eigen::Vector2d & /*x*/) -> double { return 1.0; };
+  auto one = [](const Eigen::Vector2d& /*x*/) -> double { return 1.0; };
   // Create unit mesh function
   const lf::mesh::utils::MeshFunctionGlobal mf_one{one};
   // Element matrix provider to $-\Delta$ bilinear form
@@ -79,7 +76,7 @@ buildStokesLSE(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FFUNCTOR &&force) {
    // lf::fe::DiffusionElementMatrixProvider Laplace_emp( , );
    ************************************************** */
   // local $\to$ global index mapping
-  const lf::assemble::DofHandler &dofh_velo_comp{fes_velo_comp->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_velo_comp{fes_velo_comp->LocGlobMap()};
   const lf::assemble::size_type N_velo_comp = dofh_velo_comp.NumDofs();
   // Full matrix A in triplet format
   lf::assemble::COOMatrix<double> A_velo_comp(N_velo_comp, N_velo_comp);
@@ -126,17 +123,15 @@ buildStokesLSE(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FFUNCTOR &&force) {
   }
   // Modify linear system of equations and r.h.s. vector phi\_x
   lf::assemble::FixFlaggedSolutionComponents<double>(
-      [&dof_bd_flags](
-          lf::assemble::glb_idx_t dof_idx) -> std::pair<bool, double> {
-        return {dof_bd_flags[dof_idx], 0.0};
-      },
+      [&dof_bd_flags](lf::assemble::glb_idx_t dof_idx)
+          -> std::pair<bool, double> { return {dof_bd_flags[dof_idx], 0.0}; },
       A_velo_comp, phi_x);
   // IV. Aseemble the matrices $\VB_x$ and $\VB_y$
   // Initialize lowest-order Lagrange FE space, p=1
   auto fes_pressure =
       std::make_shared<lf::uscalfe::FeSpaceLagrangeO1<double>>(mesh_p);
   // local $\to$ global index mapping and number of d.o.f.s
-  const lf::assemble::DofHandler &dofh_pressure{fes_pressure->LocGlobMap()};
+  const lf::assemble::DofHandler& dofh_pressure{fes_pressure->LocGlobMap()};
   const lf::assemble::size_type n_pressure = dofh_pressure.NumDofs();
   // Helper objects for computation of element matrices
   THBElementMatrixProvider B_emp_x(X_Dir);
@@ -171,18 +166,18 @@ buildStokesLSE(std::shared_ptr<const lf::mesh::Mesh> mesh_p, FFUNCTOR &&force) {
  */
 
 /* SAM_LISTING_BEGIN_5 */
-template <typename RECORDER = std::function<void(const Eigen::VectorXd &,
-                                                 const Eigen::VectorXd &,
-                                                 const Eigen::VectorXd &)>>
+template <typename RECORDER =
+              std::function<void(const Eigen::VectorXd&, const Eigen::VectorXd&,
+                                 const Eigen::VectorXd&)>>
 std::tuple<Eigen::VectorXd, Eigen::VectorXd, Eigen::VectorXd> CGUzawa(
-    const Eigen::SparseMatrix<double> &A,
-    const Eigen::SparseMatrix<double> &B_x,
-    const Eigen::SparseMatrix<double> &B_y, const Eigen::VectorXd &phi_x,
-    const Eigen::VectorXd &phi_y, double rtol = 1E-6, double atol = 1E-8,
+    const Eigen::SparseMatrix<double>& A,
+    const Eigen::SparseMatrix<double>& B_x,
+    const Eigen::SparseMatrix<double>& B_y, const Eigen::VectorXd& phi_x,
+    const Eigen::VectorXd& phi_y, double rtol = 1E-6, double atol = 1E-8,
     unsigned int itmax = 100,
-    RECORDER &&rec = [](const Eigen::VectorXd &mu_x,
-                        const Eigen::VectorXd &mu_y,
-                        const Eigen::VectorXd &pi) -> void {}) {
+    RECORDER&& rec = [](const Eigen::VectorXd& mu_x,
+                        const Eigen::VectorXd& mu_y,
+                        const Eigen::VectorXd& pi) -> void {}) {
   const Eigen::Index N = A.cols();
   const Eigen::Index M = B_x.rows();
   // Check consistent sizes of matrices
