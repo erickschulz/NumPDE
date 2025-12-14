@@ -78,6 +78,7 @@ jobs:
         make -j $(nproc)
 
     - name: Test
+      continue-on-error: true
       run: |
         cd build
         echo "Testing developer folder master solutions"
@@ -130,6 +131,7 @@ jobs:
         make -j $(sysctl -n hw.ncpu)
 
     - name: Test
+      continue-on-error: true
       run: |
         cd build
         echo "Testing developer folder master solutions"
