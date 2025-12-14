@@ -26,17 +26,14 @@ function(build_problem TARGET DIR OUTPUT_NAME)
   add_library(${TARGET}.obj OBJECT ${SOURCES})
   target_compile_definitions(${TARGET}.obj PRIVATE CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/${DIR}")
   target_compile_definitions(${TARGET}.obj PRIVATE CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-  target_link_libraries(${TARGET}.obj PRIVATE ${LIBRARIES})
+  target_link_libraries(${TARGET}.obj PUBLIC ${LIBRARIES})
 
   # Create main executable by linking object library with main file
-  add_executable(${TARGET} $<TARGET_OBJECTS:${TARGET}.obj> ${MAIN_SOURCES})
+  add_executable(${TARGET} ${MAIN_SOURCES})
   set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
   target_compile_definitions(${TARGET} PRIVATE CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/${DIR}")
   target_compile_definitions(${TARGET} PRIVATE CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-  target_link_libraries(${TARGET} PUBLIC ${LIBRARIES})
-
-  # Keep .static as alias to .obj for backwards compatibility
-  add_library(${TARGET}.static ALIAS ${TARGET}.obj)
+  target_link_libraries(${TARGET} PRIVATE ${TARGET}.obj)
 endfunction(build_problem)
 
 # Build rule for tests
@@ -62,16 +59,9 @@ function(build_test TARGET TARGET_TO_TEST DIR OUTPUT_NAME)
   target_compile_definitions(${TARGET} PRIVATE CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/${DIR}/test")
   target_compile_definitions(${TARGET} PRIVATE CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
-  # Link against the problem's object library to reuse compiled code
-  target_link_libraries(${TARGET} PRIVATE ${TARGET_TO_TEST}.obj)
-
-  # Inherit libraries from problem and add test-specific libraries
-  get_target_property(MAIN_LIBS ${TARGET_TO_TEST}.obj LINK_LIBRARIES)
-  set(TEST_ONLY_LIBS ${LIBRARIES})
-  foreach(lib ${MAIN_LIBS})
-    list(REMOVE_ITEM TEST_ONLY_LIBS ${lib})
-  endforeach()
-  target_link_libraries(${TARGET} PUBLIC ${MAIN_LIBS} ${TEST_ONLY_LIBS})
+  # Link against the problem's object library (inherits all dependencies automatically)
+  # and add test-specific libraries
+  target_link_libraries(${TARGET} PRIVATE ${TARGET_TO_TEST}.obj ${LIBRARIES})
 endfunction(build_test)
 
 # Create relative symbolic link from binary directory to source directory
