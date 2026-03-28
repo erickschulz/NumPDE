@@ -1,4 +1,10 @@
-"""Plot the navigation field -grad(u) as streamlines."""
+"""Plot the navigation field -grad(u) as streamlines.
+
+NPDE homework RobotNavigation
+Author: Erick Schulz
+Date: 28.03.2026
+Developed at ETH Zurich
+"""
 
 import numpy as np
 import meshio

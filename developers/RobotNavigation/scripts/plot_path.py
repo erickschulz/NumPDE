@@ -1,4 +1,10 @@
-"""Plot the robot path overlaid on the potential field."""
+"""Plot the robot path overlaid on the potential field.
+
+NPDE homework RobotNavigation
+Author: Erick Schulz
+Date: 28.03.2026
+Developed at ETH Zurich
+"""
 
 import numpy as np
 import meshio

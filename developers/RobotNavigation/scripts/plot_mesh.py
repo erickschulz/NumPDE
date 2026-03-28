@@ -1,4 +1,10 @@
-"""Plot the room mesh with doors highlighted."""
+"""Plot the room mesh with doors highlighted.
+
+NPDE homework RobotNavigation
+Author: Erick Schulz
+Date: 28.03.2026
+Developed at ETH Zurich
+"""
 
 import meshio
 import matplotlib.pyplot as plt

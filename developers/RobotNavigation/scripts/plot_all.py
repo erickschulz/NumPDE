@@ -1,4 +1,10 @@
-"""Run all plotting scripts."""
+"""Run all plotting scripts.
+
+NPDE homework RobotNavigation
+Author: Erick Schulz
+Date: 28.03.2026
+Developed at ETH Zurich
+"""
 
 import subprocess
 import sys

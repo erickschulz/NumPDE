@@ -1,4 +1,10 @@
-"""Plot the potential field u from the Poisson BVP."""
+"""Plot the potential field u from the Poisson BVP.
+
+NPDE homework RobotNavigation
+Author: Erick Schulz
+Date: 28.03.2026
+Developed at ETH Zurich
+"""
 
 import numpy as np
 import meshio
