@@ -78,7 +78,7 @@ Eigen::VectorXd solvePoissonBVP(const lf::io::GmshReader& reader) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-Eigen::Matrix<double, 2, 3> gradlambdaoordinates(const lf::mesh::Entity& cell) {
+Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& cell) {
 #if SOLUTION
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
@@ -126,15 +126,15 @@ Eigen::VectorXd GradientProjectionRhsVectorProvider::Eval(
                 "Unsupported cell type " << cell.RefEl());
 #if SOLUTION
   const lf::assemble::DofHandler& dofh = fe_space_p_->LocGlobMap();
-  auto gdof_idx = dofh.GlobalDofIndices(cell);
+  auto scal_idx = dofh.GlobalDofIndices(cell);
 
   // Gradient of barycentric coordinates
-  Eigen::Matrix<double, 2, 3> grad_bary = gradlambdaoordinates(cell);
+  Eigen::Matrix<double, 2, 3> grad_bary = gradbarycoordinates(cell);
 
   // Piecewise-constant gradient of u_h on this cell
   Eigen::Vector2d gradu_h = Eigen::Vector2d::Zero();
   for (int i = 0; i < 3; i++) {
-    gradu_h += grad_bary.col(i) * u_h_(gdof_idx[i]);
+    gradu_h += grad_bary.col(i) * u_h_(scal_idx[i]);
   }
 
   // Element vector using trapezoidal rule
@@ -218,9 +218,9 @@ Eigen::MatrixXd integrateRobotPath(
       bool cell_is_found = lambda.minCoeff() >= 0.0;
       if (cell_is_found) {
         // Interpolate u
-        auto gdof_idx = dofh.GlobalDofIndices(*cell);
-        Eigen::Vector3d u_nodal = {u(gdof_idx[0]), u(gdof_idx[1]),
-                                   u(gdof_idx[2])};
+        auto scal_idx = dofh.GlobalDofIndices(*cell);
+        Eigen::Vector3d u_nodal = {u(scal_idx[0]), u(scal_idx[1]),
+                                   u(scal_idx[2])};
         double u_val = lambda.dot(u_nodal);
 
         // Interpolate grad(u)
