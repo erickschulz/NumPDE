@@ -78,7 +78,7 @@ Eigen::VectorXd solvePoissonBVP(const lf::io::GmshReader& reader) {
 /* SAM_LISTING_END_1 */
 
 /* SAM_LISTING_BEGIN_2 */
-Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& cell) {
+Eigen::Matrix<double, 2, 3> gradlambdaoordinates(const lf::mesh::Entity& cell) {
 #if SOLUTION
   LF_VERIFY_MSG(cell.RefEl() == lf::base::RefEl::kTria(),
                 "Unsupported cell type " << cell.RefEl());
@@ -129,7 +129,7 @@ Eigen::VectorXd GradientProjectionRhsVectorProvider::Eval(
   auto gdof_idx = dofh.GlobalDofIndices(cell);
 
   // Gradient of barycentric coordinates
-  Eigen::Matrix<double, 2, 3> grad_bary = gradbarycoordinates(cell);
+  Eigen::Matrix<double, 2, 3> grad_bary = gradlambdaoordinates(cell);
 
   // Piecewise-constant gradient of u_h on this cell
   Eigen::Vector2d gradu_h = Eigen::Vector2d::Zero();
@@ -190,84 +190,81 @@ Eigen::VectorXd solveGradientProjection(
 /* SAM_LISTING_BEGIN_6 */
 Eigen::MatrixXd integrateRobotPath(
     const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
-    const lf::assemble::DofHandler& dofh, const Eigen::VectorXd& sol,
-    const lf::assemble::DofHandler& vec_dofh, const Eigen::VectorXd& grad,
+    const lf::assemble::DofHandler& dofh, const Eigen::VectorXd& u,
+    const lf::assemble::DofHandler& vec_dofh, const Eigen::VectorXd& gradu,
     const Eigen::Vector2d& x_start, double dt, int max_steps,
     double u_door_threshold) {
 #if SOLUTION
-  // Helper: compute barycentric coordinates of point p in triangle
-  // with vertices v0, v1, v2. Returns (lambda0, lambda1, lambda2).
-  auto barycentric = [](const Eigen::Vector2d& p, const Eigen::Vector2d& v0,
-                        const Eigen::Vector2d& v1,
-                        const Eigen::Vector2d& v2) -> Eigen::Vector3d {
-    Eigen::Matrix2d T;
-    T.col(0) = v0 - v2;
-    T.col(1) = v1 - v2;
-    Eigen::Vector2d lam01 = T.inverse() * (p - v2);
-    return {lam01(0), lam01(1), 1.0 - lam01(0) - lam01(1)};
+  struct InterpolationResult {
+    Eigen::Vector2d gradu;
+    double u;
+    bool found;
   };
 
-  // Helper: find the triangle containing point p and evaluate
-  // the interpolated gradient and potential at p.
-  // Returns {gradb_x, gradb_y, u} or {0,0,-1} if not found.
-  constexpr int cell_codim = 0;
-  constexpr int node_subcodim = 2;
-  auto evaluate = [&](const Eigen::Vector2d& p) -> Eigen::Vector3d {
+  // Interpolate u and grad(u) by finding the cell containing a point
+  auto interpolateAt =
+      [&](const Eigen::Vector2d& point) -> InterpolationResult {
+    constexpr int cell_codim = 0;
     for (const lf::mesh::Entity* cell : mesh_p->Entities(cell_codim)) {
-      if (cell->RefEl() != lf::base::RefEl::kTria()) continue;
+      // Barycentric coordinates
       auto corners = lf::geometry::Corners(*(cell->Geometry()));
-      Eigen::Vector2d v0 = corners.col(0);
-      Eigen::Vector2d v1 = corners.col(1);
-      Eigen::Vector2d v2 = corners.col(2);
-      Eigen::Vector3d lam = barycentric(p, v0, v1, v2);
-      // Check if point is inside triangle (with small tolerance)
-      if (lam(0) >= -1e-10 && lam(1) >= -1e-10 && lam(2) >= -1e-10) {
-        // Interpolate gradient and potential
-        auto scal_idx = dofh.GlobalDofIndices(*cell);
-        double u_val = (lam(0) * sol(scal_idx[0])) +
-                       (lam(1) * sol(scal_idx[1])) +
-                       (lam(2) * sol(scal_idx[2]));
-        auto nodes = cell->SubEntities(node_subcodim);
-        Eigen::Vector2d grad_val = Eigen::Vector2d::Zero();
+      Eigen::Matrix2d T;
+      T.col(0) = corners.col(0) - corners.col(2);
+      T.col(1) = corners.col(1) - corners.col(2);
+      Eigen::Vector3d lambda;
+      lambda.head<2>() = T.inverse() * (point - corners.col(2));
+      lambda(2) = 1.0 - lambda(0) - lambda(1);
+
+      bool cell_is_found = lambda.minCoeff() >= 0.0;
+      if (cell_is_found) {
+        // Interpolate u
+        auto gdof_idx = dofh.GlobalDofIndices(*cell);
+        Eigen::Vector3d u_nodal = {u(gdof_idx[0]), u(gdof_idx[1]),
+                                   u(gdof_idx[2])};
+        double u_val = lambda.dot(u_nodal);
+
+        // Interpolate grad(u)
+        constexpr int node_codim = 2;
+        auto nodes = cell->SubEntities(node_codim);
+        Eigen::Vector2d gradu_val = Eigen::Vector2d::Zero();
         for (int k = 0; k < 3; ++k) {
-          auto vi = vec_dofh.GlobalDofIndices(*nodes[k]);
-          grad_val(0) += lam(k) * grad(vi[0]);
-          grad_val(1) += lam(k) * grad(vi[1]);
+          auto vec_idx = vec_dofh.GlobalDofIndices(*nodes[k]);
+          gradu_val(0) += lambda(k) * gradu(vec_idx[0]);
+          gradu_val(1) += lambda(k) * gradu(vec_idx[1]);
         }
-        return {grad_val(0), grad_val(1), u_val};
+
+        return {gradu_val, u_val, true};
       }
     }
-    return {0.0, 0.0, -1.0};  // not found
+
+    return {{0.0, 0.0}, 0.0, false};
   };
 
-  // RK4 integration
+  // RK4 integration of dx/dt = -grad(u)
   std::vector<Eigen::Vector2d> path;
   path.push_back(x_start);
-  Eigen::Vector2d x = x_start;
+  Eigen::Vector2d pos = x_start;
 
+  Eigen::Vector2d k1, k2, k3, k4;  // derivatives
   for (int step = 0; step < max_steps; ++step) {
-    // Evaluate -grad(u) at current position
-    Eigen::Vector3d ev = evaluate(x);
-    if (ev(2) < -0.5) break;              // point outside mesh
-    if (ev(2) < u_door_threshold) break;  // reached door
+    auto [gradu1, u1, found1] = interpolateAt(pos);
+    if (!found1 || u1 < u_door_threshold) break;
+    k1 = -gradu1;
 
-    // RK4 stages: dx/dt = -grad(u)
-    Eigen::Vector2d k1 = {-ev(0), -ev(1)};
+    auto [gradu2, u2, found2] = interpolateAt(pos + 0.5 * dt * k1);
+    if (!found2) break;
+    k2 = -gradu2;
 
-    ev = evaluate(x + 0.5 * dt * k1);
-    if (ev(2) < -0.5) break;
-    Eigen::Vector2d k2 = {-ev(0), -ev(1)};
+    auto [gradu3, u3, found3] = interpolateAt(pos + 0.5 * dt * k2);
+    if (!found3) break;
+    k3 = -gradu3;
 
-    ev = evaluate(x + 0.5 * dt * k2);
-    if (ev(2) < -0.5) break;
-    Eigen::Vector2d k3 = {-ev(0), -ev(1)};
+    auto [gradu4, u4, found4] = interpolateAt(pos + dt * k3);
+    if (!found4) break;
+    k4 = -gradu4;
 
-    ev = evaluate(x + dt * k3);
-    if (ev(2) < -0.5) break;
-    Eigen::Vector2d k4 = {-ev(0), -ev(1)};
-
-    x += (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
-    path.push_back(x);
+    pos += (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
+    path.push_back(pos);
   }
 
   // Convert to Nx2 matrix

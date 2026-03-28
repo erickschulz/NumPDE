@@ -108,9 +108,9 @@ Eigen::VectorXd solveGradientProjection(
  *
  * @param mesh_p Pointer to the mesh.
  * @param dofh Scalar DOF handler.
- * @param sol Scalar FE solution coefficient vector.
+ * @param u Scalar FE solution coefficient vector.
  * @param vec_dofh Vector DOF handler (2 DOFs per node).
- * @param grad Gradient projection coefficient vector.
+ * @param gradu Gradient projection coefficient vector.
  * @param x_start Starting position of the robot.
  * @param dt Time step size.
  * @param max_steps Maximum number of steps.
@@ -119,8 +119,8 @@ Eigen::VectorXd solveGradientProjection(
  */
 Eigen::MatrixXd integrateRobotPath(
     const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
-    const lf::assemble::DofHandler& dofh, const Eigen::VectorXd& sol,
-    const lf::assemble::DofHandler& vec_dofh, const Eigen::VectorXd& grad,
+    const lf::assemble::DofHandler& dofh, const Eigen::VectorXd& u,
+    const lf::assemble::DofHandler& vec_dofh, const Eigen::VectorXd& gradu,
     const Eigen::Vector2d& x_start, double dt, int max_steps,
     double u_door_threshold);
 
