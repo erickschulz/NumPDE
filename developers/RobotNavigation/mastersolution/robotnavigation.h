@@ -19,8 +19,6 @@
 
 namespace RobotNavigation {
 
-using coord_t = Eigen::Vector2d;
-
 /**
  * @brief Solve the Poisson BVP
  *
@@ -35,7 +33,7 @@ Eigen::VectorXd solvePoissonBVP(const lf::io::GmshReader& reader);
 /**
  * @brief Compute gradients of barycentric coordinate functions.
  */
-Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& entity);
+Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& cell);
 
 /**
  * @brief Element matrix provider for the vector FE mass matrix.
@@ -53,8 +51,8 @@ Eigen::Matrix<double, 2, 3> gradbarycoordinates(const lf::mesh::Entity& entity);
 class GradientProjectionMassMatrixProvider {
  public:
   explicit GradientProjectionMassMatrixProvider() = default;
-  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
-  Eigen::MatrixXd Eval(const lf::mesh::Entity& entity);
+  bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  Eigen::MatrixXd Eval(const lf::mesh::Entity& cell);
 };
 
 /**
@@ -75,8 +73,8 @@ class GradientProjectionRhsVectorProvider {
       const std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>>& fe_space_p,
       const Eigen::VectorXd& u_h)
       : u_h_(u_h), fe_space_p_(fe_space_p) {}
-  virtual bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
-  Eigen::VectorXd Eval(const lf::mesh::Entity& entity);
+  bool isActive(const lf::mesh::Entity& /*cell*/) { return true; }
+  Eigen::VectorXd Eval(const lf::mesh::Entity& cell);
 
  private:
   std::shared_ptr<lf::uscalfe::FeSpaceLagrangeO1<double>> fe_space_p_;
@@ -119,12 +117,11 @@ Eigen::VectorXd solveGradientProjection(
  * @param u_door_threshold Stop when u(x) drops below this (near a door).
  * @return Nx2 matrix of path positions.
  */
-Eigen::MatrixXd tracePath(const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
-                          const lf::assemble::DofHandler& dofh,
-                          const Eigen::VectorXd& sol,
-                          const lf::assemble::DofHandler& vec_dofh,
-                          const Eigen::VectorXd& grad,
-                          const Eigen::Vector2d& x_start, double dt,
-                          int max_steps, double u_door_threshold);
+Eigen::MatrixXd integrateRobotPath(
+    const std::shared_ptr<const lf::mesh::Mesh>& mesh_p,
+    const lf::assemble::DofHandler& dofh, const Eigen::VectorXd& sol,
+    const lf::assemble::DofHandler& vec_dofh, const Eigen::VectorXd& grad,
+    const Eigen::Vector2d& x_start, double dt, int max_steps,
+    double u_door_threshold);
 
 }  // namespace RobotNavigation
