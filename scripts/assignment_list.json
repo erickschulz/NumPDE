@@ -116,6 +116,7 @@
       "MagStat2D/",
       "AxisymmetricBVP/",
       "BlackBodyRadiation/",
-      "MaxwellEvlTM/"
+      "MaxwellEvlTM/",
+      "RobotNavigation/"
   ]
 }
